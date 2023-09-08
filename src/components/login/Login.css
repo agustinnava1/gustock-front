@@ -23,11 +23,6 @@ body {
 
 .form-signin input{
   border: none;
-  border-bottom: 2px solid #3B71CA;
-}
-
-.form-signin .checkbox {
-  font-weight: 400;
 }
 
 .form-signin .form-floating:focus-within {
@@ -44,8 +39,4 @@ body {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-}
-
-body > main > form > span {
-  color: red;
 }
