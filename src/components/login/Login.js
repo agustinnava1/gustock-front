@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 
+import './login.css'
+
 const Login = () => {
 
 	const[userDetail, setUserDetail] = useState({

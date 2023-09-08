@@ -124,13 +124,6 @@ footer {
 .header-error{
   background-color: #E86252;
 }
-.form-signin{
-  border-radius: 30px;
-}
-.form-signin input{
-  border: none;
-  border-bottom: 2px solid #3B71CA;
-}
 .form-control, .form-select{
   width: 100%;
   padding: 0.5rem 1rem;
@@ -207,55 +200,6 @@ thead{
   color: #1764C6;
   background-color: #ffffff;
   box-shadow: inset 0 -1px 0 rgba(0,0,0,.125);
-}
-
-
-/*Login*/
-
-h1{
-    color: #3B71CA;
-}
-
-body {
-    align-items: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-image: url(https://lh3.googleusercontent.com/p/AF1QipPQOyu5qKhSYfl5goM71AGncCZLpcehLhmS-_hH=s680-w680-h510);
-}
-
-.form-signin {
-    top: 40%;
-    left: 50%;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    max-width: 350px;
-    padding: 45px;
-    background: hsla(0, 0%, 100%, 0.55);
-    backdrop-filter: blur(5px)
-}
-
-.form-signin .checkbox {
-    font-weight: 400;
-}
-
-.form-signin .form-floating:focus-within {
-    z-index: 2;
-}
-
-.form-signin input[type="text"] {
-    margin-bottom: -1px;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.form-signin input[type="password"] {
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-
-body > main > form > span {
-    color: red;
 }
 
 /*ErrorPages
