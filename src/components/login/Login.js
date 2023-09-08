@@ -1,11 +1,8 @@
 import React from 'react';
-import Swal from 'sweetalert2';
-import { FormGroup } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import '../index.css'
+const Login = () => {
 
-function Login() {
 	const[userDetail, setUserDetail] = useState({
 		username: "",
 		password: ""
@@ -21,18 +18,9 @@ function Login() {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
-    if(await addLibro(libro)){
-      Swal.fire(
-        'Listo!'
-      ).then(
-
-      );
-    } else {
-      Swal.fire(
-        'Error'
-      )
-    }
+		if(userDetail.username === "" || userDetail.password === ""){
+			return;
+		}
 	}
 
 	return (
