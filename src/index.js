@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './componentes/App';
+import App from './views/App';
 import reportWebVitals from './reportWebVitals';
 
-import './index.css';
+import './views/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
