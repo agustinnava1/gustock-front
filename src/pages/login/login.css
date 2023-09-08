@@ -2,12 +2,12 @@ h1{
   color: #3B71CA;
 }
 
-body {
+/*body {
   align-items: center;
   background-size: cover;
   background-repeat: no-repeat;
   background-image: url(https://lh3.googleusercontent.com/p/AF1QipPQOyu5qKhSYfl5goM71AGncCZLpcehLhmS-_hH=s680-w680-h510);
-}
+}*/
 
 .form-signin{
   top: 40%;

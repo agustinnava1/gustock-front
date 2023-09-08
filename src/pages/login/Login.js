@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 import './login.css'
 
@@ -45,10 +46,11 @@ const Login = () => {
 					</div>
 
 					<button className="w-100 btn btn-lg btn-primary rounded-pill mt-3" type="submit">Iniciar sesión</button>
+					<NavLink to="/inicio" className='btn fs-4 fw-bold px-4 rounded-pill' >¡Empezá ahora!</NavLink>
 				</form>
 			</div>
 		</div>
-	);
+	)
 }
 
 export default Login;
