@@ -1,4 +1,5 @@
 import React from 'react';
+import Swal from 'sweetalert2';
 import { FormGroup } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 
@@ -18,12 +19,28 @@ function Login() {
     });
   };
 
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+    if(await addLibro(libro)){
+      Swal.fire(
+        'Listo!'
+      ).then(
+
+      );
+    } else {
+      Swal.fire(
+        'Error'
+      )
+    }
+	}
+
 	return (
 	  <div className="text-center">
 			<div className="form-signin">
 				<h1 className="fw-bold">GUSTOCK</h1>
 				<h2 className="mb-5 fw-normal">Ingreso al sistema</h2>
-				<form>
+				<form onSubmit={handleSubmit}>
 					<div className="form-floating mb-3">
 						<input name="username" type="text" className="form-control m-0" autoFocus
 									 value={userDetail.username} onChange={handleChange}></input>
