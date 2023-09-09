@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 
-const Navbar = () => {
-  
+function Navbar() {
+ 
 }
 
-export default Navbar;
+export default Navbar();

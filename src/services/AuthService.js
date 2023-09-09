@@ -1,13 +1,5 @@
-import axios from "axios";
+import { myAxios } from "../helper/AxionHelper";
 
-class AuthService{
-
-    baseUrl = "http://localhost:8080/auth"
-
-    login(){return axios.post(this.baseUrl + "/login");}
-
-    register(){return axios.post(this.baseUrl + "/register");}
-
+export const login = (userDetail) => {
+  return myAxios.post("/auth/login", userDetail)
 }
-
-export default new AuthService();

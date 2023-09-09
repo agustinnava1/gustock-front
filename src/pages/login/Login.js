@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import AuthService from '../../services/AuthService';
+import { login } from '../../services/AuthService'
 
 import './login.css'
 
@@ -26,7 +26,13 @@ const Login = () => {
 		if (userDetail.username === "" || userDetail.password === "") {
 			return;
 		}
-
+		
+		login(userDetail).then((resp) => {
+			console.log(resp)
+			console.log("success")
+		}).catch((error) => {
+			console.log(error)
+		})
 
 	}
 
