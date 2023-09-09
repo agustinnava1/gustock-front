@@ -22,11 +22,11 @@ function Home() {
           <SidebarItem icon={<Package size={20} />} text="Productos" />
         </NavLink>
         <NavLink className="text-decoration-none" to={"/"}>
-          <SidebarItem icon={<Clipboard size={20} />} text="Reposicion" />
+          <SidebarItem icon={<Clipboard size={20} />} text="Reposición" />
         </NavLink>
         <hr className="mt-3"></hr>
         <NavLink className="text-decoration-none" to={"/"}>
-          <SidebarItem icon={<MessageSquare size={20} />} text="Mensajeria" />
+          <SidebarItem icon={<MessageSquare size={20} />} text="Mensajería" />
         </NavLink>
         <NavLink className="text-decoration-none" to={"/"}>
           <SidebarItem icon={<Bell size={20} />} text="Notificaciones" />

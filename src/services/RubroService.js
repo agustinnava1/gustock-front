@@ -1,18 +1,19 @@
 import axios from "axios";
+import { BASE_URL } from "../helper/AxionHelper";
 
 class RubroService{
 
-    baseUrl = "http://localhost:8080/rubro"
+    baseUrl = BASE_URL + "/rubro";
 
-    getById(){return axios.get(this.baseUrl + "/" + rubroId);}
+    getById(rubroId){return axios.get(this.baseUrl + "/" + rubroId);}
 
-    create(){return axios.post(this.baseUrl + "/crear" + rubro)}
+    create(rubro){return axios.post(this.baseUrl + "/crear" + rubro)}
 
-    update(){return axios.put(this.baseUrl + "/modificar/" + rubroId)}
+    update(rubroId, rubro){return axios.put(this.baseUrl + "/modificar/" + rubroId, rubro)}
 
-    delete(){return axios.delete(this.baseUrl + "/eliminar/" + rubroId)}
+    delete(rubroId){return axios.delete(this.baseUrl + "/eliminar/" + rubroId)}
 
-    getAll(){return axios.get(this.baseUrl+ "/listar").then(res => res.data.data);}
+    getAll(){return axios.get(this.baseUrl+ "/listar");}
 
 }
 
