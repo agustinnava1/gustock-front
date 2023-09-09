@@ -2,8 +2,8 @@ import React from 'react'
 import { Route,  BrowserRouter as Router, Routes } from 'react-router-dom';
 
 //Pages
-import Home from '../pages/home/Home';
-import Login from '../pages/login/Login';
+import Home from '../pages/Home';
+import Login from '../pages/Login';
 //Components
 
 export const AppRouter = () => { 

@@ -1,8 +1,7 @@
-import Navbar from "../../components/navbar/Navbar";
-import Sidebar, { SidebarItem } from "../../components/sidebar/Sidebar";
+import Navbar from "../components/navbar/Navbar";
+import Sidebar, { SidebarItem } from "../components/sidebar/Sidebar";
 import { LayoutDashboard, MessageSquare, Bell, Package, Settings, HomeIcon, ShoppingCart, Clipboard } from 'lucide-react';
 
-import './home.css';
 import { NavLink } from "react-router-dom";
 
 function Home() {

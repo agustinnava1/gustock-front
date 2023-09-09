@@ -2,8 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { login } from '../../services/AuthService'
-import RubroService from '../../services/RubroService';
+import { login } from '../services/auth.service'
 
 import './login.css'
 

@@ -5,13 +5,13 @@ class RubroService{
 
     baseUrl = BASE_URL + "/rubro";
 
-    getById(rubroId){return axios.get(this.baseUrl + "/" + rubroId);}
+    getById(id){return axios.get(this.baseUrl + "/" + id);}
 
     create(rubro){return axios.post(this.baseUrl + "/crear" + rubro)}
 
-    update(rubroId, rubro){return axios.put(this.baseUrl + "/modificar/" + rubroId, rubro)}
+    update(rubro){return axios.put(this.baseUrl + "/modificar/" + rubro.id, rubro)}
 
-    delete(rubroId){return axios.delete(this.baseUrl + "/eliminar/" + rubroId)}
+    delete(id){return axios.delete(this.baseUrl + "/eliminar/" + id)}
 
     getAll(){return axios.get(this.baseUrl+ "/listar");}
 
