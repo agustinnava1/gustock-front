@@ -2,9 +2,9 @@ import React from 'react'
 import { Route,  BrowserRouter as Router, Routes } from 'react-router-dom';
 
 //Pages
-import Home from '../pages/Home';
+import Home from '../pages/home/Home';
+import Login from '../pages/login/Login';
 //Components
-import Login from '../components/login/Login';
 
 export const AppRouter = () => { 
 

@@ -4,8 +4,6 @@ class RubroService{
 
     baseUrl = "http://localhost:8080/rubro"
 
-    getAll(){return axios.get(this.baseUrl).then(res => res.data.data);}
-
     getById(){return axios.get(this.baseUrl + "/" + rubroId);}
 
     create(){return axios.post(this.baseUrl + "/crear" + rubro)}
@@ -13,6 +11,8 @@ class RubroService{
     update(){return axios.put(this.baseUrl + "/modificar/" + rubroId)}
 
     delete(){return axios.delete(this.baseUrl + "/eliminar/" + rubroId)}
+
+    getAll(){return axios.get(this.baseUrl+ "/listar").then(res => res.data.data);}
 
 }
 
