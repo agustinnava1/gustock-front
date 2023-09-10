@@ -4,13 +4,14 @@ import { Routes, Route } from "react-router-dom";
 import Sidebar, { SidebarItem } from "./components/sidebar.component";
 import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings } from 'lucide-react';
 
-import Home from "./pages/Home";
+import Home from "./pages/AdminPage";
 import Login from "./pages/Login";
-import { Navbar } from "react-bootstrap";
 import Header from "./components/header.component";
 
 function App() {
   return (
+    
+
     <div className="flex">
       <Sidebar>
         <NavLink className="text-decoration-none" to={"/inicio"}>
@@ -40,9 +41,8 @@ function App() {
           <SidebarItem icon={<Settings size={20} />} text="Ajustes" />
         </NavLink>
       </Sidebar>
-      <div className="grow">
-        <Header></Header>
-        <div className="m-5">
+        <div className="grow">
+          <Header></Header>
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/inicio" element={<Home />} />
@@ -55,7 +55,6 @@ function App() {
             <Route path="/ajustes" element={<Home />} />
           </Routes>
         </div>
-      </div>
     </div>
   );
 }
