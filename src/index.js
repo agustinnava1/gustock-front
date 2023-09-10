@@ -4,7 +4,7 @@ import App from './pages/App';
 import reportWebVitals from './reportWebVitals';
 
 import './index.css'
-import 'bootstrap/dist/css/bootstrap.css';
+
 import "primereact/resources/primereact.min.css";  
 import "primereact/resources/themes/lara-light-indigo/theme.css";     
 

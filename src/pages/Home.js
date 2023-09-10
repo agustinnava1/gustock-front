@@ -1,12 +1,11 @@
-import Navbar from "../components/navbar/Navbar";
 import Sidebar, { SidebarItem } from "../components/sidebar/Sidebar";
-import { LayoutDashboard, MessageSquare, Bell, Package, Settings, HomeIcon, ShoppingCart, Clipboard } from 'lucide-react';
+import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings } from 'lucide-react';
 
 import { NavLink } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="d-flex flex-nowrap">
+    <div className="flex ">
       <Sidebar>
         <NavLink className="text-decoration-none" to={"/"}>
           <SidebarItem icon={<HomeIcon size={20} />} text="Inicio" active />
