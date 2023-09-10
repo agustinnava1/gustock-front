@@ -1,9 +1,13 @@
-import Sidebar, { SidebarItem } from "../components/sidebar.component";
+import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import Sidebar, { SidebarItem } from "./components/sidebar.component";
 import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings } from 'lucide-react';
 
-import { NavLink } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
 
-function Home() {
+function App() {
   return (
     <div className="flex">
       <Sidebar>
@@ -34,8 +38,14 @@ function Home() {
           <SidebarItem icon={<Settings size={20} />} text="Ajustes" />
         </NavLink>
       </Sidebar>
+      <div className="container mt-3">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/inicio" element={<Home />} />
+        </Routes>
+      </div>
     </div>
   );
 }
 
-export default Home;
+export default App;
