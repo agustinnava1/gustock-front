@@ -10,8 +10,6 @@ import Header from "./components/header.component";
 
 function App() {
   return (
-    
-
     <div className="flex">
       <Sidebar>
         <NavLink className="text-decoration-none" to={"/inicio"}>

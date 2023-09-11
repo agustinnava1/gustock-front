@@ -12,7 +12,10 @@ function Login() {
   const cookies = new Cookies();
 
   // Initialize user state
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    username: "",
+    roles: [],
+  });
 
   const logout = () => {
     setUser(null);
@@ -43,7 +46,7 @@ function Login() {
       const decoded = jwt(resp.data.token);
 
       // Set user state
-      setUser(decoded.sub);
+      setUser(decoded.sub, decoded.claim);
 
       // Set cookie
       cookies.set("jwt_authorization", resp.data.token, {
