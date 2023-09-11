@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 export default function Header() {
   return (
     <nav className="bg-white w-full">
-      <Button label='Cerrar sesión'></Button>
+      
     </nav>
   )
 }

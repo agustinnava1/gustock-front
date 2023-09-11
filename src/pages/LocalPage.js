@@ -2,7 +2,7 @@ import { Card } from 'primereact/card';
 import { Component } from "react"
 import { LocalService } from "../services/local.service";
 
-export default class Home extends Component {
+export default class LocalPage extends Component {
   constructor() {
     super();
     this.state = {

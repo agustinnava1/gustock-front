@@ -1,18 +1,18 @@
 import axios from "axios";
-import { BASE_URL } from "../helper/AxionHelper";
+import { BASE_URL, config } from "../helper/AxionHelper";
+
+const baseUrl = BASE_URL + "/local";
 
 export class LocalService{
 
-    baseUrl = BASE_URL + "/local";
+    getById(id){return axios.get(baseUrl + "/" + id, config).then(res => res.data)}
 
-    getById(id){return axios.get(this.baseUrl + "/" + id);}
+    create(local){return axios.post(baseUrl + "/crear", local, config).then(res => res.data)}
 
-    create(local){return axios.post(this.baseUrl + "/crear" + local)}
+    update(local){return axios.put(baseUrl + "/modificar/" + local.id, local, config).then(res => res.data)}
 
-    update(local){return axios.put(this.baseUrl + "/modificar/" + local.id, local)}
+    delete(id){return axios.delete(baseUrl + "/eliminar/" + id, config).then(res => res.data)}
 
-    delete(id){return axios.delete(this.baseUrl + "/eliminar/" + id)}
-
-    getAll(){return axios.get(this.baseUrl+ "/listar").then(res => res.data);}
-
+    getAll(){return axios.get(baseUrl + "/listar", config).then(res => res.data)}
+        
 }

@@ -1,7 +1,16 @@
-import axios from "axios"
+
+export let token = null;
 
 export const BASE_URL = "http://localhost:8080";
 
-export const myAxios = axios.create({
-  baseURL: BASE_URL
-});
+export const config = {
+  headers: {
+      Authorization: token
+  }
+} 
+
+export const setToken = newToken =>{
+  token = 'Bearer ' + newToken
+}
+
+

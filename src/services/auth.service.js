@@ -1,13 +1,13 @@
 import axios from "axios";
 import { BASE_URL } from "../helper/AxionHelper";
 
+const baseUrl = BASE_URL + "/auth";
+
 class AuthService{
 
-    baseUrl = BASE_URL + "/auth";
+    login(userDetail){return axios.post(baseUrl + "/login", userDetail).then(res => res.data);}
 
-    login(userDetail){return axios.post(this.baseUrl + "/login", userDetail);}
-
-    register(userDetail){return axios.post(this.baseUrl + "/register", userDetail)}
+    register(userDetail){return axios.post(baseUrl + "/register", userDetail)}
 
 }
 
