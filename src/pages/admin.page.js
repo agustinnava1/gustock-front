@@ -38,7 +38,17 @@ export const AdminPage = () => {
       <div>
         <h1 className="text-[42px] my-5">Mis Depósitos</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
+          {depositos.map(deposito => (
+            <div className="bg-white border rounded-lg shadow">
+              <div className="p-5">
+                <h5 className="mb-2 text-2xl font-bold text-gray-900">{deposito.nombre}</h5>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{deposito.direccion}</p>
+                <Link to={`/local/${deposito.id}`}>
+                  <Button label="Ingresar" size="small" />
+                </Link>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
