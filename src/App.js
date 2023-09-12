@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { setToken } from "./helper/AxionHelper";
 
-import Home from "./pages/HomePage";
-import Login from "./pages/LoginPage";
+import { Home } from "./pages/home.page";
+import { Login } from "./pages/login.page";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -26,7 +26,7 @@ function App() {
     <div>
       {user
           ? <Home></Home>
-          : <Login></Login>
+          : <Home></Home>
       }
     </div>
   );

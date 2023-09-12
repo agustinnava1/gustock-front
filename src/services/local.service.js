@@ -3,7 +3,7 @@ import { BASE_URL, config } from "../helper/AxionHelper";
 
 const baseUrl = BASE_URL + "/local";
 
-export class LocalService{
+class LocalService{
 
     getById(id){return axios.get(baseUrl + "/" + id, config).then(res => res.data)}
 
@@ -16,3 +16,5 @@ export class LocalService{
     getAll(){return axios.get(baseUrl + "/listar", config).then(res => res.data)}
         
 }
+
+export default new LocalService();

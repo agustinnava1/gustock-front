@@ -3,7 +3,10 @@ import { Routes, Route } from "react-router-dom";
 import Sidebar, { SidebarItem } from "../components/sidebar.component";
 import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings } from 'lucide-react';
 
-function Home() {
+import { AdminPage } from "./admin.page";
+import { LocalPage } from "./local.page";
+
+export const Home = () => {
   return (
     <div className="flex">
       <Sidebar>
@@ -36,19 +39,18 @@ function Home() {
       </Sidebar>
       <div className="grow">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/inicio" element={<Home />} />
-          <Route path="/panel" element={<Home />} />
-          <Route path="/ventas" element={<Home />} />
-          <Route path="/productos" element={<Home />} />
-          <Route path="/reposicion" element={<Home />} />
-          <Route path="/mensajeria" element={<Home />} />
-          <Route path="/notificaciones" element={<Home />} />
-          <Route path="/ajustes" element={<Home />} />
+          <Route path="/inicio" element={<AdminPage/>}/>
+          <Route path="/panel" />
+          <Route path="/ventas" />
+          <Route path="/productos" />
+          <Route path="/reposicion"  />
+          <Route path="/mensajeria"  />
+          <Route path="/notificaciones" />
+          <Route path="/ajustes" />
+
+          <Route path="/local" element={<LocalPage />}/>
         </Routes>
       </div>
     </div>
   )
 }
-
-export default Home;

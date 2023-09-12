@@ -1,14 +1,13 @@
-
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
+import { setToken } from "../helper/AxionHelper";
 import { InputText } from 'primereact/inputtext';
 
 import AuthService from '../services/auth.service';
-import { setToken } from "../helper/AxionHelper";
 
-function Login() {
+export const Login = () => {
   useEffect(() => {
     const loggedUserJSON = localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
@@ -85,9 +84,7 @@ function Login() {
           <img className="max-w-full"
             src="https://scontent.fepa14-1.fna.fbcdn.net/v/t39.30808-6/300785795_630035965347940_3805356491541379238_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a2f6c7&_nc_eui2=AeHO8l0ulJAACKgYJ3uegHzF28Utcy80ogjbxS1zLzSiCOmMh9XzQAZ1SyMclzRQPTz7Rge_lmTo2GJD3_uJ7Miy&_nc_ohc=R_t7s3LAAVIAX_bsmPN&_nc_ht=scontent.fepa14-1.fna&oh=00_AfAFfBW1lP-K97sOAJ8iRjc8BX1iU3-oOFb4Cw0joBS5Yg&oe=6502BA62" />
         </div>
-      </div >
+      </div>
     </div>
   )
 }
-
-export default Login;

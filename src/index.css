@@ -5,4 +5,5 @@
 body{
   color: #2A2B2A;
   background-color: #EEF1F6!important;
+  font-family: var(--font-family);
 }
