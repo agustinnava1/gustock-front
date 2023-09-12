@@ -5,6 +5,7 @@ import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSqu
 
 import { AdminPage } from "./admin.page";
 import { LocalPage } from "./local.page";
+import Header from "../components/header.component";
 
 export const Home = () => {
   return (
@@ -38,6 +39,7 @@ export const Home = () => {
         </NavLink>
       </Sidebar>
       <div className="grow">
+        <Header></Header>
         <Routes>
           <Route path="/inicio" element={<AdminPage/>}/>
           <Route path="/panel" />
@@ -48,7 +50,7 @@ export const Home = () => {
           <Route path="/notificaciones" />
           <Route path="/ajustes" />
 
-          <Route path="/local" element={<LocalPage />}/>
+          <Route exact path="/local/:id" element={<LocalPage />}/>
         </Routes>
       </div>
     </div>

@@ -9,6 +9,10 @@ export const config = {
   }
 } 
 
+export const setUser = user =>{
+  localStorage.setItem('loggedUser', user)
+}
+
 export const setToken = newToken =>{
   token = 'Bearer ' + newToken
 }

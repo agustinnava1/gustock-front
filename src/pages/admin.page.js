@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button } from 'primereact/button';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import LocalService from "../services/local.service";
 
@@ -26,9 +26,9 @@ export const AdminPage = () => {
               <div className="p-5">
                 <h5 className="mb-2 text-2xl font-bold text-gray-900">{local.nombre}</h5>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{local.direccion}</p>
-                <NavLink to={"/local/" + local.id}>
+                <Link to={`/local/${local.id}`}>
                   <Button label="Ingresar" size="small" />
-                </NavLink>
+                </Link>
               </div>
             </div>
           ))}

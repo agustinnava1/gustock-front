@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
+import { setUser } from "../helper/AxionHelper";
 
 import { Button } from 'primereact/button';
 import { Message } from 'primereact/message';
-import { setToken } from "../helper/AxionHelper";
 import { InputText } from 'primereact/inputtext';
 
 import AuthService from '../services/auth.service';
@@ -13,13 +13,11 @@ export const Login = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      setToken(user)
     }
   }, [])
 
   const [errorMessage, setErrorMessage] = useState();
-  // Initialize user state
-  const [user, setUser] = useState(null);
+
   const [userDetail, setUserDetail] = useState({
     username: "",
     password: ""
@@ -43,8 +41,6 @@ export const Login = () => {
       localStorage.setItem(
         'loggedUser', JSON.stringify(resp)
       )
-      setUser(resp)
-      setToken(resp)
     }).catch((error) => {
       setErrorMessage('Usuario o contraseña incorrecto');
       setTimeout(() => {
