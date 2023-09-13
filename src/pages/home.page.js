@@ -1,11 +1,18 @@
 import { NavLink } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
+import Header from "../components/header.component";
 import Sidebar, { SidebarItem } from "../components/sidebar.component";
 import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings } from 'lucide-react';
 
 import { AdminPage } from "./admin.page";
 import { LocalPage } from "./local.page";
-import Header from "../components/header.component";
+import { PanelPage } from "./panel.page";
+import { VentasPage } from "./ventas.page";
+import { AjustesPage } from "./ajustes.page";
+import { ProductosPage } from "./productos.page";
+import { ReposicionPage } from "./reposicion.page";
+import { MensajeriaPage } from "./mensajeria.page";
+import { NotificacionesPage } from "./notificaciones.page";
 
 export const Home = () => {
   return (
@@ -41,16 +48,16 @@ export const Home = () => {
       <div className="grow">
         <Header></Header>
         <Routes>
-          <Route path="/inicio" element={<AdminPage/>}/>
-          <Route path="/panel" />
-          <Route path="/ventas" />
-          <Route path="/productos" />
-          <Route path="/reposicion"  />
-          <Route path="/mensajeria"  />
-          <Route path="/notificaciones" />
-          <Route path="/ajustes" />
+          <Route path="/inicio" element={<AdminPage />} />
+          <Route path="/panel" element={<PanelPage />} />
+          <Route path="/ventas" element={<VentasPage />} />
+          <Route path="/productos" element={<ProductosPage />} />
+          <Route path="/reposicion" element={<ReposicionPage />} />
+          <Route path="/mensajeria" element={<MensajeriaPage />} />
+          <Route path="/notificaciones" element={<NotificacionesPage />} />
+          <Route path="/ajustes" element={<AjustesPage />} />
 
-          <Route exact path="/local/:id" element={<LocalPage />}/>
+          <Route exact path="/local/:id" element={<LocalPage />} />
         </Routes>
       </div>
     </div>
