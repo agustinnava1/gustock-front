@@ -3,6 +3,7 @@ export function formatCurrency(number) {
     style: "currency",
     currency: "ARS",
     minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(number);
 }
 

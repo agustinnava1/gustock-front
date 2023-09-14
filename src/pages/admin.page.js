@@ -19,7 +19,7 @@ export const AdminPage = () => {
   return (
     <div className="m-5">
       <div>
-        <h2 className="sm:text-4xl text-5xl font-medium title-font text-gray-900 mb-5">Mis Locales</h2>
+        <h2 className="sm:text-4xl text-5xl font-medium mb-5">Mis Locales</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {locales.map(local => (
             <div className="bg-white border rounded-lg shadow">
