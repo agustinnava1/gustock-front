@@ -20,7 +20,7 @@ export const MarcaComponent = () => {
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "Se eliminará al proveedor de la base del sistema",
+      text: "Se eliminará la marca de la base del sistema",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3B82F6',
@@ -30,22 +30,22 @@ export const MarcaComponent = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         MarcaService.delete(id)
-          .then((data) => {
+          .then(() => {
             setListaMarcas(listaMarcas.filter((m) => m.id !== id));
-            Swal.fire('Eliminado', 'El proveedor ha sido eliminado del sistema.', 'success');
+            Swal.fire('Eliminado', 'La marca ha sido eliminado del sistema.', 'success');
           })
           .catch((error) => {
             console.error('Error deleting product:', error);
-            Swal.fire('Error', 'Hubo un problema al eliminar el proveedor. Por favor, inténtalo de nuevo más tarde.', 'error');
+            Swal.fire('Error', 'Hubo un problema al eliminar la marca. Por favor, inténtalo de nuevo más tarde.', 'error');
           });
       }
     })
   };
 
   return (
-    <div>
+    <div className="p-5">
       <div className="border rounded p-5">
-        <DataTable value={listaMarcas} scrollable scrollHeight="400px" size="small">
+        <DataTable value={listaMarcas} scrollable scrollHeight="350px" size="small">
           <Column field="descripcion" header="Descripción"></Column>
           <Column header="Acciones" style={{ width: '10%' }}
             body={(rowData) => (

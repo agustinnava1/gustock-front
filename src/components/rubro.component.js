@@ -5,22 +5,22 @@ import { useState, useEffect } from "react"
 import { DataTable } from "primereact/datatable"
 
 import Swal from 'sweetalert2';
-import ProveedorService from "../services/proveedor.service"
+import RubroService from "../services/rubro.service";
 
-export const ProveedorComponent = () => {
+export const RubroComponent = () => {
   const { id } = useState(null);
-  const [listaProveedores, setListaProveedores] = useState([])
+  const [listaRubros, setListaRubros] = useState([])
 
   useEffect(() => {
-    ProveedorService.getAll().then(data => {
-      setListaProveedores(data);
+    RubroService.getAll().then(data => {
+      setListaRubros(data);
     })
   }, []);
 
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "Se eliminará al proveedor de la base del sistema",
+      text: "Se eliminará el rubro de la base del sistema",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3B82F6',
@@ -29,25 +29,24 @@ export const ProveedorComponent = () => {
       cancelButtonText: 'Cancelar',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        ProveedorService.delete(id)
-          .then((data) => {
-            setListaProveedores(listaProveedores.filter((p) => p.id !== id));
-            Swal.fire('Eliminado', 'El proveedor ha sido eliminado del sistema.', 'success');
+        RubroService.delete(id)
+          .then(() => {
+            setListaRubros(listaRubros.filter((m) => m.id !== id));
+            Swal.fire('Eliminado', 'El rubro ha sido eliminado del sistema.', 'success');
           })
           .catch((error) => {
             console.error('Error deleting product:', error);
-            Swal.fire('Error', 'Hubo un problema al eliminar el proveedor. Por favor, inténtalo de nuevo más tarde.', 'error');
+            Swal.fire('Error', 'Hubo un problema al eliminar el rubro. Por favor, inténtalo de nuevo más tarde.', 'error');
           });
       }
     })
   };
 
   return (
-    <div>
+    <div className="p-5">
       <div className="border rounded p-5">
-        <DataTable value={listaProveedores} scrollable scrollHeight="400px" size="small">
-          <Column field="razonSocial" header="Razon social"></Column>
-          <Column field="ciudad" header="Ciudad"></Column>
+        <DataTable value={listaRubros} scrollable scrollHeight="350px" size="small">
+          <Column field="descripcion" header="Descripción"></Column>
           <Column header="Acciones" style={{ width: '10%' }}
             body={(rowData) => (
               <div className='flex'>

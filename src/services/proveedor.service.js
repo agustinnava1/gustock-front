@@ -7,7 +7,7 @@ class ProveedorService {
 
   getById(id) { return axios.get(this.baseUrl + "/" + id).then(res => res.data) }
 
-  create(proveedor) { return axios.post(this.baseUrl + "/crear" + proveedor).then(res => res.data) }
+  create(proveedor) { return axios.post(this.baseUrl + "/crear" , proveedor).then(res => res.data) }
 
   update(proveedor) { return axios.put(this.baseUrl + "/modificar/" + proveedor.id, proveedor).then(res => res.data) }
 
