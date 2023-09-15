@@ -22,7 +22,7 @@ export const ProductosPage = () => {
   return (
     <div className='m-5'>
       <h2 className="sm:text-4xl text-5xl font-medium mb-3">Mis productos</h2>
-      <span class="text-lg font-normal">Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema.</span>
+      <span class="text-xl font-normal">Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema.</span>
       <Card className='drop-shadow !shadow-none mt-3'>
         <div></div>
         <DataTable value={listaProductos} paginator
