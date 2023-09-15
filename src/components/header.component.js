@@ -1,3 +1,4 @@
+import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext"
 
 export default function Header() {
@@ -7,10 +8,9 @@ export default function Header() {
   return (
     <nav className="flex justify-between bg-white w-full p-4">
       <span className="flex-1 p-input-icon-left">
-        <i className="pi pi-search" />
-        <InputText placeholder="Buscar producto por código, código de barras o descripción" className="p-inputtext-sm" />
+        <Button label='Buscar producto' className="hover:!bg-blue-600" size="small"></Button>
       </span>
-      <span className="text-2xl font-semibold text-blue-500 my-auto">{user.name} | {rol}</span>
+      <span className="text-xl font-semibold text-blue-500 my-auto">{user.name} | {rol}</span>
     </nav>
   )
 }

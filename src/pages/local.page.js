@@ -24,7 +24,6 @@ export const LocalPage = () => {
   const [date, setDate] = useState(null);
   const [rubro, setRubro] = useState(null);
 
-
   const [listaRubros, setListaRubros] = useState([])
   const [listaProductos, setListaProductos] = useState([])
 
@@ -90,45 +89,45 @@ export const LocalPage = () => {
   return (
     <div className='lg:flex justify-between m-5'>
       <div className='w-1/6'>
-        <Card title="Local" className='text-center border !shadow-none'>
+        <Card title="Local" className='text-center border drop-shadow !shadow-none'>
           <h2 className="text-[28px]">{local.nombre}</h2>
           <p className="text-[20px]">{local.direccion}</p>
         </Card>
-        <Card title="Venta" className='text-center border !shadow-none mt-5'>
+        <Card title="Venta" className='text-center border drop-shadow !shadow-none mt-5'>
           <div className='mb-5'>
             <Link to={`/local/${local.nombre}/venta`}>
-              <Button label='Nueva venta' className='hover:!bg-blue-600 w-3/4' />
+              <Button label='Nueva venta' className='hover:!bg-blue-600 w-3/4' size='small' />
             </Link>
           </div>
           <div>
             <Link to={`/local/${local.nombre}/devolucion`}>
-              <Button label='Devolución' className='hover:!bg-blue-600 w-3/4' />
+              <Button label='Devolución' className='hover:!bg-blue-600 w-3/4' size='small' />
             </Link>
           </div>
         </Card>
-        <Card title="Turno" className='text-center border !shadow-none mt-5'>
+        <Card title="Turno" className='text-center border drop-shadow !shadow-none mt-5'>
           <div className='mb-5'>
-            <Button label='Abrir turno' className='hover:!bg-blue-600 w-3/4' />
+            <Button label='Abrir turno' className='hover:!bg-blue-600 w-3/4' size='small' />
           </div>
           <div>
-            <Button label='Cerrar turno' className='hover:!bg-blue-600 w-3/4' />
+            <Button label='Cerrar turno' className='hover:!bg-blue-600 w-3/4' size='small' />
           </div>
         </Card>
       </div>
 
       <div className='w-5/6 ms-5'>
-        <Card title="Productos" className='border !shadow-none'>
+        <Card title="Productos" className='border drop-shadow !shadow-none'>
           <div className='flex justify-between mb-5'>
             <div>
-              <Button label='Filtrar' className='hover:!bg-blue-600' onClick={toggleExpand}>
+              <Button label='Filtrar' className='hover:!bg-blue-600' size='small' onClick={toggleExpand}>
                 <ChevronDown size={20} className='ms-2' />
               </Button>
             </div>
             <div>
-              <Button label='Exportar a excel' className='hover:!bg-blue-600 !me-5'>
+              <Button label='Exportar a excel' className='hover:!bg-blue-600 !me-5' size='small'>
                 <Download size={20} className='ms-2' />
               </Button>
-              <Button label='Agregar' className='hover:!bg-blue-600' >
+              <Button label='Agregar' className='hover:!bg-blue-600' size='small' >
                 <Plus size={20} className='ms-2' />
               </Button>
             </div>
