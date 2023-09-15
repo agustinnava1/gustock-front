@@ -16,13 +16,13 @@ export default function Header() {
         <Button label='Buscar producto' className="hover:!bg-blue-600" size="small" onClick={() => setVisible(true)}></Button>
         <div className="card flex justify-content-center">
           <Dialog header="Buscar producto por código, código de barras o descripción" className="bg-blue-500"
-                  visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
+            visible={visible} style={{ width: '50vw' }} onHide={() => setVisible(false)}>
             <InputText className="p-inputtext-lg w-full !shadow-none" autoFocus></InputText>
           </Dialog>
         </div>
       </div>
-      <span className="flex-auto text-xl text-center font-semibold text-blue-500 my-auto">{user.name}</span>
-      <span className="flex-auto text-xl text-end font-semibold text-blue-500 my-auto">{rol}</span>
+      <span className="flex-auto text-2xl font-bold text-blue-500 text-center my-auto">GUSTOCK</span>
+      <span className="flex-auto text-xl text-end font-semibold text-blue-500 my-auto">{user.name} | {rol}</span>
     </nav>
   )
 }

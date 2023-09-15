@@ -12,8 +12,8 @@ export default function Sidebar({ children }) {
       <nav className="h-full flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <span
-            className={`text-2xl font-bold text-blue-500 overflow-hidden transition-all ${expanded ? "w-32" : "w-0"}`}>
-            GUSTOCK
+            className={`text-2xl font-bold text-blue-500 overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
+            Navegación
           </span>
           <button
             onClick={() => setExpanded((curr) => !curr)}
@@ -27,7 +27,7 @@ export default function Sidebar({ children }) {
         </SidebarContext.Provider>
 
         <div className="border-t p-3">
-          <Button icon={<LogOut size={20} />} severity="info"/>
+          <Button icon={<LogOut size={20} />} severity="info" />
         </div>
       </nav>
     </aside>

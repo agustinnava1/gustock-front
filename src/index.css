@@ -7,3 +7,8 @@ body{
   background-color: #EEF1F6!important;
   font-family: var(--font-family);
 }
+
+.p-accordion .p-accordion-header .p-accordion-header-link{
+  color: white!important;
+  background-color: #3B82F6!important;
+}
