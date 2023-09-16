@@ -17,17 +17,20 @@ export const AdminPage = () => {
   const depositos = sucursales.filter(deposito => deposito.tipo === 'DEPOSITO');
 
   return (
-    <div className="m-5">
+    <div className="container my-5 mx-auto px-48">
       <div>
-        <h2 className="sm:text-4xl text-5xl font-medium mb-5">Mis Locales</h2>
+        <h2 className="sm:text-4xl text-5xl font-medium text-gray-600 mb-5">Mis Locales</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {locales.map(local => (
-            <div className="bg-white border rounded-lg shadow">
-              <div className="p-5">
-                <h5 className="mb-2 text-2xl font-bold text-gray-900">{local.nombre}</h5>
+            <div className="border text-center rounded drop-shadow">
+              <div className="bg-blue-500 py-5">
+                <i className="bi bi-shop text-white text-8xl"></i>
+              </div>
+              <div className="bg-white  p-5">
+                <h5 className="mb-2 text-2xl font-bold text-blue-900">{local.nombre}</h5>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{local.direccion}</p>
                 <Link to={`/local/${local.id}`}>
-                  <Button label="Ingresar" size="small" />
+                  <Button label="Ingresar" size="small" className="hover:!bg-blue-600 w-1/2" />
                 </Link>
               </div>
             </div>
@@ -36,15 +39,18 @@ export const AdminPage = () => {
       </div>
 
       <div>
-        <h1 className="sm:text-4xl text-5xl font-medium title-font text-gray-900| my-5">Mis Depósitos</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <h2 className="sm:text-4xl text-5xl font-medium title-font text-gray-600 my-5">Mis Depósitos</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {depositos.map(deposito => (
-            <div className="bg-white border rounded-lg shadow">
-              <div className="p-5">
-                <h5 className="mb-2 text-2xl font-bold text-gray-900">{deposito.nombre}</h5>
+            <div className="border text-center rounded drop-shadow">
+              <div className="bg-cyan-500 py-5">
+                <i className="bi bi-shop text-white text-8xl"></i>
+              </div>
+              <div className="bg-white p-5">
+                <h5 className="mb-2 text-2xl font-bold text-cyan-900">{deposito.nombre}</h5>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{deposito.direccion}</p>
                 <Link to={`/local/${deposito.id}`}>
-                  <Button label="Ingresar" size="small" />
+                  <Button label="Ingresar" size="small" className="!bg-cyan-500 !border-cyan-500 hover:!bg-cyan-600 w-1/2"/>
                 </Link>
               </div>
             </div>

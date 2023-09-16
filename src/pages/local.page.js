@@ -90,12 +90,12 @@ export const LocalPage = () => {
     <div className='lg:flex justify-between m-5'>
       <div className='w-1/6'>
         <Card title="Local" className='text-center border drop-shadow !shadow-none'>
-          <h2 className="text-[28px]">{local.nombre}</h2>
+          <h2 className="text-[28px] font-bold">{local.nombre}</h2>
           <p className="text-[20px]">{local.direccion}</p>
         </Card>
         <Card title="Venta" className='text-center border drop-shadow !shadow-none mt-5'>
           <div className='mb-5'>
-            <Link to={`/local/${local.nombre}/venta`}>
+            <Link to={`/local/${local.nombre}/venta/registrar`}>
               <Button label='Nueva venta' className='hover:!bg-blue-600 w-3/4' size='small' />
             </Link>
           </div>
@@ -193,13 +193,19 @@ export const LocalPage = () => {
               body={(rowData) => (
                 <div className='flex'>
                   <Link to={`/producto/detalle/${rowData.producto.id}`} className='me-3'>
-                    <Button icon="pi pi-eye" severity="info" size='small'></Button>
+                    <button className='bg-cyan-500 rounded text-xl text-white px-2 py-1'>
+                      <i className='bi bi-eye-fill'></i>
+                    </button>
                   </Link>
                   <Link to={`/producto/modificar/${rowData.producto.id}`} className='me-3'>
-                    <Button icon="pi pi-pencil" severity="warning" size='small'></Button>
+                    <button className='bg-yellow-500 rounded text-xl text-white px-2 py-1'>
+                      <i className='bi bi-pencil-fill'></i>
+                    </button>
                   </Link>
-                  <Button icon="pi pi-trash" severity="danger" size='small'
-                    onClick={() => handleDelete(rowData.id)}></Button>
+                  <button className='bg-red-500 rounded text-xl text-white px-2 py-1'
+                    onClick={() => handleDelete(rowData.id)}>
+                    <i className='bi bi-trash-fill'></i>
+                  </button>
                 </div>
               )}>
             </Column>

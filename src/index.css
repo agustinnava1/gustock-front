@@ -8,6 +8,10 @@ body{
   font-family: var(--font-family);
 }
 
+.p-card .p-card-title{
+  color:  rgb(65, 84, 132)!important;
+}
+
 .p-accordion .p-accordion-header .p-accordion-header-link{
   color: white!important;
   background-color: #3B82F6!important;

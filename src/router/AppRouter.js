@@ -10,6 +10,8 @@ import { ProductosPage } from "../pages/productos.page";
 import { ReposicionPage } from "../pages/reposicion.page";
 import { MensajeriaPage } from "../pages/mensajeria.page";
 import { NotificacionesPage } from "../pages/notificaciones.page";
+import { ProductoDetalle} from '../pages/producto/detalle.page';
+import { RegistrarVenta } from '../pages/venta.page';
 
 export const AppRouter = () => {
   return (
@@ -24,6 +26,16 @@ export const AppRouter = () => {
         <Route path="/ajustes" element={<AjustesPage />} />
 
         <Route exact path="/local/:id" element={<LocalPage />} />
+
+        <Route exact path="/local/:nombre/venta/registrar" element={<RegistrarVenta />} />
+        <Route exact path="/local/:nombre/devolucion/registrar" element={<ProductoDetalle />} />
+        <Route exact path="/venta/detalle/:id" element={<ProductoDetalle />} />
+        <Route exact path="/devolucion/detalle/:id" element={<ProductoDetalle />} />
+
+        <Route exact path="/producto/registrar" element={<ProductoDetalle />} />
+        <Route exact path="/producto/detalle/:id" element={<ProductoDetalle />} />
+        <Route exact path="/producto/modificar/:id" element={<ProductoDetalle />} />
+        <Route exact path="/producto/busqueda/:busqueda" element={<ProductoDetalle />} />
       </Routes>
   )
 } 
