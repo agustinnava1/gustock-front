@@ -13,3 +13,11 @@ export function formatDate(number) {
     timeStyle: "short"
   }).format(new Date(number));
 }
+
+export function formatDateLong(number) {
+  return new Intl.DateTimeFormat("es-sp", {
+    dateStyle: "long",
+    timeStyle: "short"
+  }).format(new Date(number));
+}
+

@@ -193,7 +193,7 @@ export const LocalPage = () => {
               body={(rowData) => (
                 <div className='flex'>
                   <Link to={`/producto/detalle/${rowData.producto.id}`} className='me-3'>
-                    <button className='bg-cyan-500 rounded text-xl text-white px-2 py-1'>
+                    <button className='bg-sky-500 rounded text-xl text-white px-2 py-1'>
                       <i className='bi bi-eye-fill'></i>
                     </button>
                   </Link>

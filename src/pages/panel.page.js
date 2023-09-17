@@ -4,13 +4,97 @@ import { MarcaComponent } from '../components/marca.component';
 import { ProveedorComponent } from '../components/proveedor.component';
 import { RubroComponent } from '../components/rubro.component';
 import { Card } from 'primereact/card';
+import { PanelMenu } from 'primereact/panelmenu';
 
 export const PanelPage = () => {
+
+  const items = [
+    {
+      label: 'File',
+      icon: 'pi pi-fw pi-file',
+      items: [
+        {
+          label: 'Delete',
+          icon: 'pi pi-fw pi-trash'
+        },
+        {
+          label: 'Export',
+          icon: 'pi pi-fw pi-external-link'
+        }
+      ]
+    },
+    {
+      label: 'Edit',
+      icon: 'pi pi-fw pi-pencil',
+      items: [
+        {
+          label: 'Left',
+          icon: 'pi pi-fw pi-align-left'
+        },
+        {
+          label: 'Right',
+          icon: 'pi pi-fw pi-align-right'
+        },
+      ]
+    },
+    {
+      label: 'Users',
+      icon: 'pi pi-fw pi-user',
+      items: [
+        {
+          label: 'New',
+          icon: 'pi pi-fw pi-user-plus'
+        },
+        {
+          label: 'Delete',
+          icon: 'pi pi-fw pi-user-minus'
+        },
+      ]
+    },
+    {
+      label: 'Users',
+      icon: 'pi pi-fw pi-user',
+      items: [
+        {
+          label: 'New',
+          icon: 'pi pi-fw pi-user-plus'
+        },
+        {
+          label: 'Delete',
+          icon: 'pi pi-fw pi-user-minus'
+        },
+      ]
+    },
+    {
+      label: 'Users',
+      icon: 'pi pi-fw pi-user',
+      items: [
+        {
+          label: 'New',
+          icon: 'pi pi-fw pi-user-plus'
+        },
+        {
+          label: 'Delete',
+          icon: 'pi pi-fw pi-user-minus'
+        },
+      ]
+    },
+  ];
+
   return (
     <div className='m-5'>
       <h2 className="sm:text-4xl text-5xl font-medium mb-5">Panel de administración</h2>
       <span class="text-xl font-normal">Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema.</span>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-5'>
+     
+      <div className="card flex justify-content-center">
+        <PanelMenu model={items} className="w-full" />
+      </div>
+
+    </div >
+  )
+}
+
+/*<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-5'>
         <div className='bg-white drop-shadow !shadow-none'>
           <h3 className='bg-blue-500 font-bold text-lg text-white p-5'>Proveedores</h3>
           <ProveedorComponent></ProveedorComponent>
@@ -29,10 +113,7 @@ export const PanelPage = () => {
         <div className='bg-white drop-shadow !shadow-none'>
           <h3 className='bg-blue-500 font-bold text-lg text-white p-5'>Usuarios</h3>
         </div>
-      </div >
-    </div >
-  )
-}
+      </div >*/
 
 /*<Card className='text-center border drop-shadow !shadow-none !bg-blue-500 !text-white'>
           <i className="bi bi-briefcase text-7xl"></i>

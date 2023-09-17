@@ -15,6 +15,10 @@ h2{
   color:   #1764C6!important;
 }
 
+.p-card .p-card-content{
+  padding: 0!important;
+}
+
 .p-datatable .p-datatable-thead > tr > th{
   color: white!important;
   background-color: #0ea5e9!important;

@@ -17,10 +17,10 @@ export const AdminPage = () => {
   const depositos = sucursales.filter(deposito => deposito.tipo === 'DEPOSITO');
 
   return (
-    <div className="container my-5 mx-auto px-48">
+    <div className="container m-5">
       <div>
         <h2 className="sm:text-4xl text-5xl font-medium text-gray-600 mb-5">Mis Locales</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {locales.map(local => (
             <div className="border text-center rounded drop-shadow">
               <div className="bg-blue-500 py-5">
@@ -40,7 +40,7 @@ export const AdminPage = () => {
 
       <div>
         <h2 className="sm:text-4xl text-5xl font-medium title-font text-gray-600 my-5">Mis Depósitos</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {depositos.map(deposito => (
             <div className="border text-center rounded drop-shadow">
               <div className="bg-cyan-500 py-5">

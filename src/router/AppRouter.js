@@ -4,13 +4,15 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { AdminPage } from "../pages/admin.page";
 import { LocalPage } from "../pages/local.page";
 import { PanelPage } from "../pages/panel.page";
-import { VentasPage } from "../pages/ventas.page";
 import { AjustesPage } from "../pages/ajustes.page";
-import { ProductosPage } from "../pages/productos.page";
 import { ReposicionPage } from "../pages/reposicion.page";
 import { MensajeriaPage } from "../pages/mensajeria.page";
 import { NotificacionesPage } from "../pages/notificaciones.page";
+
+import { ProductosPage } from "../pages/producto/productos.page";
 import { ProductoDetalle} from '../pages/producto/detalle.page';
+
+import { VentasPage } from "../pages/venta/ventas.page";
 import { RegistrarVenta } from '../pages/venta/venta.page';
 
 export const AppRouter = () => {

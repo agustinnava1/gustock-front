@@ -4,6 +4,7 @@ import { addLocale } from 'primereact/api'
 import { Dropdown } from "primereact/dropdown"
 import { Calendar } from "primereact/calendar"
 import { DataTable } from "primereact/datatable"
+import { Button } from "primereact/button"
 
 export const VentasPage = () => {
 
@@ -21,31 +22,39 @@ export const VentasPage = () => {
     <div className="m-5">
       <h2 className="sm:text-4xl text-5xl font-medium mb-3">Mis ventas</h2>
       <span class="text-xl font-normal">Gestioná y explorá el registro histórico de ventas en todas las sucursales</span>
-      <Card className="my-5">
+      <Card className="drop-shadow !shadow-none my-5">
         <div className="flex">
           <div className='flex-1 me-3'>
-            <label htmlFor="fechaDesde" className='block font-medium text-lg mb-3'>Fecha desde:</label>
-            <Calendar showIcon dateFormat="dd/mm/yy" locale="es" />
+            <label htmlFor="fechaDesde" className='block font-medium text-lg mb-3'>Fecha desde</label>
+            <Calendar showIcon dateFormat="dd/mm/yy" locale="es" className="w-full" />
           </div>
           <div className='flex-1 me-3'>
-            <label htmlFor="fechaDesde" className='block font-medium text-lg mb-3'>Fecha desde:</label>
-            <Calendar showIcon dateFormat="dd/mm/yy" locale="es" />
+            <label htmlFor="fechaDesde" className='block font-medium text-lg mb-3'>Fecha desde</label>
+            <Calendar showIcon dateFormat="dd/mm/yy" locale="es" className="w-full" />
           </div>
           <div className='flex-1 me-3'>
-            <label htmlFor="local" className='block font-medium text-lg mb-3'>Local:</label>
+            <label htmlFor="local" className='block font-medium text-lg mb-3'>Local</label>
             <Dropdown optionLabel="local" className='w-full me-5' />
           </div>
           <div className='flex-1 me-3'>
-            <label htmlFor="tipoPago" className='block font-medium text-lg mb-3'>Tipo de pago:</label>
+            <label htmlFor="tipoPago" className='block font-medium text-lg mb-3'>Tipo de pago</label>
             <Dropdown optionLabel="tipoPago" className='w-full me-5' />
           </div>
           <div className='flex-1 me-3'>
-            <label htmlFor="cantidad" className='block font-medium text-lg mb-3'>Cantidad:</label>
+            <label htmlFor="cantidad" className='block font-medium text-lg mb-3'>Cantidad</label>
             <Dropdown optionLabel="cantidad" className='w-full me-5' />
+          </div>
+          <div className='flex-1 me-3'>
+            <label htmlFor="proveedor" className='block font-medium text-lg invisible mb-3'>boton</label>
+            <Button label='Aplicar' className='hover:!bg-blue-600' />
+          </div>
+          <div className='flex-1 text-end me-3'>
+            <label htmlFor="proveedor" className='block font-medium text-lg invisible mb-3'>boton</label>
+            <Button label='Opciones' className='hover:!bg-blue-600' />
           </div>
         </div>
       </Card>
-      <Card className="drop-shadow !shadow-none">
+      <Card title='Listado' className="drop-shadow !shadow-none mb-5">
         <DataTable editMode="cell" tableStyle={{ minWidth: '50rem' }} emptyMessage="Sin registro de ventas" size="small">
           <Column header="N° Venta" style={{ width: '5%' }}></Column>
           <Column header="Fecha" style={{ width: '10%' }}></Column>
@@ -59,6 +68,9 @@ export const VentasPage = () => {
           <Column header="Usuario" style={{ width: '10%' }}></Column>
           <Column header="Acciones" style={{ width: '5%' }}></Column>
         </DataTable>
+      </Card>
+      <Card title='Recaudación' className="drop-shadow !shadow-none">
+
       </Card>
     </div>
   )

@@ -7,7 +7,7 @@ export const AjustesPage = () => {
   return (
     <div className='m-5'>
       <h2 className='sm:text-4xl text-5xl font-medium mb-3'>Ajustes del sistema</h2>
-      <span class='text-lg font-normal'>Administra la configuración del sistema para adaptarlo a tus requisitos</span>
+      <span class='text-xl font-normal'>Administra la configuración del sistema para adaptarlo a tus requisitos</span>
       <div className="flex flex-wrap mt-5">
         <Card title='Recargo por tarjeta'
           subTitle='Se aplicará automáticamente sobre el precio de contado al momento de registrar o modificar un producto'
