@@ -11,7 +11,7 @@ import { ReposicionPage } from "../pages/reposicion.page";
 import { MensajeriaPage } from "../pages/mensajeria.page";
 import { NotificacionesPage } from "../pages/notificaciones.page";
 import { ProductoDetalle} from '../pages/producto/detalle.page';
-import { RegistrarVenta } from '../pages/venta.page';
+import { RegistrarVenta } from '../pages/venta/venta.page';
 
 export const AppRouter = () => {
   return (

@@ -5,15 +5,15 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import React, { useEffect, useState } from 'react';
 
-import { formatDate, formatCurrency } from "../helper/format";
-import productoService from '../services/producto.service';
+import { formatDate, formatCurrency } from "../../helper/format";
+import ProductoServicio from '../../services/producto.service';
 
 export const ProductosPage = () => {
 
   const [listaProductos, setListaProductos] = useState([])
 
   useEffect(() => {
-    productoService.getAll().then(data => {
+    ProductoServicio.listar().then(data => {
       setListaProductos(data)
       console.log(data)
     })

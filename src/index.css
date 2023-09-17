@@ -5,11 +5,19 @@
 body{
   color: #2A2B2A;
   background-color: #EEF1F6!important;
-  font-family: var(--font-family);
+}
+
+h2{
+  color:  rgb(65, 84, 132)!important;
 }
 
 .p-card .p-card-title{
-  color:  rgb(65, 84, 132)!important;
+  color:   #1764C6!important;
+}
+
+.p-datatable .p-datatable-thead > tr > th{
+  color: white!important;
+  background-color: #0ea5e9!important;
 }
 
 .p-accordion .p-accordion-header .p-accordion-header-link{
