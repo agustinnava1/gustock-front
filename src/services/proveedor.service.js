@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../helper/AxionHelper";
 
-class ProveedorService {
+class ProveedorServicio {
 
   baseUrl = BASE_URL + "/proveedor";
 
@@ -13,8 +13,8 @@ class ProveedorService {
 
   delete(id) { return axios.delete(this.baseUrl + "/eliminar/" + id).then(res => res.data) }
 
-  getAll() { return axios.get(this.baseUrl + "/listar").then(res => res.data) }
+  listar() { return axios.get(this.baseUrl + "/listar").then(res => res.data) }
 
 }
 
-export default new ProveedorService();
+export default new ProveedorServicio();
