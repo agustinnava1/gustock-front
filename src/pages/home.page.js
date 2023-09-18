@@ -1,5 +1,5 @@
-import { NavLink, useLocation } from "react-router-dom";
 import { AppRouter } from "../router/AppRouter";
+import { NavLink, useLocation } from "react-router-dom";
 
 import Header from "../components/header.component";
 import Sidebar, { SidebarItem } from "../components/sidebar.component";
@@ -12,7 +12,7 @@ export const Home = () => {
     <div className="flex">
       <Sidebar>
         <NavLink className="text-decoration-none" to={"/inicio"}>
-          <SidebarItem icon={<HomeIcon size={20} />} text="Inicio" active={location.pathname === '/inicio'}/>
+          <SidebarItem icon={<HomeIcon size={20} />} text="Inicio" active={location.pathname === '/inicio'} />
         </NavLink>
         <NavLink className="text-decoration-none" to={"/panel"}>
           <SidebarItem icon={<LayoutDashboard size={20} />} text="Panel" active={location.pathname === '/panel'} />

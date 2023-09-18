@@ -10,12 +10,13 @@ import { MensajeriaPage } from "../pages/mensajeria.page";
 import { NotificacionesPage } from "../pages/notificaciones.page";
 
 import { ProductosPage } from "../pages/producto/productos.page";
-import { ProductoDetalle} from '../pages/producto/detalle.page';
+import { ProductoDetalle} from '../pages/producto/producto.detalle.page';
 
 import { VentasPage } from "../pages/venta/ventas.page";
 import { RegistrarVenta } from '../pages/venta/venta.page';
 import { ProductosModificacionMasiva } from '../pages/producto/modificacion.masiva';
 import { ProductosModificacionRapida } from '../pages/producto/modificacion.rapida';
+import { ProductosRegistrar } from '../pages/producto/producto.registrar.page';
 
 export const AppRouter = () => {
   return (
@@ -39,7 +40,7 @@ export const AppRouter = () => {
         <Route path="/productos/modificacion/rapida" element={<ProductosModificacionRapida />} />
         <Route path="/productos/modificacion/masiva" element={<ProductosModificacionMasiva />} />
 
-        <Route exact path="/producto/registrar" element={<ProductoDetalle />} />
+        <Route exact path="/producto/registrar" element={<ProductosRegistrar />} />
         <Route exact path="/producto/detalle/:id" element={<ProductoDetalle />} />
         <Route exact path="/producto/modificar/:id" element={<ProductoDetalle />} />
         <Route exact path="/producto/buscar/:busqueda" element={<ProductoDetalle />} />
