@@ -7,7 +7,7 @@ body{
   background-color: #EEF1F6!important;
 }
 
-h2{
+h1, h2{
   color:  rgb(65, 84, 132)!important;
 }
 
@@ -24,7 +24,7 @@ h2{
   background-color: #0ea5e9!important;
 }
 
-.p-accordion .p-accordion-header .p-accordion-header-link{
+/*.p-accordion .p-accordion-header .p-accordion-header-link{
   color: white!important;
   background-color: #3B82F6!important;
-}
+}*/

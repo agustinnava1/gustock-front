@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 
 import { addLocale } from 'primereact/api';
 
-import LocalService from '../services/local.service';
+import LocalService from '../services/local.servicio';
 import StockService from '../services/stock.service';
 import RubroService from '../services/rubro.service';
 

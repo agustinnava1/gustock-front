@@ -28,7 +28,6 @@ export const ProductosPage = () => {
     })
   }, [])
 
-
   const menu = useRef(null);
 
   const items = [
@@ -106,8 +105,7 @@ export const ProductosPage = () => {
                     <i className='bi bi-pencil-fill'></i>
                   </button>
                 </Link>
-                <button className='bg-red-500 rounded text-xl text-white px-2 py-1'
-                >
+                <button className='bg-red-500 rounded text-xl text-white px-2 py-1' >
                   <i className='bi bi-trash-fill'></i>
                 </button>
               </div>

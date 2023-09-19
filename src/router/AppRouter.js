@@ -10,10 +10,11 @@ import { MensajeriaPage } from "../pages/mensajeria.page";
 import { NotificacionesPage } from "../pages/notificaciones.page";
 
 import { ProductosPage } from "../pages/producto/productos.page";
-import { ProductoDetalle} from '../pages/producto/producto.detalle.page';
+import { ProductoDetalle } from '../pages/producto/producto.detalle.page';
 
-import { VentasPage } from "../pages/venta/ventas.page";
-import { RegistrarVenta } from '../pages/venta/venta.page';
+import { VentasPagina } from "../pages/venta/ventas.pagina";
+import { RegistrarVenta } from '../pages/venta/venta.registrar.pagina';
+
 import { ProductosModificacionMasiva } from '../pages/producto/modificacion.masiva';
 import { ProductosModificacionRapida } from '../pages/producto/modificacion.rapida';
 import { ProductosRegistrar } from '../pages/producto/producto.registrar.page';
@@ -23,7 +24,6 @@ export const AppRouter = () => {
       <Routes>
         <Route path="/inicio" element={<AdminPage />} />
         <Route path="/panel" element={<PanelPage />} />
-        <Route path="/ventas" element={<VentasPage />} />
         <Route path="/reposicion" element={<ReposicionPage />} />
         <Route path="/mensajeria" element={<MensajeriaPage />} />
         <Route path="/notificaciones" element={<NotificacionesPage />} />
@@ -33,6 +33,8 @@ export const AppRouter = () => {
 
         <Route exact path="/local/:nombre/venta/registrar" element={<RegistrarVenta />} />
         <Route exact path="/local/:nombre/devolucion/registrar" element={<ProductoDetalle />} />
+
+        <Route path="/ventas" element={<VentasPagina />} />
         <Route exact path="/venta/detalle/:id" element={<ProductoDetalle />} />
         <Route exact path="/devolucion/detalle/:id" element={<ProductoDetalle />} />
 

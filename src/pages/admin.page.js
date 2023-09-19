@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Button } from 'primereact/button';
 import { Link } from 'react-router-dom';
 
-import LocalService from "../services/local.service";
+import LocalService from "../services/local.servicio";
 
 export const AdminPage = () => {
   const [sucursales, setSucursales] = useState([]);

@@ -5,14 +5,14 @@ import { useState, useEffect } from "react"
 import { DataTable } from "primereact/datatable"
 
 import Swal from 'sweetalert2';
-import MarcaService from "../services/marca.service";
+import MarcaServicio from "../services/marca.service";
 
 export const MarcaComponent = () => {
   const { id } = useState(null);
   const [listaMarcas, setListaMarcas] = useState([])
 
   useEffect(() => {
-    MarcaService.getAll().then(data => {
+    MarcaServicio.listar().then(data => {
       setListaMarcas(data);
     })
   }, []);
@@ -29,7 +29,7 @@ export const MarcaComponent = () => {
       cancelButtonText: 'Cancelar',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        MarcaService.delete(id)
+        MarcaServicio.eliminar(id)
           .then(() => {
             setListaMarcas(listaMarcas.filter((m) => m.id !== id));
             Swal.fire('Eliminado', 'La marca ha sido eliminado del sistema.', 'success');
@@ -43,7 +43,7 @@ export const MarcaComponent = () => {
   };
 
   return (
-    <div className="p-5">
+    <div>
       <div className="border rounded p-5">
         <DataTable value={listaMarcas} scrollable scrollHeight="350px" size="small">
           <Column field="descripcion" header="Descripción"></Column>

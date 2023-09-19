@@ -5,14 +5,14 @@ import { useState, useEffect } from "react"
 import { DataTable } from "primereact/datatable"
 
 import Swal from 'sweetalert2';
-import RubroService from "../services/rubro.service";
+import RubroServicio from "../services/rubro.service";
 
 export const RubroComponent = () => {
   const { id } = useState(null);
   const [listaRubros, setListaRubros] = useState([])
 
   useEffect(() => {
-    RubroService.getAll().then(data => {
+    RubroServicio.listar().then(data => {
       setListaRubros(data);
     })
   }, []);
@@ -29,7 +29,7 @@ export const RubroComponent = () => {
       cancelButtonText: 'Cancelar',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        RubroService.delete(id)
+        RubroServicio.eliminar(id)
           .then(() => {
             setListaRubros(listaRubros.filter((m) => m.id !== id));
             Swal.fire('Eliminado', 'El rubro ha sido eliminado del sistema.', 'success');
@@ -43,7 +43,7 @@ export const RubroComponent = () => {
   };
 
   return (
-    <div className="p-5">
+    <div>
       <div className="border rounded p-5">
         <DataTable value={listaRubros} scrollable scrollHeight="350px" size="small">
           <Column field="descripcion" header="Descripción"></Column>

@@ -4,9 +4,10 @@ import { Dialog } from "primereact/dialog"
 import { InputText } from "primereact/inputtext"
 
 import Swal from 'sweetalert2';
-import ProveedorService from "../../services/proveedor.service"
+import ProveedorServicio from "../../services/proveedor.service"
 
 export const CreateProveedorComponent = () => {
+  const [visible, setVisible] = useState(false);
   const [proveedor, setProveedor] = useState({
     razonSocial: "",
     ciudad: ""
@@ -26,7 +27,7 @@ export const CreateProveedorComponent = () => {
       return;
     }
 
-    ProveedorService.create(proveedor).then((resp) => {
+    ProveedorServicio.crear(proveedor).then((resp) => {
       console.log(resp)
     }).catch((error) => {
 
@@ -34,7 +35,7 @@ export const CreateProveedorComponent = () => {
   }
 
   return (
-    <Dialog header='Agregar nuevo proveedor' style={{ width: '20vw' }}>
+    <Dialog header='Agregar nuevo proveedor' visible={visible} onHide={() => setVisible(false)} style={{ width: '20vw' }}>
       <form onSubmit={handleCreateProveedor}>
         <div className='mb-5'>
           <label htmlFor='razonSocial' className='text-lg font-bold block mb-2'>Razon social</label>
