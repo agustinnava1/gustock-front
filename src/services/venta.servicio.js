@@ -13,7 +13,7 @@ class VentaServicio{
 
     eliminar(id){return axios.delete(baseUrl + "/eliminar/" + id, config).then(res => res.data)}
 
-    listar(){return axios.get(baseUrl + "/listar", config).then(res => res.data)}
+    listar(paginacionRequest){return axios.get(baseUrl + "/listar", paginacionRequest, config).then(res => res.data)}
         
 }
 

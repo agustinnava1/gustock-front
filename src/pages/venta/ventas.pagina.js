@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
 import { Card } from 'primereact/card'
@@ -10,6 +11,7 @@ import { DataTable } from 'primereact/datatable'
 
 import VentaFiltros from '../../helper/VentaFiltros'
 import VentaServicio from '../../services/venta.servicio'
+import { formatCurrency, formatDate } from '../../helper/format'
 
 export const VentasPagina = () => {
   const [listaVentas, setListaVentas] = useState([])
@@ -20,20 +22,15 @@ export const VentasPagina = () => {
   const [fechaDesde, setFechaDesde] = useState(null);
   const [fechaHasta, setFechaHasta] = useState(null);
 
-  const [paginacionRequest, setPaginacionRequest] = useState({
-    local: null,
-    cantidad: null,
-    metodoPago: null,
-    fechaDesde: null,
-    fechaHasta: null,
-  });
+  const [paginacionRequest, setPaginacionRequest] = useState(null);
 
   const { listaLocales, listaMetodosPago, listaCantidades } = VentaFiltros();
 
   useEffect(() => {
-    /*VentaServicio.listar().then(data => {
-      setListaVentas(data)
-    })*/
+    VentaServicio.listar().then(data => {
+      setListaVentas(data.ventas)
+      console.log(data)
+    })
   }, [])
 
   addLocale('es', {
@@ -53,7 +50,9 @@ export const VentasPagina = () => {
       fechaHasta: new Date(fechaHasta).toISOString().slice(0, 10),
     })
 
-    console.log(paginacionRequest)
+    VentaServicio.listar(paginacionRequest).then(data => {
+      setListaVentas(data.ventas)
+    })
   };
 
   return (
@@ -91,18 +90,32 @@ export const VentasPagina = () => {
         </div>
       </div>
       <Card className="drop-shadow !shadow-none mb-5">
-        <DataTable tableStyle={{ minWidth: '50rem' }} emptyMessage="Sin registro de ventas" size="small">
-          <Column header="N° Venta" style={{ width: '5%' }}></Column>
-          <Column header="Fecha" style={{ width: '10%' }}></Column>
-          <Column header="Hora" style={{ width: '10%' }}></Column>
-          <Column header="Efectivo" style={{ width: '10%' }}></Column>
-          <Column header="Débito" style={{ width: '10%' }}></Column>
-          <Column header="Código Qr" style={{ width: '10%' }}></Column>
-          <Column header="Crédito" style={{ width: '10%' }}></Column>
-          <Column header="Total" style={{ width: '10%' }}></Column>
-          <Column header="Local" style={{ width: '10%' }}></Column>
-          <Column header="Usuario" style={{ width: '10%' }}></Column>
-          <Column header="Acciones" style={{ width: '5%' }}></Column>
+        <DataTable value={listaVentas} emptyMessage="Sin registro de ventas" size="small"
+          paginator rows={10} >
+          <Column field='id' header="N° Venta" style={{ width: '5%' }}></Column>
+          <Column field='fecha' header="Fecha" style={{ width: '10%' }}></Column>
+          <Column field='hora' header="Hora" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => formatCurrency(rowData.pagoEfectivo)} header="Efectivo" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => formatCurrency(rowData.pagoDebito)} header="Débito" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => formatCurrency(rowData.pagoCodigoQr)} header="Código Qr" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => formatCurrency(rowData.pagoCredito)} header="Crédito" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => formatCurrency(rowData.total)} header="Total" style={{ width: '10%' }}></Column>
+          <Column field='local.nombre' header="Local" style={{ width: '10%' }}></Column>
+          <Column field='usuario' header="Usuario" style={{ width: '10%' }}></Column>
+          <Column header="Acciones" alignHeader={'center'} style={{ width: '5%' }}
+            body={(rowData) => (
+              <div className='flex justify-center'>
+                <Link to={`/venta/detalle/${rowData.id}`} className='me-3'>
+                  <button className='bg-blue-500 rounded text-xl text-white px-2 py-1'>
+                    <i className='bi bi-eye-fill'></i>
+                  </button>
+                </Link>
+                <button className='bg-red-500 rounded text-xl text-white px-2 py-1' >
+                  <i className='bi bi-trash-fill'></i>
+                </button>
+              </div>
+            )}>
+          </Column>
         </DataTable>
       </Card>
     </div>
