@@ -12,7 +12,7 @@ export const PanelPage = () => {
 
   return (
     <div className='m-5'>
-      <h1 className="sm:text-4xl text-5xl font-medium mb-5">Panel de administración</h1>
+      <h2 className="sm:text-4xl text-5xl font-medium mb-5">Panel de administración</h2>
       <span className="text-xl font-normal">Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema.</span>
 
       <Accordion activeIndex={0} className='mt-5 drop-shadow'>

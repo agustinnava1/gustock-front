@@ -22,14 +22,19 @@ export const VentasPagina = () => {
   const [fechaDesde, setFechaDesde] = useState(null);
   const [fechaHasta, setFechaHasta] = useState(null);
 
-  const [paginacionRequest, setPaginacionRequest] = useState(null);
+  const [paginacionRequest, setPaginacionRequest] = useState({
+    local: null,
+    cantidad: null,
+    metodoPago: null,
+    fechaDesde: null,
+    fechaHasta: null,
+  });
 
   const { listaLocales, listaMetodosPago, listaCantidades } = VentaFiltros();
 
   useEffect(() => {
     VentaServicio.listar().then(data => {
-      setListaVentas(data.ventas)
-      console.log(data)
+      setListaVentas(data.ventas.content)
     })
   }, [])
 
@@ -91,7 +96,7 @@ export const VentasPagina = () => {
       </div>
       <Card className="drop-shadow !shadow-none mb-5">
         <DataTable value={listaVentas} emptyMessage="Sin registro de ventas" size="small"
-          paginator rows={10} >
+          paginator rows={10} totalRecords={10}>
           <Column field='id' header="N° Venta" style={{ width: '5%' }}></Column>
           <Column field='fecha' header="Fecha" style={{ width: '10%' }}></Column>
           <Column field='hora' header="Hora" style={{ width: '10%' }}></Column>

@@ -18,6 +18,7 @@ import { RegistrarVenta } from '../pages/venta/venta.registrar.pagina';
 import { ProductosModificacionMasiva } from '../pages/producto/modificacion.masiva';
 import { ProductosModificacionRapida } from '../pages/producto/modificacion.rapida';
 import { ProductosRegistrar } from '../pages/producto/producto.registrar.page';
+import { VentaDetalle } from '../pages/venta/venta.detalle.pagina';
 
 export const AppRouter = () => {
   return (
@@ -35,7 +36,7 @@ export const AppRouter = () => {
         <Route exact path="/local/:nombre/devolucion/registrar" element={<ProductoDetalle />} />
 
         <Route path="/ventas" element={<VentasPagina />} />
-        <Route exact path="/venta/detalle/:id" element={<ProductoDetalle />} />
+        <Route exact path="/venta/detalle/:id" element={<VentaDetalle />} />
         <Route exact path="/devolucion/detalle/:id" element={<ProductoDetalle />} />
 
         <Route path="/productos" element={<ProductosPage />} />
