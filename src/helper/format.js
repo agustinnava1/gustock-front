@@ -7,10 +7,12 @@ export function formatCurrency(number) {
   }).format(number);
 }
 
+
+
 export function formatDate(number) {
   return new Intl.DateTimeFormat("es-sp", {
     dateStyle: "short",
-    timeStyle: "short"
+    timeStyle: "short",
   }).format(new Date(number));
 }
 

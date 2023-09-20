@@ -2,13 +2,14 @@ import { Card } from "primereact/card"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
-import { formatCurrency } from "../../helper/format"
+import { formatCurrency, formatDateLong, formatDateShort } from "../../helper/format"
 import VentaServicio from "../../services/venta.servicio"
 
 export const VentaDetalle = () => {
   const { id } = useParams()
 
   const [venta, setVenta] = useState([])
+  const [fecha, setFecha] = useState(null)
   const [local, setLocal] = useState(null)
   const [detalle, setDetalle] = useState([])
 
@@ -21,18 +22,27 @@ export const VentaDetalle = () => {
       setVenta(data)
       setDetalle(data.detalle)
       setLocal(data.local.nombre)
+
+      const dateObject = new Date(data.fecha)
+      const formato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const fechaCompleta = dateObject.toLocaleDateString(undefined, formato);
+    
+      setFecha(fechaCompleta)
       console.log(data);
     })
   }
 
   return (
     <div className="container mx-auto pt-5">
-      <h2 className='text-4xl font-medium mb-5'>Resumen de venta</h2>
+      <div className="mb-5">
+        <h2 className='text-4xl font-medium mb-3'>Resumen de venta</h2>
+        <span className="text-lg">{fecha}</span>
+      </div>
       <div className="flex">
         <div className="w-3/4">
           <Card title='Productos vendidos' className='!rounded-lg !shadow-md'>
             {detalle.map(producto => (
-              <div className="flex items-center text-lg border rounded mt-5 p-5">
+              <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
                 <div className="flex-auto">
                   <p className="font-medium">{producto.descripcion}</p>
                   <span className="!text-sm">Código: {producto.producto}</span>
@@ -53,23 +63,23 @@ export const VentaDetalle = () => {
             <div className="p-4">
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Descuento</span>
-                <span className='text-lg'>{formatCurrency(venta.descuento)}</span>
+                <p className='text-lg'>{formatCurrency(venta.descuento)}</p>
               </div>
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Efectivo</span>
-                <span className='text-lg'>{formatCurrency(venta.pagoEfectivo)}</span>
+                <p className='text-lg'>{formatCurrency(venta.pagoEfectivo)}</p>
               </div>
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Débito</span>
-                <span className='text-lg'>{formatCurrency(venta.pagoDebito)}</span>
+                <p className='text-lg'>{formatCurrency(venta.pagoDebito)}</p>
               </div>
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Crédito</span>
-                <span className='text-lg'>{formatCurrency(venta.pagoCredito)}</span>
+                <p className='text-lg'>{formatCurrency(venta.pagoCredito)}</p>
               </div>
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Código Qr</span>
-                <span className='text-lg'>{formatCurrency(venta.pagoCodigoQr)}</span>
+                <p className='text-lg'>{formatCurrency(venta.pagoCodigoQr)}</p>
               </div>
             </div>
             <hr className="mb-4"></hr>
@@ -84,15 +94,15 @@ export const VentaDetalle = () => {
             <div className="p-4">
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Local</span>
-                <span className='text-md'>{local}</span>
+                <p className='text-md'>{local}</p>
               </div>
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Usuario</span>
-                <span className='text-md'>{venta.usuario}</span>
+                <p className='text-md'>{venta.usuario}</p>
               </div>
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Nro de venta</span>
-                <span className='text-md'>{venta.id}</span>
+                <p className='text-md'>{venta.id}</p>
               </div>
               <div>
                 <span className="text-gray-500 text-md font-medium">Nota del vendedor:</span>

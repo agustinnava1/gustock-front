@@ -11,7 +11,7 @@ import { DataTable } from 'primereact/datatable'
 
 import VentaFiltros from '../../helper/VentaFiltros'
 import VentaServicio from '../../services/venta.servicio'
-import { formatCurrency, formatDate } from '../../helper/format'
+import { formatCurrency } from '../../helper/format'
 
 export const VentasPagina = () => {
   const [listaVentas, setListaVentas] = useState([])
@@ -94,12 +94,12 @@ export const VentasPagina = () => {
           <Button label='Opciones' className='hover:!bg-blue-600' size='small' />
         </div>
       </div>
-      <Card className="drop-shadow !shadow-none mb-5">
+      <Card className="!rounded-lg !shadow-md mb-5">
         <DataTable value={listaVentas} emptyMessage="Sin registro de ventas" size="small"
           paginator rows={10} totalRecords={10}>
           <Column field='id' header="N° Venta" style={{ width: '5%' }}></Column>
-          <Column field='fecha' header="Fecha" style={{ width: '10%' }}></Column>
-          <Column field='hora' header="Hora" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => (rowData.fecha)} header="Fecha" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => (rowData.hora)} header="Hora" style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatCurrency(rowData.pagoEfectivo)} header="Efectivo" style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatCurrency(rowData.pagoDebito)} header="Débito" style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatCurrency(rowData.pagoCodigoQr)} header="Código Qr" style={{ width: '10%' }}></Column>
