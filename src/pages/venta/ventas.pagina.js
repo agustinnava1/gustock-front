@@ -33,7 +33,7 @@ export const VentasPagina = () => {
   const [paginacionRequest, setPaginacionRequest] = useState({
     local: null,
     pagina: paginaActual,
-    cantidad: null,
+    cantidad: cantidad,
     fechaDesde: null,
     fechaHasta: null,
     metodoPago: null
@@ -42,7 +42,7 @@ export const VentasPagina = () => {
   const { listaLocales, listaMetodosPago, listaCantidades } = VentaFiltros()
 
   useEffect(() => {
-    VentaServicio.listar().then(data => {
+    VentaServicio.listar(paginacionRequest).then(data => {
       setListaVentas(data.ventas.content)
       setTotalRegistros(data.totalRegistros)
     })
