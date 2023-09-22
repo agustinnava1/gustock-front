@@ -18,76 +18,57 @@ import VentaServicio from '../../services/venta.servicio'
 
 export const VentasPagina = () => {
   const [listaVentas, setListaVentas] = useState([])
+  const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
 
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
 
   const [local, setLocal] = useState(null)
-  const [cantidad, setCantidad] = useState(10)
   const [metodoPago, setMetodoPago] = useState(null)
   const [fechaDesde, setFechaDesde] = useState(null)
   const [fechaHasta, setFechaHasta] = useState(null)
 
-  const [paginaActual, setPaginaActual] = useState(1)
   const [totalRegistros, setTotalRegistros] = useState(null)
-  const [paginacionRequest, setPaginacionRequest] = useState({
-    local: null,
-    pagina: paginaActual,
-    cantidad: cantidad,
-    fechaDesde: null,
-    fechaHasta: null,
-    metodoPago: null
-  })
+  const [paginacionRequest, setPaginacionRequest] = useState([])
 
-  const { listaLocales, listaMetodosPago, listaCantidades } = VentaFiltros()
+  const { listaLocales, listaMetodosPago } = VentaFiltros()
 
   useEffect(() => {
     VentaServicio.listar(paginacionRequest).then(data => {
-      setListaVentas(data.ventas.content)
-      setTotalRegistros(data.totalRegistros)
+      setListaVentas(data.content)
+      setTotalRegistros(data.totalElements)
     })
   }, [])
 
   const handleFechaDesde = (e) => {
     setFechaDesde(e.target.value)
     const fecha = new Date(e.target.value).toISOString().split('T')[0]
-    paginacionRequest.fechaDesde = fecha
-    setPaginacionRequest({ ...paginacionRequest })
+    setPaginacionRequest({ ...paginacionRequest, fechaDesde: fecha })
   };
 
   const handleFechaHasta = (e) => {
     setFechaHasta(e.target.value)
     const fecha = new Date(e.target.value).toISOString().split('T')[0]
-    paginacionRequest.fechaHasta = fecha
-    setPaginacionRequest({ ...paginacionRequest })
+    setPaginacionRequest({ ...paginacionRequest, fechaHasta: fecha })
   };
 
   const handleLocal = (e) => {
     setLocal(e.target.value)
-    paginacionRequest.local = e.target.value.nombre
-    setPaginacionRequest({ ...paginacionRequest })
+    setPaginacionRequest({ ...paginacionRequest, local: e.target.value })
   };
 
   const handleMetodoPago = (e) => {
     setMetodoPago(e.target.value);
-    paginacionRequest.metodoPago = e.target.value
-    setPaginacionRequest({ ...paginacionRequest })
-  };
-
-  const handleCantidad = (e) => {
-    setCantidad(e.target.value);
-    paginacionRequest.cantidad = e.target.value
-    setPaginacionRequest({ ...paginacionRequest })
+    setPaginacionRequest({ ...paginacionRequest, metodoPago: e.target.value })
   };
 
   addLocale('es', calendarioEspañol)
 
   const filtrarVentas = () => {
-    console.log(paginacionRequest)
-
+    setPaginacionRequest({  ...paginacionRequest, pagina: 1})
     VentaServicio.listar(paginacionRequest).then(data => {
-      setListaVentas(data.ventas.content)
-      console.log(data.ventas.content)
+      setListaVentas(data.content)
+      setTotalRegistros(data.totalElements)
     })
   };
 
@@ -96,9 +77,12 @@ export const VentasPagina = () => {
     setRows(event.rows)
 
     const pagina = Math.ceil((event.first + 1) / event.rows)
-    setPaginaActual(pagina)
+    setPaginacionRequest({ ...paginacionRequest, pagina: pagina})
 
-    filtrarVentas();
+    VentaServicio.listar(paginacionRequest).then(data => {
+      setListaVentas(data.content)
+      setTotalRegistros(data.totalElements)
+    })
   };
 
   return (
@@ -123,10 +107,6 @@ export const VentasPagina = () => {
             <Dropdown options={listaMetodosPago} emptyMessage="Sin registros" placeholder="Selecciona un método de pago"
               value={metodoPago} onChange={handleMetodoPago} className='w-full p-inputtext-sm' />
           </div>
-          <div className='flex-auto me-3'>
-            <Dropdown options={listaCantidades} emptyMessage="Sin registros" placeholder="Selecciona la cantidad"
-              value={cantidad} onChange={handleCantidad} className='flex-1 p-inputtext-sm' />
-          </div>
           <div className='flex-auto'>
             <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
           </div>
@@ -136,7 +116,8 @@ export const VentasPagina = () => {
         </div>
       </div>
       <Card className="!rounded-lg !shadow-md mb-5">
-        <DataTable value={listaVentas} emptyMessage="Sin registro de ventas" size="small">
+        <DataTable value={listaVentas} selectionMode="single" selection={ventaSeleccionada}
+          onSelectionChange={(e) => setVentaSeleccionada(e.value)} emptyMessage="Sin registro de ventas" size="small">
           <Column field='id' header="N° Venta" style={{ width: '5%' }}></Column>
           <Column field={(rowData) => (rowData.fecha)} header="Fecha" style={{ width: '10%' }}></Column>
           <Column field={(rowData) => (rowData.hora)} header="Hora" style={{ width: '10%' }}></Column>
@@ -150,7 +131,7 @@ export const VentasPagina = () => {
           <Column header="Acciones" alignHeader={'center'} style={{ width: '5%' }}
             body={(rowData) => (
               <div className='flex justify-center'>
-                <Link to={`/venta/detalle/${rowData.id}`} className='me-3'>
+                <Link to={`/venta/detalle/${rowData.id}`} className='me-3' target='_blank'>
                   <button className='bg-blue-500 rounded text-xl text-white px-2 py-1'>
                     <i className='bi bi-eye-fill'></i>
                   </button>

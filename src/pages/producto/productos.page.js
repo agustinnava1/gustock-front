@@ -78,7 +78,7 @@ export const ProductosPage = () => {
       <Card className='drop-shadow !shadow-none mt-5'>
         <DataTable value={listaProductos} selectionMode="single" selection={productoSeleccionado}
           onSelectionChange={(e) => setProductoSeleccionado(e.value)} stripedRows size='small'
-          paginator rows={10} rowsPerPageOptions={[10, 20, 30, 40, 50, 100]} >
+          paginator rows={10} >
           <Column field="codigo" header="Código" style={{ width: '10%' }}></Column>
           <Column field="descripcion" header="Descripción" style={{ width: '20%' }}></Column>
           <Column field="precioEfectivo" header="Efectivo" style={{ width: '10%' }}

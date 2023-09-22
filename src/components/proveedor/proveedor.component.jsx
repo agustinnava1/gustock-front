@@ -4,9 +4,9 @@ import { Column } from "primereact/column"
 import { useState, useEffect } from "react"
 import { DataTable } from "primereact/datatable"
 
-import ProveedorServicio from "../services/proveedor.service"
-import { DeleteProveedorComponent } from "./proveedor/delete.component";
-import { CreateProveedorComponent } from "./proveedor/create.component";
+import ProveedorServicio from "../../services/proveedor.service"
+import { DeleteProveedorComponent } from "./delete.component";
+import { CreateProveedorComponent } from "./create.component";
 
 export const ProveedorComponent = () => {
   const [proveedorId, setProveedorId] = useState(null);

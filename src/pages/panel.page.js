@@ -3,9 +3,9 @@ import { Card } from 'primereact/card';
 import { Accordion, AccordionTab } from 'primereact/accordion';
 import { PanelMenu } from 'primereact/panelmenu';
 
-import { MarcaComponent } from '../components/marca.component';
-import { RubroComponent } from '../components/rubro.component';
-import { ProveedorComponent } from '../components/proveedor.component';
+import { MarcaComponent } from '../components/marca/marca.component';
+import { RubroComponent } from '../components/rubro/rubro.component';
+import { ProveedorComponent } from '../components/proveedor/proveedor.component';
 import { DataTable } from 'primereact/datatable';
 
 export const PanelPage = () => {

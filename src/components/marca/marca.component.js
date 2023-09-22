@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { DataTable } from "primereact/datatable"
 
 import Swal from 'sweetalert2';
-import MarcaServicio from "../services/marca.service";
+import MarcaServicio from "../../services/marca.service";
 
 export const MarcaComponent = () => {
   const { id } = useState(null);

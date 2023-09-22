@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import { DataTable } from "primereact/datatable"
 
 import Swal from 'sweetalert2';
-import RubroServicio from "../services/rubro.service";
+import RubroServicio from "../../services/rubro.service";
 
 export const RubroComponent = () => {
   const { id } = useState(null);
