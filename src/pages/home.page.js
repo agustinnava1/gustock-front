@@ -38,7 +38,7 @@ export const Home = () => {
           <SidebarItem icon={<Settings size={20} />} text="Ajustes" active={location.pathname === '/ajustes'} />
         </NavLink>
       </Sidebar>
-      <div className="grow">
+      <div className="grow w-screen">
         <Header></Header>
         <AppRouter></AppRouter>
       </div>

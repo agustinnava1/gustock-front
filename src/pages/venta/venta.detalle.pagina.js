@@ -2,16 +2,16 @@ import { Card } from "primereact/card"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
-import { formatCurrency, formatDateLong, formatDateShort } from "../../helper/format"
+import { formatCurrency, formatoFechaCompleto, formatoHora } from "../../helper/format"
 import VentaServicio from "../../services/venta.servicio"
 
 export const VentaDetalle = () => {
   const { id } = useParams()
 
   const [venta, setVenta] = useState([])
-  const [fecha, setFecha] = useState(null)
   const [local, setLocal] = useState(null)
   const [detalle, setDetalle] = useState([])
+  const [detalleCambio, setDetalleCambio] = useState([])
 
   useEffect(() => {
     cargarDatosVenta()
@@ -22,13 +22,8 @@ export const VentaDetalle = () => {
       setVenta(data)
       setDetalle(data.detalle)
       setLocal(data.local.nombre)
-
-      const dateObject = new Date(data.fecha)
-      const formato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const fechaCompleta = dateObject.toLocaleDateString(undefined, formato);
-    
-      setFecha(fechaCompleta)
-      console.log(data);
+      setDetalleCambio(data.detalleDevuelto)
+      console.log(data)
     })
   }
 
@@ -36,20 +31,36 @@ export const VentaDetalle = () => {
     <div className="container mx-auto pt-5">
       <div className="mb-5">
         <h2 className='text-4xl font-medium mb-3'>Resumen de venta</h2>
-        <span className="text-lg">{fecha}</span>
+        <span className="text-lg">{formatoFechaCompleto(venta.fecha)}</span>
       </div>
-      <div className="flex">
+      <div className="lg:flex">
         <div className="w-3/4">
+          {detalleCambio.length > 0 &&
+            <Card title='Productos devueltos' className='!rounded-lg !shadow-md mb-5'>
+              {detalleCambio.map(producto => (
+                <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
+                  <div className="flex-auto w-52">
+                    <p className="font-medium">{producto.descripcion}</p>
+                    <span className="!text-sm">Código: {producto.producto}</span>
+                  </div>
+                  <span className="flex-auto text-center text-gray-500 font-medium">Precio unitario: {formatCurrency(producto.precio)}</span>
+                  <span className="flex-auto text-center text-gray-500 font-medium">Cantidad: {producto.cantidad}</span>
+                  <span className="flex-auto text-center text-gray-500 font-medium">Subtotal: {formatCurrency(producto.subtotal)}</span>
+                </div>
+              ))}
+            </Card>
+          }
+
           <Card title='Productos vendidos' className='!rounded-lg !shadow-md'>
             {detalle.map(producto => (
               <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
-                <div className="flex-auto">
+                <div className="flex-auto w-52">
                   <p className="font-medium">{producto.descripcion}</p>
                   <span className="!text-sm">Código: {producto.producto}</span>
                 </div>
-                <span className="flex-auto text-gray-500 font-medium">Precio unitario: {formatCurrency(producto.precio)}</span>
-                <span className="flex-auto text-gray-500 font-medium">Cantidad: {producto.cantidad}</span>
-                <span className="flex-auto text-gray-500 font-medium">Subtotal: {formatCurrency(producto.subtotal)}</span>
+                <span className="flex-auto text-center text-gray-500 font-medium">Precio unitario: {formatCurrency(producto.precio)}</span>
+                <span className="flex-auto text-center text-gray-500 font-medium">Cantidad: {producto.cantidad}</span>
+                <span className="flex-auto text-center text-gray-500 font-medium">Subtotal: {formatCurrency(producto.subtotal)}</span>
               </div>
             ))}
           </Card>
@@ -60,7 +71,7 @@ export const VentaDetalle = () => {
             <div className="bg-blue-500 p-4 rounded-t-lg">
               <h3 className="text-white font-medium text-xl mb-0">Detalle de pago</h3>
             </div>
-            <div className="p-4">
+            <div className="px-4 pt-4">
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Descuento</span>
                 <p className='text-lg'>{formatCurrency(venta.descuento)}</p>
@@ -99,6 +110,10 @@ export const VentaDetalle = () => {
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Usuario</span>
                 <p className='text-md'>{venta.usuario}</p>
+              </div>
+              <div className="flex justify-between mb-1">
+                <span className="text-gray-500 text-md font-medium">Horario</span>
+                <p className='text-md'>{formatoHora(venta.hora)}</p>
               </div>
               <div className="flex justify-between mb-1">
                 <span className="text-gray-500 text-md font-medium">Nro de venta</span>

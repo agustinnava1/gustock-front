@@ -10,8 +10,8 @@ import { Calendar } from 'primereact/calendar'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
 
-import { formatCurrency } from '../../helper/format'
 import { calendarioEspañol } from '../../helper/configuracion.regional'
+import { formatCurrency, formatoFechaCorto, formatoHora } from '../../helper/format'
 
 import VentaFiltros from '../../helper/VentaFiltros'
 import VentaServicio from '../../services/venta.servicio'
@@ -54,7 +54,7 @@ export const VentasPagina = () => {
 
   const handleLocal = (e) => {
     setLocal(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, local: e.target.value })
+    setPaginacionRequest({ ...paginacionRequest, local: e.target.value.nombre })
   };
 
   const handleMetodoPago = (e) => {
@@ -86,26 +86,26 @@ export const VentasPagina = () => {
   };
 
   return (
-    <div className="sm:w-auto w-full m-5">
+    <div className="m-5">
       <h2 className="sm:text-4xl text-5xl font-medium mb-3">Mis ventas</h2>
       <span className="text-xl font-normal">Gestioná y explorá el registro histórico de ventas en todas las sucursales</span>
       <div className='flex justify-between my-5'>
         <div className='md:flex'>
           <div className='flex-auto me-3'>
             <Calendar dateFormat="dd/mm/yy" locale="es" placeholder='Seleccione fecha desde'
-              value={fechaDesde} onChange={handleFechaDesde} className="p-inputtext-sm" />
+              value={fechaDesde} onChange={handleFechaDesde} className="p-inputtext-sm w-52" />
           </div>
           <div className='flex-auto me-3'>
             <Calendar dateFormat="dd/mm/yy" locale="es" placeholder='Seleccione fecha hasta'
-              value={fechaHasta} onChange={handleFechaHasta} className="p-inputtext-sm" />
+              value={fechaHasta} onChange={handleFechaHasta} className="p-inputtext-sm w-52" />
           </div>
           <div className='flex-auto me-3'>
             <Dropdown options={listaLocales} optionLabel='nombre' emptyMessage="Sin registros" placeholder="Selecciona un local"
-              value={local} onChange={handleLocal} className='w-full p-inputtext-sm' />
+              value={local} onChange={handleLocal} className='p-inputtext-sm w-52' />
           </div>
           <div className='flex-auto me-3'>
             <Dropdown options={listaMetodosPago} emptyMessage="Sin registros" placeholder="Selecciona un método de pago"
-              value={metodoPago} onChange={handleMetodoPago} className='w-full p-inputtext-sm' />
+              value={metodoPago} onChange={handleMetodoPago} className='p-inputtext-sm w-52' />
           </div>
           <div className='flex-auto'>
             <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
@@ -119,8 +119,8 @@ export const VentasPagina = () => {
         <DataTable value={listaVentas} selectionMode="single" selection={ventaSeleccionada}
           onSelectionChange={(e) => setVentaSeleccionada(e.value)} emptyMessage="Sin registro de ventas" size="small">
           <Column field='id' header="N° Venta" style={{ width: '5%' }}></Column>
-          <Column field={(rowData) => (rowData.fecha)} header="Fecha" style={{ width: '10%' }}></Column>
-          <Column field={(rowData) => (rowData.hora)} header="Hora" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => formatoFechaCorto(rowData.fecha)} header="Fecha" style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => formatoHora(rowData.hora)} header="Hora" style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatCurrency(rowData.pagoEfectivo)} header="Efectivo" style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatCurrency(rowData.pagoDebito)} header="Débito" style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatCurrency(rowData.pagoCodigoQr)} header="Código Qr" style={{ width: '10%' }}></Column>

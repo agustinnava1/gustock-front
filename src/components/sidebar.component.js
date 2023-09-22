@@ -8,8 +8,8 @@ export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <aside className="hidden lg:flex h-screen">
-      <nav className="h-full flex flex-col bg-white border-r shadow-sm">
+    <aside className="hidden lg:flex min-h-screen">
+      <nav className="flex flex-col bg-white border-r shadow-sm">
         <div className="p-4 pb-2 flex justify-between items-center">
           <span
             className={`text-2xl font-bold text-blue-500 overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
