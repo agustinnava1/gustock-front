@@ -30,4 +30,6 @@ export const calendarioEspañol = {
     'nov',
     'dic',
   ],
+  today: 'Hoy',
+  clear: 'Limpiar'
 };

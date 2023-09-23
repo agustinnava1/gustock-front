@@ -6,23 +6,25 @@ import { InputTextarea } from "primereact/inputtextarea"
 import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { Divider } from "primereact/divider"
+import { useParams } from "react-router-dom"
 
 export const RegistrarVenta = () => {
-  
+  const { nombre } = useParams()
+
   return (
-    <div className='container mx-auto mt-5'>
-      <h2 className='sm:text-4xl text-5xl font-medium mb-5'>Registrar venta</h2>
+    <div className='container mx-auto p-5'>
+      <h2 className='text-4xl font-medium mb-5'>{nombre} | Registrar venta</h2>
       <div className="lg:flex">
         <div className='w-3/4 me-5'>
-          <Card title='Productos' className="drop-shadow !shadow-none">
+          <Card title='Productos' className="!shadow-md !rounded-lg">
             <div className="flex">
               <div className="me-5">
                 <label htmlFor="firstname" className="block font-semibold mb-3">Producto</label>
-                <InputText id="firstname" placeholder='Artículo o código de barras' size={25} />
+                <InputText id="firstname" placeholder='Artículo o código de barras' className="p-inputtext-sm" size={25} />
               </div>
               <div className="me-5">
                 <label htmlFor="firstname" className="block font-semibold mb-3">Tipo de precio</label>
-                <InputText id="firstname" />
+                <InputText id="firstname" className="p-inputtext-sm" />
               </div>
               <div>
                 <label htmlFor="firstname" className="block mb-3 invisible">Firstname</label>
@@ -41,8 +43,8 @@ export const RegistrarVenta = () => {
               </DataTable>
             </div>
           </Card>
-          <Card title='Resumen de cuenta' className="drop-shadow mt-5 !shadow-none">
-            <div className="flex rounded border-2 p-5">
+          <Card title='Resumen de cuenta' className="!shadow-md !rounded-lg border mt-5">
+            <div className="flex rounded border-2 p-5 bg-gray-50">
               <div className="flex-1 me-5">
                 <InputTextarea rows={7} placeholder='Nota interna (Opcional)' className="w-full"></InputTextarea>
               </div>
@@ -51,7 +53,7 @@ export const RegistrarVenta = () => {
                   <div class="flex items-center mb-5">
                     <label class="flex-1">Descuento por porcentaje</label>
                     <div class="flex items-center">
-                      <InputNumber inputId='porcentaje' suffix="%" size={1} />
+                      <InputNumber inputId='porcentaje' suffix="%" size={1} className="p-inputtext-sm" />
                     </div>
                   </div>
                   <div class="flex justify-between mb-1">
@@ -74,41 +76,38 @@ export const RegistrarVenta = () => {
           </Card>
         </div>
         <div className='w-1/4'>
-          <Card title='Información de pago' className="drop-shadow !shadow-none">
-            <div class="flex items-center justify-between mb-3">
-              <span className="text-lg font-semibold">Importe</span>
-              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10}
-                minFractionDigits={0}
-                maxFractionDigits={0} />
+          <Card className="!shadow-md !rounded-lg border">
+            <div className="bg-blue-500 mb-5 p-4 rounded-t-lg">
+              <h3 className="text-white font-medium text-xl mb-0">Información de pago</h3>
             </div>
             <div class="flex items-center justify-between mb-3">
               <span className="text-lg font-semibold">Contado</span>
-              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10}
+              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10} className="p-inputtext-sm"
                 minFractionDigits={0}
                 maxFractionDigits={0} />
             </div>
             <div class="flex items-center justify-between mb-3">
               <span className="text-lg font-semibold">Débito</span>
-              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10}
+              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10} className="p-inputtext-sm"
                 minFractionDigits={0}
                 maxFractionDigits={0} />
             </div>
             <div class="flex items-center justify-between">
               <span className="text-lg font-semibold">Código QR</span>
-              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10}
+              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10} className="p-inputtext-sm"
                 minFractionDigits={0}
                 maxFractionDigits={0} />
             </div>
             <Divider />
             <div class="flex items-center justify-between mb-3">
               <span className="text-lg font-semibold">Recargo</span>
-              <InputNumber inputId="currency-ars" suffix="%" size={1}
+              <InputNumber inputId="currency-ars" suffix="%" size={1} className="p-inputtext-sm"
                 minFractionDigits={0}
                 maxFractionDigits={0} />
             </div>
             <div class="flex items-center justify-between">
               <span className="text-lg font-semibold">Crédito</span>
-              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10}
+              <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10} className="p-inputtext-sm"
                 minFractionDigits={0}
                 maxFractionDigits={0} />
             </div>

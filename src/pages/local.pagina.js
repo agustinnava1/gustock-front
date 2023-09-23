@@ -1,55 +1,55 @@
-import { Card } from 'primereact/card';
-import { Button } from 'primereact/button';
-import { Column } from 'primereact/column';
-import { Calendar } from 'primereact/calendar';
-import { Dropdown } from 'primereact/dropdown';
-import { DataTable } from 'primereact/datatable';
-import { Link, useParams } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
+import { Card } from 'primereact/card'
+import { Button } from 'primereact/button'
+import { Column } from 'primereact/column'
+import { Calendar } from 'primereact/calendar'
+import { Dropdown } from 'primereact/dropdown'
+import { DataTable } from 'primereact/datatable'
+import { Link, useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 
-import { addLocale } from 'primereact/api';
-
-import LocalService from '../services/local.servicio';
-import StockService from '../services/stock.service';
-import RubroService from '../services/rubro.service';
-
-import { formatDate, formatCurrency } from "../helper/format";
 import Swal from 'sweetalert2';
-import { ChevronDown, Download, Plus } from 'lucide-react';
+import { addLocale } from 'primereact/api'
+import { ChevronDown, Download, Plus } from 'lucide-react'
+import { formatDate, formatCurrency } from '../helper/format'
+import { calendarioEspañol } from '../helper/configuracion.regional'
 
-export const LocalPage = () => {
-  const { id } = useParams();
+import LocalServicio from '../services/local.servicio'
+import StockServicio from '../services/stock.servicio'
+import { Paginator } from 'primereact/paginator'
 
-  const [local, setLocal] = useState([]);
-  const [date, setDate] = useState(null);
-  const [rubro, setRubro] = useState(null);
+export const LocalPagina = () => {
+  const { nombre } = useParams();
+
+  const [local, setLocal] = useState([])
+
+  const [rubro, setRubro] = useState(null)
+  const [marca, setMarca] = useState(null)
+  const [fecha, setFecha] = useState(null)
 
   const [listaRubros, setListaRubros] = useState([])
   const [listaProductos, setListaProductos] = useState([])
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(10);
+
+  const [totalRegistros, setTotalRegistros] = useState(null)
+  const [paginacionRequest, setPaginacionRequest] = useState([])
 
   const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+    setIsExpanded(!isExpanded)
   };
 
   useEffect(() => {
-    loadProducts()
+    LocalServicio.obtenerPorNombre(nombre).then(data => {
+      setLocal(data)
+    })
+
+    StockServicio.obtenerPorLocal(nombre).then(data => {
+      setListaProductos(data.content);
+    })
   }, []);
-
-  const loadProducts = async () => {
-    LocalService.getById(id).then(data => {
-      setLocal(data);
-    })
-
-    StockService.getAllByLocalId(id).then(data => {
-      setListaProductos(data);
-    })
-
-    RubroService.getAll().then(data => {
-      setListaRubros(data);
-    })
-  };
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -63,7 +63,7 @@ export const LocalPage = () => {
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        StockService.delete(id)
+        StockServicio.eliminar(nombre)
           .then((data) => {
             setListaProductos(listaProductos.filter((stock) => stock.id !== id));
             Swal.fire('Eliminado', 'El producto ha sido eliminado del local.', 'success');
@@ -76,50 +76,52 @@ export const LocalPage = () => {
     })
   };
 
-  addLocale('es', {
-    firstDayOfWeek: 1,
-    dayNamesShort: ['dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb'],
-    dayNamesMin: ['DO', 'LU', 'MA', 'MI', 'JU', 'VI', 'SA'],
-    monthNames: ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'],
-    monthNamesShort: ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'],
-    today: 'Hoy',
-    clear: 'Limpiar'
-  });
+  addLocale('es', calendarioEspañol);
 
   return (
-    <div className='lg:flex justify-between m-5'>
-      <div className='w-1/6'>
-        <Card title="Local" className='text-center border drop-shadow !shadow-none'>
-          <h2 className="text-[28px] font-bold">{local.nombre}</h2>
-          <p className="text-[20px]">{local.direccion}</p>
-        </Card>
-        <Card title="Venta" className='text-center border drop-shadow !shadow-none mt-5'>
-          <div className='mb-5'>
-            <Link to={`/local/${local.nombre}/venta/registrar`}>
-              <Button label='Nueva venta' className='hover:!bg-blue-600 w-3/4' size='small' />
-            </Link>
+    <div className='lg:flex lg:justify-between p-5'>
+      <div className='lg:w-1/6'>
+        <Card title="Local" className='text-center !rounded-lg !shadow-md'>
+          <div className='p-5'>
+            <h2 className="text-2xl font-bold">{local.nombre}</h2>
+            <p className="text-xl">{local.direccion}</p>
           </div>
+        </Card>
+        {local.tipo === 'LOCAL' &&
           <div>
-            <Link to={`/local/${local.nombre}/devolucion`}>
-              <Button label='Devolución' className='hover:!bg-blue-600 w-3/4' size='small' />
-            </Link>
+            <Card title="Venta" className='text-center !rounded-lg !shadow-md mt-5'>
+              <div className='p-5'>
+                <div className='mb-5'>
+                  <Link to={`/local/${local.nombre}/venta/registrar`}>
+                    <Button label='Nueva venta' className='hover:!bg-blue-600 w-3/4' size='small' />
+                  </Link>
+                </div>
+                <div>
+                  <Link to={`/local/${local.nombre}/devolucion`}>
+                    <Button label='Devolución' className='hover:!bg-blue-600 w-3/4' size='small' />
+                  </Link>
+                </div>
+              </div>
+            </Card>
+            <Card title="Turno" className='text-center !rounded-lg !shadow-md mt-5'>
+              <div className='p-5'>
+                <div className='mb-5'>
+                  <Button label='Abrir turno' className='hover:!bg-blue-600 w-3/4' size='small' />
+                </div>
+                <div>
+                  <Button label='Cerrar turno' className='hover:!bg-blue-600 w-3/4' size='small' />
+                </div>
+              </div>
+            </Card>
           </div>
-        </Card>
-        <Card title="Turno" className='text-center border drop-shadow !shadow-none mt-5'>
-          <div className='mb-5'>
-            <Button label='Abrir turno' className='hover:!bg-blue-600 w-3/4' size='small' />
-          </div>
-          <div>
-            <Button label='Cerrar turno' className='hover:!bg-blue-600 w-3/4' size='small' />
-          </div>
-        </Card>
+        }
       </div>
 
-      <div className='w-5/6 ms-5'>
-        <Card title="Productos" className='border drop-shadow !shadow-none'>
-          <div className='flex justify-between mb-5'>
+      <div className='lg:w-5/6 lg:ms-5'>
+        <Card title="Productos" className='!rounded-lg !shadow-md'>
+          <div className='flex justify-between mt-5 mb-5'>
             <div>
-              <Button label='Filtrar' className='hover:!bg-blue-600' size='small' onClick={toggleExpand}>
+              <Button label='Filtrar' className='peer hover:!bg-blue-600' size='small' onClick={toggleExpand}>
                 <ChevronDown size={20} className='ms-2' />
               </Button>
             </div>
@@ -133,7 +135,7 @@ export const LocalPage = () => {
             </div>
           </div>
 
-          <div className={`overflow-hidden transition-all ${isExpanded ? '' : 'max-h-0 h-0'}`}>
+          <div className={`overflow-hidden transition-all duration-500 max-h-0 peer-pressed:max-h-40 ${isExpanded ? 'max-h-40' : ''}`}>
             <div className='flex border-2 mb-5 p-5'>
               <div className='flex-1 me-3'>
                 <label htmlFor="proveedor" className='block font-medium text-lg mb-3'>Proveedor:</label>
@@ -157,7 +159,7 @@ export const LocalPage = () => {
               </div>
               <div className='flex-1 me-3'>
                 <label htmlFor="proveedor" className='block font-medium text-lg w-full mb-3'>Ult. Precio:</label>
-                <Calendar value={date} onChange={(e) => setDate(e.value)} showIcon dateFormat="dd/mm/yy" locale="es" />
+                <Calendar value={fecha} onChange={(e) => setFecha(e.value)} showIcon dateFormat="dd/mm/yy" locale="es" />
               </div>
               <div className='flex-1 me-3'>
                 <label htmlFor="proveedor" className='block font-medium text-lg w-full mb-3'>Cantidad:</label>
@@ -171,10 +173,9 @@ export const LocalPage = () => {
             </div>
           </div>
 
-          <DataTable value={listaProductos} stripedRows paginator className='!custom-thead'
-            rows={10} rowsPerPageOptions={[10, 20, 30, 40, 50, 100]} size='small'>
+          <DataTable value={listaProductos} stripedRows rows={10} size='small'>
             <Column field="producto.codigo" header="Código" style={{ width: '10%' }}></Column>
-            <Column field="producto.descripcion" header="Descripción" style={{ width: '20%' }}></Column>
+            <Column field="producto.descripcion" header="Descripción" style={{ width: '25%' }}></Column>
             <Column field="producto.precioEfectivo" header="Efectivo" style={{ width: '10%' }}
               body={(rowData) => rowData.producto.precioEfectivo ? formatCurrency(rowData.producto.precioEfectivo) : ''}>
             </Column>
@@ -188,12 +189,14 @@ export const LocalPage = () => {
               body={(rowData) => rowData.producto.ultActPrecio ? formatDate(rowData.producto.ultActPrecio) : ''}></Column>
             <Column field="ultActStock" header="Ult. Stock" style={{ width: '10%' }}
               body={(rowData) => rowData.ultActStock ? formatDate(rowData.ultActStock) : ''}></Column>
-            <Column field="cantidad" header="Unidades" sortable style={{ width: '10%' }}></Column>
-            <Column header="Acciones" style={{ width: '10%' }}
+            <Column field="cantidad" header="Unidades" alignHeader={'center'} style={{ width: '5%' }}
+              body={(rowData) => (<p className='text-center'>{rowData.cantidad}</p>)}>
+            </Column>
+            <Column header="Acciones" alignHeader={'center'} style={{ width: '10%' }}
               body={(rowData) => (
                 <div className='flex'>
                   <Link to={`/producto/detalle/${rowData.producto.id}`} className='me-3'>
-                    <button className='bg-sky-500 rounded text-xl text-white px-2 py-1'>
+                    <button className='bg-blue-500 rounded text-xl text-white px-2 py-1'>
                       <i className='bi bi-eye-fill'></i>
                     </button>
                   </Link>
@@ -210,6 +213,7 @@ export const LocalPage = () => {
               )}>
             </Column>
           </DataTable>
+          <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalRegistros} className='mt-5 !p-0'></Paginator>
         </Card>
       </div >
     </div >

@@ -5,7 +5,7 @@ const baseUrl = BASE_URL + "/local";
 
 class LocalServicio{
 
-    obtenerPorId(id){return axios.get(baseUrl + "/" + id, config).then(res => res.data)}
+    obtenerPorNombre(nombre){return axios.get(baseUrl + "/" + nombre, config).then(res => res.data)}
 
     crear(local){return axios.post(baseUrl + "/crear", local, config).then(res => res.data)}
 
