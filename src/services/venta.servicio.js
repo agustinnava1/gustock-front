@@ -19,7 +19,7 @@ class VentaServicio {
             .map(key => `${key}=${paginacion[key]}`)
             .join('&');
 
-        return axios.get(baseUrl + "/listar?" + parametros ,config).then(res => res.data)
+        return axios.get(baseUrl + "/listar?" + parametros, config).then(res => res.data)
     }
 
 }

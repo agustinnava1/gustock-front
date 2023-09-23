@@ -63,7 +63,7 @@ export const LocalPagina = () => {
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        StockServicio.eliminar(nombre)
+        StockServicio.eliminar(id)
           .then((data) => {
             setListaProductos(listaProductos.filter((stock) => stock.id !== id));
             Swal.fire('Eliminado', 'El producto ha sido eliminado del local.', 'success');

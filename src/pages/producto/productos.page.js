@@ -1,20 +1,21 @@
-import { Card } from 'primereact/card';
-import { Link } from "react-router-dom";
-import { Button } from 'primereact/button';
-import { Column } from 'primereact/column';
-import { Dropdown } from 'primereact/dropdown';
-import { DataTable } from 'primereact/datatable';
-import React, { useEffect, useRef, useState } from 'react';
+import { Card } from 'primereact/card'
+import { Link } from "react-router-dom"
+import { Button } from 'primereact/button'
+import { Column } from 'primereact/column'
+import { Dropdown } from 'primereact/dropdown'
+import { DataTable } from 'primereact/datatable'
+import { TieredMenu } from 'primereact/tieredmenu'
+import React, { useEffect, useRef, useState } from 'react'
 
-import { formatDate, formatCurrency } from "../../helper/format";
+import { formatDate, formatCurrency } from "../../helper/format"
 
-import ProductoFiltros from '../../helper/ProductoFiltros';
-import ProductoServicio from '../../services/producto.service';
-import { TieredMenu } from 'primereact/tieredmenu';
+import ProductoFiltros from '../../helper/ProductoFiltros'
+import ProductoServicio from '../../services/producto.service'
+import { Paginator } from 'primereact/paginator'
 
 export const ProductosPage = () => {
   const [listaProductos, setListaProductos] = useState([])
-  const { listaProveedores, listaRubros, listaMarcas } = ProductoFiltros();
+  const { listaProveedores, listaRubros, listaMarcas, listaCantidades } = ProductoFiltros();
 
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
@@ -22,11 +23,37 @@ export const ProductosPage = () => {
   const [rubro, setRubro] = useState(null)
   const [marca, setMarca] = useState(null)
 
+  const [first, setFirst] = useState(0)
+  const [cantidad, setCantidad] = useState(10)
+  const [totalRegistros, setTotalRegistros] = useState(null)
+  const [paginacionRequest, setPaginacionRequest] = useState({})
+
   useEffect(() => {
-    ProductoServicio.listar().then(data => {
-      setListaProductos(data)
+    ProductoServicio.listar(paginacionRequest).then(data => {
+      setListaProductos(data.content)
+      setTotalRegistros(data.totalElements)
     })
   }, [])
+
+  const handleCantidad = (e) => {
+    setCantidad(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, cantidad: e.target.value })
+  };
+
+  const handleMarca = (e) => {
+    setMarca(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, marca: e.target.value.descripcion })
+  };
+
+  const handleRubro = (e) => {
+    setRubro(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, rubro: e.target.value.descripcion })
+  };
+
+  const handleProveedor = (e) => {
+    setProveedor(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, proveedor: e.target.value.razonSocial })
+  };
 
   const menu = useRef(null);
 
@@ -45,26 +72,58 @@ export const ProductosPage = () => {
     }
   ];
 
+  const filtrarVentas = () => {
+    setPaginacionRequest({ ...paginacionRequest, pagina: 1 })
+    ProductoServicio.listar(paginacionRequest).then(data => {
+      setListaProductos(data.content)
+      setTotalRegistros(data.totalElements)
+    })
+  };
+
+  const cambiarPagina = (event) => {
+    const pagina = event.page + 1
+    const newFirst = (pagina - 1) * event.rows
+  
+    setFirst(newFirst);
+
+    setPaginacionRequest({ ...paginacionRequest, pagina: pagina })
+    console.log(event.page)
+
+    ProductoServicio.listar(paginacionRequest).then(data => {
+      setListaProductos(data.content)
+      setTotalRegistros(data.totalElements)
+    })
+  };
+
   return (
     <div className='m-5'>
       <h2 className="sm:text-4xl text-5xl font-medium mb-3">Mis productos</h2>
       <span className="text-xl font-normal">Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema</span>
       <div className='flex justify-between my-5'>
         <div className='md:flex'>
-          <Dropdown options={listaProveedores} optionLabel="razonSocial"
-            value={proveedor} onChange={(e) => setProveedor(e.value)} emptyMessage="Sin registros"
-            placeholder="Selecciona un proveedor" className='flex-1 me-3 p-inputtext-sm' />
-
-          <Dropdown options={listaRubros} optionLabel="descripcion"
-            value={rubro} onChange={(e) => setRubro(e.value)} emptyMessage="Sin registros"
-            placeholder="Selecciona un rubro" className='flex-1 me-3 p-inputtext-sm' />
-
-          <Dropdown options={listaMarcas} optionLabel="descripcion"
-            value={marca} onChange={(e) => setMarca(e.value)} emptyMessage="Sin registros"
-            placeholder="Selecciona una marca" className='flex-1 me-3 p-inputtext-sm' />
-
-          <Dropdown emptyMessage="Sin registros" placeholder="Selecciona la cantidad" className='flex-1 me-3 p-inputtext-sm' />
-          <Button label="Filtrar" className='hover:!bg-blue-600' size='small' />
+          <div className='flex-auto me-3'>
+            <Dropdown options={listaProveedores} optionLabel="razonSocial"
+              value={proveedor} onChange={handleProveedor} emptyMessage="Sin registros"
+              placeholder="Selecciona un proveedor" className='flex-1 p-inputtext-sm w-56' />
+          </div>
+          <div className='flex-auto me-3'>
+            <Dropdown options={listaRubros} optionLabel="descripcion"
+              value={rubro} onChange={handleRubro} emptyMessage="Sin registros"
+              placeholder="Selecciona un rubro" className='flex-1 p-inputtext-sm w-56' />
+          </div>
+          <div className='flex-auto me-3'>
+            <Dropdown options={listaMarcas} optionLabel="descripcion"
+              value={marca} onChange={handleMarca} emptyMessage="Sin registros"
+              placeholder="Selecciona una marca" className='flex-1 p-inputtext-sm w-56' />
+          </div>
+          <div className='flex-auto me-3'>
+            <Dropdown options={listaCantidades} emptyMessage="Sin registros"
+              value={cantidad} onChange={handleCantidad}
+              placeholder="Selecciona la cantidad" className='flex-1 p-inputtext-sm w-52' />
+          </div>
+          <div className='flex-auto'>
+            <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
+          </div>
         </div>
         <div className="card flex justify-content-center">
           <TieredMenu model={items} popup ref={menu} breakpoint="767px" className='m-0 p-0' />
@@ -77,8 +136,7 @@ export const ProductosPage = () => {
       </div>
       <Card className='drop-shadow !shadow-none mt-5'>
         <DataTable value={listaProductos} selectionMode="single" selection={productoSeleccionado}
-          onSelectionChange={(e) => setProductoSeleccionado(e.value)} stripedRows size='small'
-          paginator rows={10} >
+          onSelectionChange={(e) => setProductoSeleccionado(e.value)} stripedRows size='small'>
           <Column field="codigo" header="Código" style={{ width: '10%' }}></Column>
           <Column field="descripcion" header="Descripción" style={{ width: '20%' }}></Column>
           <Column field="precioEfectivo" header="Efectivo" style={{ width: '10%' }}
@@ -112,6 +170,8 @@ export const ProductosPage = () => {
             )}>
           </Column>
         </DataTable>
+        <Paginator first={first} rows={cantidad} pageLinkSize={5} totalRecords={totalRegistros}
+          onPageChange={cambiarPagina} className='mt-5 !p-0'></Paginator>
       </Card>
     </div>
   )

@@ -7,6 +7,7 @@ function ProductoFiltros() {
   const [listaProveedores, setListaProveedores] = useState([]);
   const [listaRubros, setListaRubros] = useState([]);
   const [listaMarcas, setListaMarcas] = useState([]);
+  const [listaCantidades, setListaCantidades] = useState(["10", "20", "30", "40", "50", "TODOS"]);
 
   useEffect(() => {
     const fetchProveedores = ProveedorServicio.listar().then((res) => setListaProveedores(res));
@@ -20,6 +21,7 @@ function ProductoFiltros() {
   }, []);
 
   return {
+    listaCantidades,
     listaProveedores,
     listaRubros,
     listaMarcas,
