@@ -1,17 +1,18 @@
+import React, { useEffect, useRef, useState } from 'react'
+
 import { Card } from 'primereact/card'
 import { Link } from "react-router-dom"
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { Dropdown } from 'primereact/dropdown'
 import { DataTable } from 'primereact/datatable'
+import { Paginator } from 'primereact/paginator'
 import { TieredMenu } from 'primereact/tieredmenu'
-import React, { useEffect, useRef, useState } from 'react'
 
 import { formatDate, formatCurrency } from "../../helper/format"
 
 import ProductoFiltros from '../../helper/ProductoFiltros'
 import ProductoServicio from '../../services/producto.service'
-import { Paginator } from 'primereact/paginator'
 
 export const ProductosPage = () => {
   const [listaProductos, setListaProductos] = useState([])
@@ -58,6 +59,10 @@ export const ProductosPage = () => {
   const menu = useRef(null);
 
   const items = [
+    {
+      label: 'Agregar producto',
+      url: '/producto/registrar',
+    },
     {
       label: 'Modificación rápida',
       url: '/productos/modificacion/rapida',
@@ -127,9 +132,6 @@ export const ProductosPage = () => {
         </div>
         <div className="card flex justify-content-center">
           <TieredMenu model={items} popup ref={menu} breakpoint="767px" className='m-0 p-0' />
-          <Link to={'/producto/registrar'}>
-            <Button label="Agregar producto" iconPos='right' icon='pi pi-plus' className='!me-3 hover:!bg-blue-600' size='small' />
-          </Link>
           <Button label="Opciones" iconPos='right' icon='pi pi-caret-down' className='hover:!bg-blue-600'
             onClick={(e) => menu.current.toggle(e)} size='small' />
         </div>
