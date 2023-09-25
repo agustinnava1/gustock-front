@@ -1,18 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { InputSwitch } from 'primereact/inputswitch';
-
 import ProductoServicio from '../../services/producto.service';
 import { Card } from 'primereact/card';
 import { formatCurrency, formatDate } from '../../helper/format';
 import { InputNumber } from 'primereact/inputnumber';
 import { RadioButton } from 'primereact/radiobutton';
 import { Button } from 'primereact/button';
+import ProductoFiltros from '../../helper/ProductoFiltros';
 
 export const ProductosModificacionRapida = () => {
   const [listaProductos, setListaProductos] = useState([])
   const [selectedProducts, setSelectedProducts] = useState(null);
+
+  const { listaProveedores, listaRubros, listaMarcas, listaCantidades } = ProductoFiltros();
+
+  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
+
+  const [proveedor, setProveedor] = useState(null)
+  const [rubro, setRubro] = useState(null)
+  const [marca, setMarca] = useState(null)
+
+  const [first, setFirst] = useState(0)
+  const [rows, setRows] = useState(10)
+
+  const [cantidad, setCantidad] = useState(10)
+  const [totalRegistros, setTotalRegistros] = useState(null)
+  const [paginacionRequest, setPaginacionRequest] = useState({})
+
+  useEffect(() => {
+    ProductoServicio.listar(paginacionRequest).then(data => {
+      setListaProductos(data.content)
+      setTotalRegistros(data.totalElements)
+    })
+  }, [])
+
   const [rowClick, setRowClick] = useState(true);
 
   const [accion, setAccion] = useState('');

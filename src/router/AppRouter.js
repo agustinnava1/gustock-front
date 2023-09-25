@@ -10,7 +10,7 @@ import { ReposicionPage } from '../pages/reposicion.page'
 import { MensajeriaPage } from '../pages/mensajeria.page'
 import { NotificacionesPage } from '../pages/notificaciones.page'
 
-import { ProductosPage } from '../pages/producto/productos.page'
+import { ProductosPagina } from '../pages/producto/productos.pagina'
 import { ProductoDetalle } from '../pages/producto/producto.detalle.page'
 
 import { VentasPagina } from '../pages/venta/ventas.pagina'
@@ -40,7 +40,7 @@ export const AppRouter = () => {
         <Route exact path="/venta/detalle/:id" element={<VentaDetalle />} />
         <Route exact path="/devolucion/detalle/:id" element={<ProductoDetalle />} />
 
-        <Route path="/productos" element={<ProductosPage />} />
+        <Route path="/productos" element={<ProductosPagina />} />
         <Route path="/productos/modificacion/rapida" element={<ProductosModificacionRapida />} />
         <Route path="/productos/modificacion/masiva" element={<ProductosModificacionMasiva />} />
 
