@@ -78,23 +78,21 @@ export const ProductosPage = () => {
   ];
 
   const filtrarVentas = () => {
-    setPaginacionRequest({ ...paginacionRequest, pagina: 1 })
-    ProductoServicio.listar(paginacionRequest).then(data => {
+    setFirst(0)
+    const request = { ...paginacionRequest, pagina: 0 }
+    ProductoServicio.listar(request).then(data => {
+      setCantidad(data.size)
       setListaProductos(data.content)
       setTotalRegistros(data.totalElements)
     })
   };
 
   const cambiarPagina = (event) => {
-    const pagina = event.page + 1
-    const newFirst = (pagina - 1) * event.rows
-  
-    setFirst(newFirst);
+    setFirst(event.first)
+    setCantidad(event.rows)
 
-    setPaginacionRequest({ ...paginacionRequest, pagina: pagina })
-    console.log(event.page)
-
-    ProductoServicio.listar(paginacionRequest).then(data => {
+    const request = { ...paginacionRequest, pagina: event.page }
+    ProductoServicio.listar(request).then(data => {
       setListaProductos(data.content)
       setTotalRegistros(data.totalElements)
     })
@@ -102,7 +100,7 @@ export const ProductosPage = () => {
 
   return (
     <div className='m-5'>
-      <h2 className="sm:text-4xl text-5xl font-medium mb-3">Mis productos</h2>
+      <h2 className="sm:text-4xl text-5xl font-medium mb-3">Listado de productos</h2>
       <span className="text-xl font-normal">Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema</span>
       <div className='flex justify-between my-5'>
         <div className='md:flex'>
@@ -140,7 +138,7 @@ export const ProductosPage = () => {
         <DataTable value={listaProductos} selectionMode="single" selection={productoSeleccionado}
           onSelectionChange={(e) => setProductoSeleccionado(e.value)} stripedRows size='small'>
           <Column field="codigo" header="Código" style={{ width: '10%' }}></Column>
-          <Column field="descripcion" header="Descripción" style={{ width: '20%' }}></Column>
+          <Column field="descripcion" header="Descripción" style={{ width: '30%' }}></Column>
           <Column field="precioEfectivo" header="Efectivo" style={{ width: '10%' }}
             body={(rowData) => rowData.precioEfectivo ? formatCurrency(rowData.precioEfectivo) : '$ 0'}>
           </Column>
@@ -152,6 +150,7 @@ export const ProductosPage = () => {
           </Column>
           <Column field='ultActPrecio' header="Ult. Precio" style={{ width: '10%' }}
             body={(rowData) => rowData.ultActPrecio ? formatDate(rowData.ultActPrecio) : ''}></Column>
+          <Column header="Unidades" alignHeader={'center'} style={{ width: '10%' }}></Column>
           <Column header="Acciones" alignHeader={'center'} style={{ width: '10%' }}
             body={(rowData) => (
               <div className='flex justify-center'>
