@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import ProductoServicio from '../../services/producto.service';
-import { Card } from 'primereact/card';
-import { formatCurrency, formatDate } from '../../helper/format';
-import { InputNumber } from 'primereact/inputnumber';
-import { RadioButton } from 'primereact/radiobutton';
-import { Button } from 'primereact/button';
-import ProductoFiltros from '../../helper/ProductoFiltros';
-import { Dropdown } from 'primereact/dropdown';
-import { Paginator } from 'primereact/paginator';
+import React, { useState, useEffect } from 'react'
+
+import { Card } from 'primereact/card'
+import { Button } from 'primereact/button'
+import { Column } from 'primereact/column'
+import { Dropdown } from 'primereact/dropdown'
+import { DataTable } from 'primereact/datatable'
+import { Paginator } from 'primereact/paginator'
+import { RadioButton } from 'primereact/radiobutton'
+import { InputNumber } from 'primereact/inputnumber'
+
+import { formatCurrency, formatDate } from '../../helper/format'
+
+import ProductoFiltros from '../../helper/ProductoFiltros'
+import ProductoServicio from '../../services/producto.service'
 
 export const ProductosModificacionRapida = () => {
   const [listaProductos, setListaProductos] = useState([])
@@ -78,6 +81,8 @@ export const ProductosModificacionRapida = () => {
       setListaProductos(data.content)
       setTotalRegistros(data.totalElements)
     })
+
+    console.log(selectedProducts)
   };
 
   return (
@@ -89,16 +94,16 @@ export const ProductosModificacionRapida = () => {
           className='w-1/6 h-full !rounded-lg !shadow-md mt-5'>
           <div>
             <div className='mb-3'>
-              <label htmlFor="porcentajeEfectivo" className='block mb-3'>Efectivo</label>
-              <InputNumber id='porcentajeEfectivo' className='p-inputtext-sm'></InputNumber>
+              <label className='block font-medium mb-3'>Efectivo</label>
+              <InputNumber className='p-inputtext-sm w-full' suffix="%"></InputNumber>
             </div>
             <div className='mb-3'>
-              <label htmlFor="porcentajeEfectivo" className='block mb-3'>Débito</label>
-              <InputNumber className='p-inputtext-sm'></InputNumber>
+              <label className='block font-medium mb-3'>Débito</label>
+              <InputNumber className='p-inputtext-sm w-full' suffix="%"></InputNumber>
             </div>
             <div className='mb-3'>
-              <label htmlFor="porcentajeEfectivo" className='block mb-3'>Crédito</label>
-              <InputNumber className='p-inputtext-sm'></InputNumber>
+              <label className='block font-medium mb-3'>Crédito</label>
+              <InputNumber className='p-inputtext-sm w-full' suffix="%"></InputNumber>
             </div>
           </div>
           <hr className='my-5'></hr>
@@ -115,8 +120,8 @@ export const ProductosModificacionRapida = () => {
           <Button label='Grabar' className='w-full hover:!bg-blue-600' size='small'></Button>
         </Card>
         <div className='w-5/6 ms-5 mt-5'>
-          <Card title='Filtros' className='!rounded-lg !shadow-md'>
-            <div className='md:flex'>
+          <Card className='!rounded-lg !shadow-md'>
+            <div className='md:flex mb-5'>
               <div className='me-3'>
                 <Dropdown options={listaProveedores} optionLabel='razonSocial' filter
                   value={proveedor} onChange={handleProveedor} emptyMessage='Sin registros'
@@ -141,8 +146,6 @@ export const ProductosModificacionRapida = () => {
                 <Button label='Filtrar' onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
               </div>
             </div>
-          </Card>
-          <Card className='!rounded-lg !shadow-md mt-5'>
             <DataTable value={listaProductos} selectionMode={'checkbox'}
               selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id" >
               <Column selectionMode="multiple" style={{ width: '5%' }}></Column>

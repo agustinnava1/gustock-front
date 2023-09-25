@@ -30,7 +30,7 @@ export const ProductoDetalle = () => {
       <div className='lg:flex justify-between mt-5'>
         <div className='lg:w-1/2 mb-5'>
           <Card className='!rounded-lg !shadow-md'>
-            <img src='http://www.higieneplus.com.ar/wp-content/themes/higieneplus/images/producto-sin-foto-ficha.jpg' class="mx-auto w-[535px] max-h-[535px]"></img>
+            <img src='/producto-sin-foto.jpg' class="mx-auto w-[535px] max-h-[535px]"></img>
           </Card>
         </div>
         <div className='lg:w-1/2 lg:ml-5'>

@@ -80,7 +80,7 @@ export const ProductosPagina = () => {
   ];
 
   const filtrarVentas = () => {
-    setFirst(0) 
+    setFirst(0)
     setRows(cantidad)
 
     const request = { ...paginacionRequest, pagina: 0 }
@@ -105,31 +105,21 @@ export const ProductosPagina = () => {
     <div className='p-5'>
       <h2 className='sm:text-4xl text-5xl font-medium mb-3'>Mis productos</h2>
       <span className='text-xl font-normal'>Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema</span>
-      <div className='flex justify-between my-5'>
+      <div className='md:flex justify-between my-5'>
         <div className='md:flex'>
-          <div className='flex-auto me-3'>
-            <Dropdown options={listaProveedores} optionLabel='razonSocial' filter
-              value={proveedor} onChange={handleProveedor} emptyMessage='Sin registros'
-              placeholder='Selecciona un proveedor' className='flex-1 p-inputtext-sm w-56' />
-          </div>
-          <div className='flex-auto me-3'>
-            <Dropdown options={listaRubros} optionLabel='descripcion' filter
-              value={rubro} onChange={handleRubro} emptyMessage='Sin registros'
-              placeholder='Selecciona un rubro' className='flex-1 p-inputtext-sm w-56' />
-          </div>
-          <div className='flex-auto me-3'>
-            <Dropdown options={listaMarcas} optionLabel='descripcion' filter
-              value={marca} onChange={handleMarca} emptyMessage='Sin registros'
-              placeholder='Selecciona una marca' className='flex-1 p-inputtext-sm w-56' />
-          </div>
-          <div className='flex-auto me-3'>
-            <Dropdown options={listaCantidades}
-              value={cantidad} onChange={handleCantidad} emptyMessage="Sin registros" 
-              placeholder='Selecciona la cantidad' className='flex-1 p-inputtext-sm w-52' />
-          </div>
-          <div className='flex-auto'>
-            <Button label='Filtrar' onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
-          </div>
+          <Dropdown options={listaProveedores} optionLabel='razonSocial' filter
+            value={proveedor} onChange={handleProveedor} emptyMessage='Sin registros'
+            placeholder='Selecciona un proveedor' className='flex-1 p-inputtext-sm w-56 me-3' />
+          <Dropdown options={listaRubros} optionLabel='descripcion' filter
+            value={rubro} onChange={handleRubro} emptyMessage='Sin registros'
+            placeholder='Selecciona un rubro' className='flex-1 p-inputtext-sm w-56 me-3' />
+          <Dropdown options={listaMarcas} optionLabel='descripcion' filter
+            value={marca} onChange={handleMarca} emptyMessage='Sin registros'
+            placeholder='Selecciona una marca' className='flex-1 p-inputtext-sm w-56 me-3' />
+          <Dropdown options={listaCantidades}
+            value={cantidad} onChange={handleCantidad} emptyMessage="Sin registros"
+            placeholder='Selecciona la cantidad' className='flex-1 p-inputtext-sm w-52 me-3' />
+          <Button label='Filtrar' onClick={filtrarVentas} className='hover:!bg-blue-600 me-3' size='small' />
         </div>
         <div className='card flex justify-content-center'>
           <TieredMenu model={items} popup ref={menu} breakpoint="767px" className='m-0 p-0' />
