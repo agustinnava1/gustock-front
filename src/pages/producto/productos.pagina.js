@@ -137,7 +137,7 @@ export const ProductosPagina = () => {
             onClick={(e) => menu.current.toggle(e)} size='small' />
         </div>
       </div>
-      <Card className='drop-shadow !shadow-none mt-5'>
+      <Card className='!rounded-lg !shadow-md mt-5'>
         <DataTable value={listaProductos} selectionMode='single' selection={productoSeleccionado}
           onSelectionChange={(e) => setProductoSeleccionado(e.value)} stripedRows emptyMessage='No se encontraron resultados' size='small'>
           <Column field='codigo' header='Código' style={{ width: '10%' }}></Column>

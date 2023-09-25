@@ -8,14 +8,14 @@ import { InputNumber } from 'primereact/inputnumber';
 import { RadioButton } from 'primereact/radiobutton';
 import { Button } from 'primereact/button';
 import ProductoFiltros from '../../helper/ProductoFiltros';
+import { Dropdown } from 'primereact/dropdown';
+import { Paginator } from 'primereact/paginator';
 
 export const ProductosModificacionRapida = () => {
   const [listaProductos, setListaProductos] = useState([])
   const [selectedProducts, setSelectedProducts] = useState(null);
 
   const { listaProveedores, listaRubros, listaMarcas, listaCantidades } = ProductoFiltros();
-
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
 
   const [proveedor, setProveedor] = useState(null)
   const [rubro, setRubro] = useState(null)
@@ -24,9 +24,12 @@ export const ProductosModificacionRapida = () => {
   const [first, setFirst] = useState(0)
   const [rows, setRows] = useState(10)
 
+  const [accion, setAccion] = useState('')
   const [cantidad, setCantidad] = useState(10)
   const [totalRegistros, setTotalRegistros] = useState(null)
   const [paginacionRequest, setPaginacionRequest] = useState({})
+
+  const [actualizacionRequest, setActualizacionRequest] = useState({})
 
   useEffect(() => {
     ProductoServicio.listar(paginacionRequest).then(data => {
@@ -35,21 +38,55 @@ export const ProductosModificacionRapida = () => {
     })
   }, [])
 
-  const [rowClick, setRowClick] = useState(true);
+  const handleCantidad = (e) => {
+    setCantidad(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, cantidad: e.target.value })
+  };
 
-  const [accion, setAccion] = useState('');
+  const handleMarca = (e) => {
+    setMarca(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, marca: e.target.value.descripcion })
+  };
 
-  useEffect(() => {
-    ProductoServicio.listar().then((data) => setListaProductos(data));
-  }, []);
+  const handleRubro = (e) => {
+    setRubro(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, rubro: e.target.value.descripcion })
+  };
+
+  const handleProveedor = (e) => {
+    setProveedor(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, proveedor: e.target.value.razonSocial })
+  };
+
+  const filtrarVentas = () => {
+    setFirst(0)
+    setRows(cantidad)
+
+    const request = { ...paginacionRequest, pagina: 0 }
+    ProductoServicio.listar(request).then(data => {
+      setListaProductos(data.content)
+      setTotalRegistros(data.totalElements)
+    })
+  };
+
+  const cambiarPagina = (event) => {
+    setFirst(event.first)
+    setRows(event.rows)
+
+    const request = { ...paginacionRequest, pagina: event.page }
+    ProductoServicio.listar(request).then(data => {
+      setListaProductos(data.content)
+      setTotalRegistros(data.totalElements)
+    })
+  };
 
   return (
     <div className='m-5'>
-      <h2 className="sm:text-4xl text-5xl font-medium mb-3">Modificación rápida de productos</h2>
+      <h2 className="sm:text-4xl text-5xl font-medium mb-3">Actualización rápida de precios</h2>
       <span class="text-xl font-normal">Presiona la casilla para seleccionar el producto. Los artículos seleccionados se actualizarán al presionar "Grabar"</span>
       <div className='flex'>
-        <Card title='Parámetros' subTitle='Defina un porcentaje para cada tipo de precio y luego seleccione que tipo de acción desea realizar'
-          className='w-1/6 drop-shadow !shadow-none mt-5'>
+        <Card title='Parámetros' subTitle='Defina un porcentaje y luego seleccione que tipo de acción desea realizar'
+          className='w-1/6 h-full !rounded-lg !shadow-md mt-5'>
           <div>
             <div className='mb-3'>
               <label htmlFor="porcentajeEfectivo" className='block mb-3'>Efectivo</label>
@@ -78,28 +115,53 @@ export const ProductosModificacionRapida = () => {
           <Button label='Grabar' className='w-full hover:!bg-blue-600' size='small'></Button>
         </Card>
         <div className='w-5/6 ms-5 mt-5'>
-          <Card title='Filtros'>
-
+          <Card title='Filtros' className='!rounded-lg !shadow-md'>
+            <div className='md:flex'>
+              <div className='me-3'>
+                <Dropdown options={listaProveedores} optionLabel='razonSocial' filter
+                  value={proveedor} onChange={handleProveedor} emptyMessage='Sin registros'
+                  placeholder='Selecciona un proveedor' className='flex-1 p-inputtext-sm w-56' />
+              </div>
+              <div className='me-3'>
+                <Dropdown options={listaRubros} optionLabel='descripcion' filter
+                  value={rubro} onChange={handleRubro} emptyMessage='Sin registros'
+                  placeholder='Selecciona un rubro' className='flex-1 p-inputtext-sm w-56' />
+              </div>
+              <div className='me-3'>
+                <Dropdown options={listaMarcas} optionLabel='descripcion' filter
+                  value={marca} onChange={handleMarca} emptyMessage='Sin registros'
+                  placeholder='Selecciona una marca' className='flex-1 p-inputtext-sm w-56' />
+              </div>
+              <div className='me-3'>
+                <Dropdown options={listaCantidades}
+                  value={cantidad} onChange={handleCantidad} emptyMessage="Sin registros"
+                  placeholder='Selecciona la cantidad' className='flex-1 p-inputtext-sm w-52' />
+              </div>
+              <div>
+                <Button label='Filtrar' onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
+              </div>
+            </div>
           </Card>
-          <Card className='drop-shadow !shadow-none mt-5'>
-            <DataTable value={listaProductos} selectionMode={rowClick ? null : 'checkbox'}
-              stripedRows paginator rows={10} rowsPerPageOptions={[10, 20, 30, 40, 50, 100]}
+          <Card className='!rounded-lg !shadow-md mt-5'>
+            <DataTable value={listaProductos} selectionMode={'checkbox'}
               selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id" >
-              <Column selectionMode="multiple" headerStyle={{ width: '5%' }}></Column>
+              <Column selectionMode="multiple" style={{ width: '5%' }}></Column>
               <Column field="codigo" header="Código" style={{ width: '10%' }}></Column>
-              <Column field="descripcion" header="Descripción" style={{ width: '30%' }}></Column>
-              <Column field="precioEfectivo" header="Efectivo" style={{ width: '15%' }}
+              <Column field="descripcion" header="Descripción" style={{ width: '40%' }}></Column>
+              <Column field="precioEfectivo" header="Efectivo" style={{ width: '10%' }}
                 body={(rowData) => rowData.precioEfectivo ? formatCurrency(rowData.precioEfectivo) : ''}>
               </Column>
-              <Column field="precioDebito" header="Débito" style={{ width: '15%' }}
+              <Column field="precioDebito" header="Débito" style={{ width: '10%' }}
                 body={(rowData) => rowData.precioDebito ? formatCurrency(rowData.precioDebito) : ''}>
               </Column>
-              <Column field="precioCredito" header="Crédito" style={{ width: '15%' }}
+              <Column field="precioCredito" header="Crédito" style={{ width: '10%' }}
                 body={(rowData) => rowData.precioCredito ? formatCurrency(rowData.precioCredito) : ''}>
               </Column>
-              <Column field='ultActPrecio' header="Ult. Precio" style={{ width: '10%' }}
+              <Column field='ultActPrecio' header="Ult. Precio" style={{ width: '15%' }}
                 body={(rowData) => rowData.ultActPrecio ? formatDate(rowData.ultActPrecio) : ''}></Column>
             </DataTable>
+            <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalRegistros}
+              onPageChange={cambiarPagina} className='mt-5 !p-0'></Paginator>
           </Card>
         </div>
       </div>
