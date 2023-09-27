@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 
-import ProveedorService from '../../services/proveedor.service';
+import ProveedorService from '../../services/proveedor.servicio';
 
 export const DeleteProveedorComponent = ({ proveedorId, listaProveedores ,updateListaProveedores }) => {
   Swal.fire({

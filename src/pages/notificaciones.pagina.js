@@ -2,7 +2,7 @@ import { Card } from "primereact/card"
 import { Paginator } from 'primereact/paginator';
 import { useState } from "react";
 
-export const NotificacionesPage = () => {
+export const NotificacionesPagina = () => {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
 

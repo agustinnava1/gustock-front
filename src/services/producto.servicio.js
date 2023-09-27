@@ -13,6 +13,15 @@ class ProductoServicio {
 
     eliminar(id) { return axios.delete(baseUrl + "/eliminar/" + id, config).then(res => res.data) }
 
+    buscar(paginacion) {
+        const parametros = Object.keys(paginacion)
+            .filter(key => paginacion[key] !== null)
+            .map(key => `${key}=${paginacion[key]}`)
+            .join('&');
+
+        return axios.get(baseUrl + "/buscar?" + parametros, config).then(res => res.data)
+    }
+
     listar(paginacion) {
         const parametros = Object.keys(paginacion)
             .filter(key => paginacion[key] !== null)

@@ -3,10 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { formatCurrency, formatDate, formatDateLong, formatoFechaCompleto } from '../../helper/format';
 
-import ProductoServicio from '../../services/producto.service';
-import { InputText } from 'primereact/inputtext';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import ProductoServicio from '../../services/producto.servicio';
 
 export const ProductoDetalle = () => {
   const { id } = useParams();
@@ -25,7 +22,7 @@ export const ProductoDetalle = () => {
   };
 
   return (
-    <div className='container mx-auto p-5 lg:px-44'>
+    <div className='container mx-auto p-5 2xl:px-44'>
       <h2 className='text-4xl font-medium'>{producto.descripcion}</h2>
       <div className='lg:flex justify-between mt-5'>
         <div className='lg:w-1/2 mb-5'>

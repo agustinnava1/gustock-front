@@ -8,7 +8,7 @@ import { RubroComponent } from '../components/rubro/rubro.component';
 import { ProveedorComponent } from '../components/proveedor/proveedor.component';
 import { DataTable } from 'primereact/datatable';
 
-export const PanelPage = () => {
+export const PanelPagina = () => {
 
   return (
     <div className='m-5'>

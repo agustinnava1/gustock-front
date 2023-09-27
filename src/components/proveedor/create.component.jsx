@@ -4,7 +4,7 @@ import { Dialog } from "primereact/dialog"
 import { InputText } from "primereact/inputtext"
 
 import Swal from 'sweetalert2';
-import ProveedorServicio from "../../services/proveedor.service"
+import ProveedorServicio from "../../services/proveedor.servicio"
 
 export const CreateProveedorComponent = () => {
   const [visible, setVisible] = useState(false);

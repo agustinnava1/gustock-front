@@ -1,12 +1,15 @@
-import { AppRouter } from "../router/AppRouter";
-import { NavLink, useLocation } from "react-router-dom";
+import { useState } from 'react'
+import { AppRouter } from '../router/AppRouter'
+import { NavLink, useLocation } from 'react-router-dom'
 
-import Header from "../components/header.component";
-import Sidebar, { SidebarItem } from "../components/sidebar.component";
-import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings } from 'lucide-react';
+import Header from '../components/header.component'
+import Buscador from '../components/buscador.componente'
+import Sidebar, { SidebarItem } from '../components/sidebar.component'
+import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings, Search } from 'lucide-react';
 
 export const Home = () => {
-  const location = useLocation();
+  const location = useLocation()
+  const [mostrarBuscador, setMostrarBuscador] = useState(false)
 
   return (
     <div className="flex">
@@ -26,6 +29,9 @@ export const Home = () => {
         <NavLink className="text-decoration-none" to={"/reposicion"}>
           <SidebarItem icon={<Clipboard size={20} />} text="Reposición" active={location.pathname === '/reposicion'} />
         </NavLink>
+        <NavLink className="text-decoration-none" onClick={() => setMostrarBuscador(true)}>
+          <SidebarItem icon={<Search size={20} />} text="busqueda" />
+        </NavLink>
         <hr className="mt-3"></hr>
         <NavLink className="text-decoration-none" to={"/mensajeria"}>
           <SidebarItem icon={<MessageSquare size={20} />} text="Mensajería" active={location.pathname === '/mensajeria'} />
@@ -42,6 +48,7 @@ export const Home = () => {
         <Header></Header>
         <AppRouter></AppRouter>
       </div>
+      {mostrarBuscador && <Buscador></Buscador>}
     </div>
   )
 }

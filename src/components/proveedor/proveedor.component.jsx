@@ -4,7 +4,7 @@ import { Column } from "primereact/column"
 import { useState, useEffect } from "react"
 import { DataTable } from "primereact/datatable"
 
-import ProveedorServicio from "../../services/proveedor.service"
+import ProveedorServicio from "../../services/proveedor.servicio"
 import { DeleteProveedorComponent } from "./delete.component";
 import { CreateProveedorComponent } from "./create.component";
 

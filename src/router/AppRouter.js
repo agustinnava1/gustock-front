@@ -4,14 +4,14 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { AdminPagina } from '../pages/admin.pagina'
 import { LocalPagina } from '../pages/local.pagina'
 
-import { PanelPage } from '../pages/panel.page'
-import { AjustesPage } from '../pages/ajustes.page'
-import { ReposicionPage } from '../pages/reposicion.page'
-import { MensajeriaPage } from '../pages/mensajeria.page'
-import { NotificacionesPage } from '../pages/notificaciones.page'
+import { PanelPagina } from '../pages/panel.pagina'
+import { AjustesPagina } from '../pages/ajustes.pagina'
+import { ReposicionPagina } from '../pages/reposicion.pagina'
+import { MensajeriaPagina } from '../pages/mensajeria.pagina'
+import { NotificacionesPagina } from '../pages/notificaciones.pagina'
 
 import { ProductosPagina } from '../pages/producto/productos.pagina'
-import { ProductoDetalle } from '../pages/producto/producto.detalle.page'
+import { ProductoDetalle } from '../pages/producto/producto.detalle.pagina'
 
 import { VentasPagina } from '../pages/venta/ventas.pagina'
 import { RegistrarVenta } from '../pages/venta/venta.registrar.pagina'
@@ -20,16 +20,17 @@ import { ProductosModificacionMasiva } from '../pages/producto/modificacion.masi
 import { ProductosModificacionRapida } from '../pages/producto/modificacion.rapida'
 import { ProductoRegistrar } from '../pages/producto/producto.registrar.pagina'
 import { VentaDetalle } from '../pages/venta/venta.detalle.pagina'
+import { ProductoBusqueda } from '../pages/busqueda.pagina'
 
 export const AppRouter = () => {
   return (
       <Routes>
         <Route path="/inicio" element={<AdminPagina />} />
-        <Route path="/panel" element={<PanelPage />} />
-        <Route path="/reposicion" element={<ReposicionPage />} />
-        <Route path="/mensajeria" element={<MensajeriaPage />} />
-        <Route path="/notificaciones" element={<NotificacionesPage />} />
-        <Route path="/ajustes" element={<AjustesPage />} />
+        <Route path="/panel" element={<PanelPagina />} />
+        <Route path="/reposicion" element={<ReposicionPagina />} />
+        <Route path="/mensajeria" element={<MensajeriaPagina />} />
+        <Route path="/notificaciones" element={<NotificacionesPagina />} />
+        <Route path="/ajustes" element={<AjustesPagina />} />
 
         <Route exact path="/deposito/:nombre" element={<LocalPagina />} />
         <Route exact path="/local/:nombre" element={<LocalPagina />} />
@@ -47,7 +48,7 @@ export const AppRouter = () => {
         <Route exact path="/producto/registrar" element={<ProductoRegistrar />} />
         <Route exact path="/producto/detalle/:id" element={<ProductoDetalle />} />
         <Route exact path="/producto/modificar/:id" element={<ProductoDetalle />} />
-        <Route exact path="/producto/buscar/:busqueda" element={<ProductoDetalle />} />
+        <Route exact path="/producto/buscar/:criterio" element={<ProductoBusqueda />} />
       </Routes>
   )
 } 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import ProveedorServicio from '../services/proveedor.service';
-import RubroServicio from '../services/rubro.service';
-import MarcaServicio from '../services/marca.service';
+import ProveedorServicio from '../services/proveedor.servicio';
+import RubroServicio from '../services/rubro.servicio';
+import MarcaServicio from '../services/marca.servicio';
 
 function ProductoFiltros() {
   const [listaProveedores, setListaProveedores] = useState([]);

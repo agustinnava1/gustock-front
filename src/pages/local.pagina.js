@@ -1,11 +1,13 @@
+import React, { useEffect, useState } from 'react'
+
 import { Card } from 'primereact/card'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { Calendar } from 'primereact/calendar'
 import { Dropdown } from 'primereact/dropdown'
 import { DataTable } from 'primereact/datatable'
+import { Paginator } from 'primereact/paginator'
 import { Link, useParams } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
 
 import Swal from 'sweetalert2';
 import { addLocale } from 'primereact/api'
@@ -15,27 +17,26 @@ import { calendarioEspañol } from '../helper/configuracion.regional'
 
 import LocalServicio from '../services/local.servicio'
 import StockServicio from '../services/stock.servicio'
-import { Paginator } from 'primereact/paginator'
+import ProductoFiltros from '../helper/ProductoFiltros'
 
 export const LocalPagina = () => {
-  const { nombre } = useParams();
-
+  const { nombre } = useParams()
   const [local, setLocal] = useState([])
+  const [isExpanded, setIsExpanded] = useState(false)
+  const [listaProductos, setListaProductos] = useState([])
+  const { listaProveedores, listaRubros, listaMarcas, listaCantidades } = ProductoFiltros();
 
+  const [proveedor, setProveedor] = useState(null)
   const [rubro, setRubro] = useState(null)
   const [marca, setMarca] = useState(null)
   const [fecha, setFecha] = useState(null)
 
-  const [listaRubros, setListaRubros] = useState([])
-  const [listaProductos, setListaProductos] = useState([])
-
-  const [isExpanded, setIsExpanded] = useState(false)
-
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(10);
 
+  const [cantidad, setCantidad] = useState(10)
   const [totalRegistros, setTotalRegistros] = useState(null)
-  const [paginacionRequest, setPaginacionRequest] = useState([])
+  const [paginacionRequest, setPaginacionRequest] = useState({})
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded)
@@ -50,6 +51,48 @@ export const LocalPagina = () => {
       setListaProductos(data.content);
     })
   }, []);
+
+  const handleCantidad = (e) => {
+    setCantidad(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, cantidad: e.target.value })
+  };
+
+  const handleMarca = (e) => {
+    setMarca(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, marca: e.target.value.descripcion })
+  };
+
+  const handleRubro = (e) => {
+    setRubro(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, rubro: e.target.value.descripcion })
+  };
+
+  const handleProveedor = (e) => {
+    setProveedor(e.target.value)
+    setPaginacionRequest({ ...paginacionRequest, proveedor: e.target.value.razonSocial })
+  };
+
+  const filtrarVentas = () => {
+    setFirst(0)
+    setRows(cantidad)
+
+    const request = { ...paginacionRequest, pagina: 0 }
+    StockServicio.obtenerPorLocal(request).then(data => {
+      setListaProductos(data.content)
+      setTotalRegistros(data.totalElements)
+    })
+  };
+
+  const cambiarPagina = (event) => {
+    setFirst(event.first)
+    setRows(event.rows)
+
+    const request = { ...paginacionRequest, pagina: event.page }
+    StockServicio.obtenerPorLocal(request).then(data => {
+      setListaProductos(data.content)
+      setTotalRegistros(data.totalElements)
+    })
+  };
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -91,26 +134,18 @@ export const LocalPagina = () => {
           <div>
             <Card title="Venta" className='text-center !rounded-lg !shadow-md mt-5'>
               <div className='p-5'>
-                <div className='mb-5'>
-                  <Link to={`/local/${local.nombre}/venta/registrar`}>
-                    <Button label='Nueva venta' className='hover:!bg-blue-600 w-3/4' size='small' />
-                  </Link>
-                </div>
-                <div>
-                  <Link to={`/local/${local.nombre}/devolucion`}>
-                    <Button label='Devolución' className='hover:!bg-blue-600 w-3/4' size='small' />
-                  </Link>
-                </div>
+                <Link to={`/local/${local.nombre}/venta/registrar`}>
+                  <Button label='Nueva venta' className='hover:!bg-blue-600 !mb-5 w-full' size='small' />
+                </Link>
+                <Link to={`/local/${local.nombre}/devolucion`}>
+                  <Button label='Devolución' className='hover:!bg-blue-600 w-full' size='small' />
+                </Link>
               </div>
             </Card>
             <Card title="Turno" className='text-center !rounded-lg !shadow-md mt-5'>
               <div className='p-5'>
-                <div className='mb-5'>
-                  <Button label='Abrir turno' className='hover:!bg-blue-600 w-3/4' size='small' />
-                </div>
-                <div>
-                  <Button label='Cerrar turno' className='hover:!bg-blue-600 w-3/4' size='small' />
-                </div>
+                <Button label='Abrir turno' className='hover:!bg-blue-600 !mb-5 w-full' size='small' />
+                <Button label='Cerrar turno' className='hover:!bg-blue-600 w-full' size='small' />
               </div>
             </Card>
           </div>
@@ -136,46 +171,51 @@ export const LocalPagina = () => {
           </div>
 
           <div className={`overflow-hidden transition-all duration-500 max-h-0 peer-pressed:max-h-40 ${isExpanded ? 'max-h-40' : ''}`}>
-            <div className='flex border-2 mb-5 p-5'>
+            <div className='flex border-2 rounded-lg shadow-sm mb-5 p-5'>
               <div className='flex-1 me-3'>
-                <label htmlFor="proveedor" className='block font-medium text-lg mb-3'>Proveedor:</label>
-                <Dropdown value={rubro} options={listaRubros} optionLabel="descripcion" className='w-full me-5'
-                  onChange={(e) => setRubro(e.value)} filter />
+                <label htmlFor="proveedor" className='block font-medium text-lg mb-2'>Proveedor</label>
+                <Dropdown options={listaProveedores} optionLabel='razonSocial' filter
+                  value={proveedor} onChange={handleProveedor} emptyMessage='Sin registros'
+                  placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-1 me-3'>
-                <label htmlFor="rubro" className='block font-medium text-lg mb-3'>Rubro:</label>
-                <Dropdown value={rubro} options={listaRubros} optionLabel="descripcion" className='w-full'
-                  onChange={(e) => setRubro(e.value)} filter />
+                <label htmlFor="rubro" className='block font-medium text-lg mb-2'>Rubro</label>
+                <Dropdown options={listaRubros} optionLabel='descripcion' filter
+                  value={rubro} onChange={handleRubro} emptyMessage='Sin registros'
+                  placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-1 me-3'>
-                <label htmlFor="marca" className='block font-medium text-lg mb-3'>Marca:</label>
-                <Dropdown value={rubro} options={listaRubros} optionLabel="descripcion" className='w-full'
-                  onChange={(e) => setRubro(e.value)} filter />
+                <label htmlFor="marca" className='block font-medium text-lg mb-2'>Marca</label>
+                <Dropdown options={listaMarcas} optionLabel='descripcion' filter
+                  value={marca} onChange={handleMarca} emptyMessage='Sin registros'
+                  placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-1 me-3'>
-                <label htmlFor="proveedor" className='block font-medium text-lg mb-3'>Stock:</label>
-                <Dropdown value={rubro} options={listaRubros} optionLabel="descripcion" className='w-full'
+                <label htmlFor="stock" className='block font-medium text-lg mb-2'>Stock</label>
+                <Dropdown value={rubro} options={listaRubros} optionLabel="descripcion" className='p-inputtext-sm w-full'
                   onChange={(e) => setRubro(e.value)} />
               </div>
               <div className='flex-1 me-3'>
-                <label htmlFor="proveedor" className='block font-medium text-lg w-full mb-3'>Ult. Precio:</label>
-                <Calendar value={fecha} onChange={(e) => setFecha(e.value)} showIcon dateFormat="dd/mm/yy" locale="es" />
+                <label htmlFor="ultPrecio" className='block font-medium text-lg w-full mb-2'>Ult. Precio</label>
+                <Calendar value={fecha} onChange={(e) => setFecha(e.value)} dateFormat="dd/mm/yy" locale="es"
+                  placeholder='Selecciona una fecha' className='p-inputtext-sm' />
               </div>
               <div className='flex-1 me-3'>
-                <label htmlFor="proveedor" className='block font-medium text-lg w-full mb-3'>Cantidad:</label>
-                <Dropdown value={rubro} options={listaRubros} optionLabel="descripcion" className='w-full'
-                  onChange={(e) => setRubro(e.value)} />
+                <label htmlFor="cantidad" className='block font-medium text-lg w-full mb-2'>Cantidad</label>
+                <Dropdown options={listaCantidades}
+                  value={cantidad} onChange={handleCantidad} emptyMessage="Sin registros"
+                  placeholder='Selecciona la cantidad' className='p-inputtext-sm me-3 w-full' />
               </div>
               <div className='flex-1 me-3'>
-                <label htmlFor="proveedor" className='block font-medium text-lg invisible mb-3'>boton</label>
-                <Button label='Aplicar' className='hover:!bg-blue-600' />
+                <label htmlFor="cantidad" className='block font-medium text-lg w-full mb-2 invisible'>Cantidad</label>
+                <Button label='Aplicar' size='small' className='hover:!bg-blue-600' />
               </div>
             </div>
           </div>
 
-          <DataTable value={listaProductos} stripedRows rows={10} size='small'>
-            <Column field="producto.codigo" header="Código" style={{ width: '10%' }}></Column>
-            <Column field="producto.descripcion" header="Descripción" style={{ width: '25%' }}></Column>
+          <DataTable value={listaProductos} stripedRows size='small'>
+            <Column field="producto.codigo" header="Código" style={{ width: '5%' }}></Column>
+            <Column field="producto.descripcion" header="Descripción" style={{ width: '30%' }}></Column>
             <Column field="producto.precioEfectivo" header="Efectivo" style={{ width: '10%' }}
               body={(rowData) => rowData.producto.precioEfectivo ? formatCurrency(rowData.producto.precioEfectivo) : ''}>
             </Column>

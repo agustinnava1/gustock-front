@@ -6,7 +6,7 @@ import { DataTable } from 'primereact/datatable';
 import React, { useEffect, useState } from 'react';
 
 import { formatDate, formatCurrency } from "../../helper/format";
-import ProductoServicio from '../../services/producto.service';
+import ProductoServicio from '../../services/producto.servicio';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';

@@ -24,6 +24,15 @@ h1, h2{
   background-color: #0ea5e9!important;
 }
 
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 /*.p-accordion .p-accordion-header .p-accordion-header-link{
   color: white!important;
   background-color: #3B82F6!important;

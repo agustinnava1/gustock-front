@@ -12,6 +12,7 @@ import JsBarcode from 'jsbarcode';
 
 import ProductoFiltros from '../../helper/ProductoFiltros'
 import { InputTextarea } from 'primereact/inputtextarea'
+import { RadioButton } from 'primereact/radiobutton'
 
 export const ProductoRegistrar = () => {
   const [codigo, setCodigo] = useState('');
@@ -220,54 +221,54 @@ export const ProductoRegistrar = () => {
                 </div>
                 <div className="w-full lg:w-5/12">
                   <div className="mb-3">
-                    <label className="text-lg">Luces</label>
-                    <div className="py-2 mb-4">
-                      <label className="inline-flex items-center">
-                        <input className="form-radio" type="radio" name="luces" id="luces1" value="Si"></input>
-                        <span className="ml-2">Si</span>
-                      </label>
-                      <label className="inline-flex items-center ml-4">
-                        <input className="form-radio" type="radio" name="luces" id="luces2" value="No"></input>
-                        <span className="ml-2">No</span>
-                      </label>
-                      <label className="inline-flex items-center ml-4">
-                        <input className="form-radio" type="radio" name="luces" id="luces3" value="No aplica" checked></input>
-                        <span className="ml-2">No aplica</span>
-                      </label>
+                    <label className="text-lg font-medium">Luces</label>
+                    <div className="flex flex-wrap gap-3 mt-3">
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="luces1" name="luces" value="Si" />
+                        <label htmlFor="luces1" className="ml-2">Si</label>
+                      </div>
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="luces2" name="luces2" value="No" />
+                        <label htmlFor="luces2" className="ml-2">No</label>
+                      </div>
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="luces3" name="luces3" value="No aplica" />
+                        <label htmlFor="luces3" className="ml-2">No aplica</label>
+                      </div>
                     </div>
                   </div>
                   <div className="mb-3">
-                    <label className="text-lg">Organizador</label>
-                    <div className="py-2 mb-4">
-                      <label className="inline-flex items-center">
-                        <input className="form-radio" type="radio" name="organizador" id="organizador1" value="Si"></input>
-                        <span className="ml-2">Si</span>
-                      </label>
-                      <label className="inline-flex items-center ml-4">
-                        <input className="form-radio" type="radio" name="organizador" id="organizador2" value="No"></input>
-                        <span className="ml-2">No</span>
-                      </label>
-                      <label className="inline-flex items-center ml-4">
-                        <input className="form-radio" type="radio" name="organizador" id="organizador3" value="No aplica" checked></input>
-                        <span className="ml-2">No aplica</span>
-                      </label>
+                    <label className="text-lg font-medium">Organizador</label>
+                    <div className="flex flex-wrap gap-3 mt-3">
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="organizador1" name="organizador1" value="Si" />
+                        <label htmlFor="organizador1" className="ml-2">Si</label>
+                      </div>
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="organizador2" name="organizador2" value="No" />
+                        <label htmlFor="organizador2" className="ml-2">No</label>
+                      </div>
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="organizador3" name="organizador3" value="No aplica" />
+                        <label htmlFor="organizador3" className="ml-2">No aplica</label>
+                      </div>
                     </div>
                   </div>
                   <div className="mb-3">
-                    <label className="text-lg">P. Notebook</label>
-                    <div className="py-2 mb-4">
-                      <label className="inline-flex items-center">
-                        <input className="form-radio" type="radio" name="portanotebook" id="notebook1" value="Si"></input>
-                        <span className="ml-2">Si</span>
-                      </label>
-                      <label className="inline-flex items-center ml-4">
-                        <input className="form-radio" type="radio" name="portanotebook" id="notebook2" value="No"></input>
-                        <span className="ml-2">No</span>
-                      </label>
-                      <label className="inline-flex items-center ml-4">
-                        <input className="form-radio" type="radio" name="portanotebook" id="notebook3" value="No aplica" checked></input>
-                        <span className="ml-2">No aplica</span>
-                      </label>
+                    <label className="text-lg font-medium">P. Notebook</label>
+                    <div className="flex flex-wrap gap-3 mt-3">
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="luces1" name="luces" value="Si" />
+                        <label htmlFor="luces1" className="ml-2">Si</label>
+                      </div>
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="luces2" name="luces2" value="No" />
+                        <label htmlFor="luces2" className="ml-2">No</label>
+                      </div>
+                      <div className="flex align-items-center">
+                        <RadioButton inputId="luces3" name="luces3" value="No aplica" />
+                        <label htmlFor="luces3" className="ml-2">No aplica</label>
+                      </div>
                     </div>
                   </div>
                 </div>

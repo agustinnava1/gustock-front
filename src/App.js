@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { Home } from "./pages/home.page";
-import { Login } from "./pages/login.page";
+import { Home } from "./pages/home.pagina";
+import { Login } from "./pages/login.pagina";
 
 function App() {
   const user = localStorage.getItem('loggedUser')

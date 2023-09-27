@@ -12,7 +12,7 @@ import { InputNumber } from 'primereact/inputnumber'
 import { formatCurrency, formatDate } from '../../helper/format'
 
 import ProductoFiltros from '../../helper/ProductoFiltros'
-import ProductoServicio from '../../services/producto.service'
+import ProductoServicio from '../../services/producto.servicio'
 
 export const ProductosModificacionRapida = () => {
   const [listaProductos, setListaProductos] = useState([])

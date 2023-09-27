@@ -3,7 +3,7 @@ import { Calendar } from "primereact/calendar"
 import { Card } from "primereact/card"
 import { InputNumber } from "primereact/inputnumber"
 
-export const AjustesPage = () => {
+export const AjustesPagina = () => {
   return (
     <div className='m-5'>
       <h2 className='sm:text-4xl text-5xl font-medium mb-3'>Ajustes del sistema</h2>

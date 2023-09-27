@@ -12,7 +12,7 @@ import { TieredMenu } from 'primereact/tieredmenu'
 import { formatDate, formatCurrency } from "../../helper/format"
 
 import ProductoFiltros from '../../helper/ProductoFiltros'
-import ProductoServicio from '../../services/producto.service'
+import ProductoServicio from '../../services/producto.servicio'
 
 export const ProductosPagina = () => {
   const [listaProductos, setListaProductos] = useState([])

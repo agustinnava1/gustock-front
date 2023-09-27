@@ -1,6 +1,6 @@
 import { Button } from "primereact/button"
 
-export const MensajeriaPage = () => {
+export const MensajeriaPagina = () => {
   return (
     <div className="p-5">
       <div class="bg-white shadow-md rounded-lg container mx-auto">
