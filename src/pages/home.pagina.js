@@ -20,7 +20,7 @@ export const Home = () => {
         <NavLink className="text-decoration-none" to={"/panel"}>
           <SidebarItem icon={<LayoutDashboard size={20} />} text="Panel" active={location.pathname === '/panel'} />
         </NavLink>
-        <NavLink className="text-decoration-none" to={"/ventas"}>
+        <NavLink className="text-decoration-none" to={"/venta/historial"}>
           <SidebarItem icon={<ShoppingCart size={20} />} text="Ventas" active={location.pathname === '/ventas'} />
         </NavLink>
         <NavLink className="text-decoration-none" to={"/productos"}>

@@ -34,7 +34,7 @@ export const VentaDetalle = () => {
   return (
     <div className="container mx-auto pt-5">
       {error ? (
-        <Card className="!rounded-lg !shadow-md">
+        <Card className="!rounded-lg !shadow-none border">
           <div class="lg:px-24 lg:py-24 md:py-20 md:px-44 px-4 py-24 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-16">
             <div class="xl:pt-20 w-full xl:w-1/2 pb-12 lg:pb-0">
               <div className="mb-5">
@@ -60,40 +60,8 @@ export const VentaDetalle = () => {
             <span className="text-lg">{formatoFechaCompleto(venta.fecha)}</span>
           </div>
           <div className="lg:flex">
-            <div className="w-3/4">
-              {detalleCambio.length > 0 &&
-                <Card title='Productos devueltos' className='!rounded-lg !shadow-md mb-5'>
-                  {detalleCambio.map(producto => (
-                    <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
-                      <div className="flex-auto w-52">
-                        <p className="font-medium">{producto.descripcion}</p>
-                        <span className="!text-sm">Código: {producto.producto}</span>
-                      </div>
-                      <span className="flex-auto text-center text-gray-500 font-medium">Precio unitario: {formatCurrency(producto.precio)}</span>
-                      <span className="flex-auto text-center text-gray-500 font-medium">Cantidad: {producto.cantidad}</span>
-                      <span className="flex-auto text-center text-gray-500 font-medium">Subtotal: {formatCurrency(producto.subtotal)}</span>
-                    </div>
-                  ))}
-                </Card>
-              }
-
-              <Card title='Productos vendidos' className='!rounded-lg !shadow-md'>
-                {detalle.map(producto => (
-                  <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
-                    <div className="flex-auto w-52">
-                      <p className="font-medium">{producto.descripcion}</p>
-                      <span className="!text-sm">Código: {producto.producto}</span>
-                    </div>
-                    <span className="flex-auto text-center text-gray-500 font-medium">Precio unitario: {formatCurrency(producto.precio)}</span>
-                    <span className="flex-auto text-center text-gray-500 font-medium">Cantidad: {producto.cantidad}</span>
-                    <span className="flex-auto text-center text-gray-500 font-medium">Subtotal: {formatCurrency(producto.subtotal)}</span>
-                  </div>
-                ))}
-              </Card>
-            </div>
-
-            <div className="w-1/4 ms-5">
-              <div className="bg-white shadow-md rounded-lg p-4">
+            <div className="w-1/4 me-5">
+              <div className="bg-white shadow-md rounded-lg border p-4">
                 <div className="bg-blue-500 p-4 rounded-t-lg">
                   <h3 className="text-white font-medium text-xl mb-0">Detalle de pago</h3>
                 </div>
@@ -124,7 +92,7 @@ export const VentaDetalle = () => {
                   <span className="text-xl font-medium text-blue-500 mb-0">Total pagado: {formatCurrency(venta.total)}</span>
                 </div>
               </div>
-              <div className="bg-white shadow-md rounded-lg p-4 mt-5">
+              <div className="bg-white shadow-md rounded-lg border p-4 mt-5">
                 <div className="bg-blue-500 p-4 rounded-t-lg">
                   <h3 className="text-white font-medium text-xl mb-0">Información adicional</h3>
                 </div>
@@ -153,6 +121,38 @@ export const VentaDetalle = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div className="w-3/4">
+              {detalleCambio.length > 0 &&
+                <Card title='Productos devueltos' className='!rounded-lg !shadow-none border mb-5'>
+                  {detalleCambio.map(producto => (
+                    <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
+                      <div className="flex-auto w-52">
+                        <p className="font-medium">{producto.descripcion}</p>
+                        <span className="!text-sm">Código: {producto.producto}</span>
+                      </div>
+                      <span className="flex-auto text-center text-gray-500 font-medium">Precio unitario: {formatCurrency(producto.precio)}</span>
+                      <span className="flex-auto text-center text-gray-500 font-medium">Cantidad: {producto.cantidad}</span>
+                      <span className="flex-auto text-center text-gray-500 font-medium">Subtotal: {formatCurrency(producto.subtotal)}</span>
+                    </div>
+                  ))}
+                </Card>
+              }
+
+              <Card title='Productos vendidos' className='!rounded-lg !shadow-none border'>
+                {detalle.map(producto => (
+                  <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
+                    <div className="flex-auto w-52">
+                      <p className="font-medium">{producto.descripcion}</p>
+                      <span className="!text-sm">Código: {producto.producto}</span>
+                    </div>
+                    <span className="flex-auto text-center text-gray-500 font-medium">Precio unitario: {formatCurrency(producto.precio)}</span>
+                    <span className="flex-auto text-center text-gray-500 font-medium">Cantidad: {producto.cantidad}</span>
+                    <span className="flex-auto text-center text-gray-500 font-medium">Subtotal: {formatCurrency(producto.subtotal)}</span>
+                  </div>
+                ))}
+              </Card>
             </div>
           </div>
         </div>)}

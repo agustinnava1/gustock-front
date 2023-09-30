@@ -7,7 +7,7 @@ export default function Header() {
   const rol = user.rol.match(/\[ROLE_(.*?)\]/)[1];
 
   return (
-    <nav className='flex justify-between bg-white w-full p-4'>
+    <nav className='flex justify-between bg-white border-b w-full p-4'>
       <span className='flex-auto text-2xl font-bold text-blue-500 ms-2 my-auto'>GUSTOCK</span>
     </nav>
   )

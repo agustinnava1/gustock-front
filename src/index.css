@@ -4,7 +4,7 @@
 
 body{
   color: #2A2B2A;
-  background-color: rgb(250, 250, 250)!important;
+  background-color: rgb(249, 249, 251)!important;
 }
 
 h1, h2{
@@ -22,6 +22,17 @@ h1, h2{
 .p-datatable .p-datatable-thead > tr > th{
   background-color: white!important;
   border-bottom: 1px solid #2A2B2A!important;
+}
+
+.p-panel.p-panel-toggleable .p-panel-header {
+  padding: 1.25rem!important;
+  background: white!important;
+}
+
+.p-panel .p-panel-header .p-panel-title{
+  font-size: 1.5rem!important;
+  font-weight: 700!important;
+  color: rgb(59 130 246)!important;
 }
 
 .hover-scale {

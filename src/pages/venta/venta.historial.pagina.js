@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Row } from 'primereact/row'
@@ -11,6 +12,7 @@ import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
+import { TieredMenu } from 'primereact/tieredmenu'
 import { ColumnGroup } from 'primereact/columngroup'
 
 import { usePagination } from '../../hooks/venta.paginacion'
@@ -21,10 +23,8 @@ import { formatCurrency, formatoFechaCorto, formatoHora } from '../../helper/for
 
 import VentaFiltros from '../../helper/VentaFiltros'
 import VentaServicio from '../../services/venta.servicio'
-import { TieredMenu } from 'primereact/tieredmenu'
-import { useRef } from 'react'
 
-export const VentasPagina = () => {
+export const VentaHistorialPagina = () => {
   const initialPagination = {
     local: null,
     pagina: null,
@@ -120,25 +120,49 @@ export const VentasPagina = () => {
 
   return (
     <div className='p-5'>
-      <h2 className='text-3xl font-medium mb-5'>Historial de ventas</h2>
-      <Card className='!shadow-none border mb-5'>
-        <div className='md:flex flex-wrap'>
-          <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha desde'
-            name='fechaDesde' onChange={handleDate} className='p-inputtext-sm flex-auto me-3' />
-          <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha hasta'
-            name='fechaHasta' onChange={handleDate} className='p-inputtext-sm flex-auto me-3' />
-          <Dropdown options={listaLocales} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un local'
-            name='local' value={local} onChange={onDropdownChange} className='p-inputtext-sm flex-auto me-3' />
-          <Dropdown options={listaMetodosPago} emptyMessage='Sin registros' placeholder='Selecciona un método de pago'
-            name='metodoPago' value={metodoPago} onChange={onDropdownChange} className='p-inputtext-sm flex-auto me-3' />
-          <Dropdown options={listaCantidades} emptyMessage='Sin registros' placeholder='Selecciona la cantidad'
-            name='cantidad' value={cantidad} onChange={onDropdownChange} className='p-inputtext-sm flex-auto me-3' />
-          <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600 !me-3' size='small' />
-          <Button label='Opciones' iconPos='right' icon='pi pi-caret-down' className='hover:!bg-blue-600'
-            onClick={(e) => menu.current.toggle(e)} size='small' />
-          <TieredMenu model={items} popup ref={menu} breakpoint="767px" className='m-0 p-0' />
+      <h2 className='text-4xl font-medium mb-3'>Historial de ventas</h2>
+      <span className='text-xl font-normal'>Gestioná y explorá el registro histórico de las ventas realizadas en todas las sucursales</span>
+      <Card className='!shadow-none border my-5'>
+        <div className='flex justify-between'>
+          <div className='md:flex flex-wrap'>
+            <div className='flex-1 me-3'>
+              <label className='block font-medium text-lg mb-2'>Fecha desde</label>
+              <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha desde'
+                name='fechaDesde' onChange={handleDate} className='p-inputtext-sm w-52' />
+            </div>
+            <div className='flex-1 me-3'>
+              <label className='block font-medium text-lg mb-2'>Fecha hasta</label>
+              <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha hasta'
+                name='fechaHasta' onChange={handleDate} className='p-inputtext-sm w-52' />
+            </div>
+            <div className='flex-1 me-3'>
+              <label className='block font-medium text-lg mb-2'>Local</label>
+              <Dropdown options={listaLocales} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un local'
+                name='local' value={local} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
+            </div>
+            <div className='flex-1 me-3'>
+              <label className='block font-medium text-lg mb-2'>Tipo de pago</label>
+              <Dropdown options={listaMetodosPago} emptyMessage='Sin registros' placeholder='Selecciona un método de pago'
+                name='metodoPago' value={metodoPago} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
+            </div>
+            <div className='flex-1 me-3'>
+              <label className='block font-medium text-lg mb-2'>Cantidad</label>
+              <Dropdown options={listaCantidades} emptyMessage='Sin registros' placeholder='Selecciona la cantidad'
+                name='cantidad' value={cantidad} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
+            </div>
+            <div className='flex-1'>
+              <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+              <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
+            </div>
+          </div>
+          <div>
+            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+            <Button label='Opciones' iconPos='right' icon='pi pi-caret-down' className='hover:!bg-blue-600'
+              onClick={(e) => menu.current.toggle(e)} size='small' />
+            <TieredMenu model={items} popup ref={menu} breakpoint="767px" className='m-0 p-0' />
+          </div>
         </div>
-      </Card>
+      </Card >
       <Card className='!shadow-none border'>
         <DataTable value={listaVentas} footerColumnGroup={footerGroup}
           stripedRows emptyMessage='Sin registro de ventas' size='small'>

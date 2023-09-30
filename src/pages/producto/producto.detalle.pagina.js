@@ -5,6 +5,7 @@ import { formatCurrency, formatDate, formatDateLong, formatoFechaCompleto } from
 
 import StockServicio from '../../services/stock.servicio'
 import ProductoServicio from '../../services/producto.servicio'
+import { Panel } from 'primereact/panel'
 
 export const ProductoDetalle = () => {
   const { id } = useParams();
@@ -13,6 +14,7 @@ export const ProductoDetalle = () => {
   const [imagen, setImagen] = useState([])
   const [barcode, setBarcode] = useState([])
   const [producto, setProducto] = useState([])
+  const [fichaTecnica, setFichaTecnica] = useState([])
 
   useEffect(() => {
     cargarProducto()
@@ -21,11 +23,21 @@ export const ProductoDetalle = () => {
   const cargarProducto = () => {
     ProductoServicio.obtenerPorId(id).then(data => {
       setProducto(data);
+      setFichaTecnica(data.fichaTecnica);
     })
 
     /*StockServicio.obtenerPorProducto(id).then(data => {
       setProducto(data);
     })*/
+  };
+
+  const generateTableRow = (label, value) => {
+    return value !== null ? (
+      <tr key={label} className='border-b'>
+        <th className='text-left p-2' scope="row">{label}</th>
+        <td className='p-2'>{value}</td>
+      </tr>
+    ) : null;
   };
 
   return (
@@ -97,9 +109,29 @@ export const ProductoDetalle = () => {
               </tbody>
             </table>
           </Card>
-          <Card title='Ficha Técnica' className='!rounded-lg !shadow-md mb-5'>
-
-          </Card>
+          <Panel header="Ficha Técnica" className='!bg-white-100 !rounded-lg !shadow-md mb-5' toggleable>
+            <table className="table w-full">
+              <tbody>
+                {[
+                  ['Altura', fichaTecnica.altura + ' cm'],
+                  ['Profundidad', fichaTecnica.profundidad + ' cm'],
+                  ['Ancho', fichaTecnica.ancho + ' cm'],
+                  ['Cm lineal', fichaTecnica.cmLineal + ' cm'],
+                  ['Capacidad', fichaTecnica.capacidad + ' kg'],
+                  ['Peso', fichaTecnica.peso + ' kg'],
+                  ['Litros', fichaTecnica.litros + ' L'],
+                  ['Ruedas', fichaTecnica.ruedas],
+                  ['Colores', fichaTecnica.colores],
+                  ['Material', fichaTecnica.material],
+                  ['Garantía', fichaTecnica.garantia],
+                  ['Luces', fichaTecnica.luces],
+                  ['Organizador', fichaTecnica.organizador],
+                  ['P. Notebook', fichaTecnica.portanotebook],
+                  ['Observaciones', fichaTecnica.observaciones],
+                ].map(([label, value]) => generateTableRow(label, value))}
+              </tbody>
+            </table>
+          </Panel>
         </div>
       </div>
       <Card title='Stock disponible en sucursales' className='!rounded-lg !shadow-md'>
