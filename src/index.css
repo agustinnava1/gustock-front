@@ -4,7 +4,7 @@
 
 body{
   color: #2A2B2A;
-  background-color: #EEF1F6!important;
+  background-color: rgb(250, 250, 250)!important;
 }
 
 h1, h2{
@@ -20,8 +20,8 @@ h1, h2{
 }
 
 .p-datatable .p-datatable-thead > tr > th{
-  color: white!important;
-  background-color: #0ea5e9!important;
+  background-color: white!important;
+  border-bottom: 1px solid #2A2B2A!important;
 }
 
 .hover-scale {

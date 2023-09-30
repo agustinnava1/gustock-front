@@ -2,25 +2,24 @@ import React from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 import { AdminPagina } from '../pages/admin.pagina'
-import { LocalPagina } from '../pages/local.pagina'
 
+import { LocalPagina } from '../pages/local.pagina'
 import { PanelPagina } from '../pages/panel.pagina'
 import { AjustesPagina } from '../pages/ajustes.pagina'
 import { ReposicionPagina } from '../pages/reposicion.pagina'
 import { MensajeriaPagina } from '../pages/mensajeria.pagina'
 import { NotificacionesPagina } from '../pages/notificaciones.pagina'
 
+import { ProductoBusqueda } from '../pages/busqueda.pagina'
 import { ProductosPagina } from '../pages/producto/productos.pagina'
 import { ProductoDetalle } from '../pages/producto/producto.detalle.pagina'
-
-import { VentasPagina } from '../pages/venta/ventas.pagina'
-import { RegistrarVenta } from '../pages/venta/venta.registrar.pagina'
-
+import { ProductoRegistrar } from '../pages/producto/producto.registrar.pagina'
 import { ProductosModificacionMasiva } from '../pages/producto/modificacion.masiva'
 import { ProductosModificacionRapida } from '../pages/producto/modificacion.rapida'
-import { ProductoRegistrar } from '../pages/producto/producto.registrar.pagina'
+
+import { VentasPagina } from '../pages/venta/ventas.pagina'
 import { VentaDetalle } from '../pages/venta/venta.detalle.pagina'
-import { ProductoBusqueda } from '../pages/busqueda.pagina'
+import { RegistrarVenta } from '../pages/venta/venta.registrar.pagina'
 
 export const AppRouter = () => {
   return (

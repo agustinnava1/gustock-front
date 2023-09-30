@@ -1,14 +1,18 @@
-import { Card } from 'primereact/card';
-import { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
-import { formatCurrency, formatDate, formatDateLong, formatoFechaCompleto } from '../../helper/format';
+import { Card } from 'primereact/card'
+import { useEffect, useState } from 'react'
+import { useParams } from "react-router-dom"
+import { formatCurrency, formatDate, formatDateLong, formatoFechaCompleto } from '../../helper/format'
 
-import ProductoServicio from '../../services/producto.servicio';
+import StockServicio from '../../services/stock.servicio'
+import ProductoServicio from '../../services/producto.servicio'
 
 export const ProductoDetalle = () => {
   const { id } = useParams();
 
-  const [producto, setProducto] = useState([]);
+  const [stock, setStock] = useState([])
+  const [imagen, setImagen] = useState([])
+  const [barcode, setBarcode] = useState([])
+  const [producto, setProducto] = useState([])
 
   useEffect(() => {
     cargarProducto()
@@ -17,8 +21,11 @@ export const ProductoDetalle = () => {
   const cargarProducto = () => {
     ProductoServicio.obtenerPorId(id).then(data => {
       setProducto(data);
-      console.log(producto);
     })
+
+    /*StockServicio.obtenerPorProducto(id).then(data => {
+      setProducto(data);
+    })*/
   };
 
   return (
