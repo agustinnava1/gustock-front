@@ -12,15 +12,15 @@ export default function Sidebar({ children }) {
 
   return (
     <aside className="hidden lg:flex min-h-screen">
-      <nav className="flex flex-col bg-white border-r shadow-sm">
+      <nav className="flex flex-col bg-[#3B71CA]">
         <div className="p-4 pb-2 flex justify-between items-center">
           <span
-            className={`text-2xl font-bold text-blue-500 overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
+            className={`text-2xl font-bold text-white overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
             Navegación
           </span>
           <button
             onClick={() => setExpanded((curr) => !curr)}
-            className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100">
+            className="p-2.5 rounded-lg bg-white">
             {expanded ? <ChevronFirst /> : <ChevronLast />}
           </button>
         </div>
@@ -57,8 +57,8 @@ export function SidebarItem({ icon, text, active, alert }) {
         font-medium rounded-md cursor-pointer
         transition-colors group
         ${active
-          ? "bg-gradient-to-tr from-blue-200 to-blue-100 text-blue-800"
-          : "hover:bg-blue-50 text-gray-600"
+          ? "bg-white text-[#1764C6]"
+          : "hover:bg-white hover:text-[#1764C6] text-white"
         }
     `}
     >

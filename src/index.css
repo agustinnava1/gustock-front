@@ -7,7 +7,7 @@ body{
   background-color: rgb(249, 249, 251)!important;
 }
 
-h1, h2{
+h1, h2, label{
   color:  rgb(65, 84, 132)!important;
 }
 
@@ -20,8 +20,7 @@ h1, h2{
 }
 
 .p-datatable .p-datatable-thead > tr > th{
-  background-color: white!important;
-  border-bottom: 1px solid #2A2B2A!important;
+  background-color: #EFF7FF!important;
 }
 
 .p-panel.p-panel-toggleable .p-panel-header {
