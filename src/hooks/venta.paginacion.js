@@ -13,6 +13,14 @@ export const usePagination = (initialPagination = {}) => {
     })
   }
 
+  const onInputChange = ({target}) => {
+    const { name, value } = target
+    setPaginationState({
+      ...paginationState,
+      [name]: value
+    })
+  }
+
   const onDropdownChange = ({target}) => {
     const { name, value } = target
     setPaginationState({
@@ -24,6 +32,7 @@ export const usePagination = (initialPagination = {}) => {
   return{
     paginationState,
     handleDate,
+    onInputChange,
     onDropdownChange
   }
 

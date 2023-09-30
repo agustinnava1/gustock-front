@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 
-import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Row } from 'primereact/row'
@@ -12,25 +11,23 @@ import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
-import { TieredMenu } from 'primereact/tieredmenu'
+import { InputText } from 'primereact/inputtext'
 import { ColumnGroup } from 'primereact/columngroup'
 
 import { usePagination } from '../../hooks/venta.paginacion'
-import { useCalculateTotal } from '../../hooks/venta.calcular'
 
 import { calendarioEspañol } from '../../helper/configuracion.regional'
-import { formatCurrency, formatoFechaCorto, formatoHora } from '../../helper/format'
+import { formatoFechaCorto, formatoHora } from '../../helper/format'
 
 import VentaFiltros from '../../helper/VentaFiltros'
 import VentaServicio from '../../services/venta.servicio'
-import { InputText } from 'primereact/inputtext'
 
 export const VentaHistorialProductoPagina = () => {
   const initialPagination = {
     local: null,
-    pagina: null,
+    pagina: 0,
     cantidad: 10,
-    metodoPago: null,
+    producto: null,
     fechaDesde: null,
     fechaHasta: null
   }
@@ -41,16 +38,9 @@ export const VentaHistorialProductoPagina = () => {
   const [totalRegistros, setTotalRegistros] = useState(null)
   const { listaLocales, listaCantidades } = VentaFiltros()
 
-  const { paginationState, onDropdownChange, handleDate } = usePagination(initialPagination)
+  const { paginationState, onDropdownChange, onInputChange, handleDate } = usePagination(initialPagination)
 
-  const { local, pagina, cantidad, metodoPago, fechaDesde, fechaHasta } = paginationState
-
-  useEffect(() => {
-    VentaServicio.listar(paginationState).then(data => {
-      setListaVentas(data.content)
-      setTotalRegistros(data.totalElements)
-    })
-  }, [])
+  const { local, cantidad, producto } = paginationState
 
   const filtrarVentas = () => {
     setFirst(0)
@@ -63,7 +53,7 @@ export const VentaHistorialProductoPagina = () => {
       request = { ...paginationState, pagina: 0 }
     }
 
-    VentaServicio.listar(request).then(data => {
+    VentaServicio.listarPorProducto(request).then(data => {
       setListaVentas(data.content)
       setTotalRegistros(data.totalElements)
     })
@@ -106,7 +96,8 @@ export const VentaHistorialProductoPagina = () => {
           <div className='md:flex flex-wrap'>
             <div className='flex-1 me-3'>
               <label className='block font-medium text-lg mb-2'>Producto</label>
-              <InputText placeholder='Ingresá un código de producto' className='p-inputtext-sm w-52' />
+              <InputText placeholder='Ingresá un código de producto' 
+                name='producto' value={producto} onChange={onInputChange} className='p-inputtext-sm w-52' />
             </div>
             <div className='flex-1 me-3'>
               <label className='block font-medium text-lg mb-2'>Fecha desde</label>
@@ -149,7 +140,17 @@ export const VentaHistorialProductoPagina = () => {
           <Column field='usuario' header='Usuario' style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatoFechaCorto(rowData.fecha)} header='Fecha' style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatoHora(rowData.hora)} header='Hora' style={{ width: '10%' }}></Column>
-          <Column header='Producto/s' style={{ width: '50%' }}></Column>
+          <Column header='Producto/s' style={{ width: '50%' }}
+            body={(rowData) => (
+              <div>
+                {rowData.detalle.map((producto, index) => (
+                  <p className="m-auto" key={index}>
+                    <span>{producto.descripcion}</span>
+                  </p>
+                ))}
+              </div>
+            )}>
+          </Column>
           <Column header='Acciones' alignHeader={'center'} style={{ width: '5%' }}
             body={(rowData) => (
               <div className='flex justify-center'>

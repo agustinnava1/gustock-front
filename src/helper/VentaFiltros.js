@@ -7,7 +7,10 @@ function VentaFiltros() {
   const [listaCantidades, setListaCantidades] = useState([10, 20, 30, 40, 50, "TODOS"]);
 
   useEffect(() => {
-    const fetchLocales = LocalServicio.listar().then((res) => setListaLocales(res));
+    const fetchLocales = LocalServicio.listarLocales().then((res) => {
+      const localesWithTodos = [{ nombre: 'TODOS', valor: null }, ...res];
+      setListaLocales(localesWithTodos);
+    });
 
     Promise.all([fetchLocales])
       .catch((error) => {

@@ -29,9 +29,9 @@ export const VentaHistorialPagina = () => {
     local: null,
     pagina: null,
     cantidad: 10,
-    metodoPago: null,
     fechaDesde: null,
-    fechaHasta: null
+    fechaHasta: null,
+    metodoPago: 'TODOS'
   }
 
   const [rows, setRows] = useState(10)
@@ -43,7 +43,7 @@ export const VentaHistorialPagina = () => {
   const { paginationState, onDropdownChange, handleDate } = usePagination(initialPagination)
   const { totalEfectivo, totalDebito, totalCredito, totalCodigoQr, totalFinal } = useCalculateTotal(listaVentas)
 
-  const { local, pagina, cantidad, metodoPago, fechaDesde, fechaHasta } = paginationState
+  const { local, metodoPago, cantidad } = paginationState
 
   useEffect(() => {
     VentaServicio.listar(paginationState).then(data => {
@@ -52,16 +52,21 @@ export const VentaHistorialPagina = () => {
     })
   }, [])
 
+  const generarRequest = (paginationState, page) => {
+    const request = { ...paginationState, pagina: page || 0 };
+  
+    if (local !== null) {
+      request.local = local.nombre;
+    }
+  
+    return request;
+  };  
+
   const filtrarVentas = () => {
     setFirst(0)
     setRows(cantidad)
 
-    let request
-    if (local !== null) {
-      request = { ...paginationState, pagina: 0, local: local.nombre }
-    } else {
-      request = { ...paginationState, pagina: 0 }
-    }
+    const request = generarRequest(paginationState)
 
     VentaServicio.listar(request).then(data => {
       setListaVentas(data.content)
@@ -73,12 +78,7 @@ export const VentaHistorialPagina = () => {
     setFirst(event.first)
     setRows(event.rows)
 
-    let request
-    if (local !== null) {
-      request = { ...paginationState, pagina: event.page, local: local.nombre }
-    } else {
-      request = { ...paginationState, pagina: event.page }
-    }
+    const request = generarRequest(paginationState, event.page)
 
     VentaServicio.listar(request).then(data => {
       setListaVentas(data.content)

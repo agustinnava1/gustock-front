@@ -30,7 +30,7 @@ export const VentaHistorialRubroPagina = () => {
     local: null,
     pagina: null,
     cantidad: 10,
-    metodoPago: null,
+    rubro: null,
     fechaDesde: null,
     fechaHasta: null
   }
@@ -43,14 +43,7 @@ export const VentaHistorialRubroPagina = () => {
 
   const { paginationState, onDropdownChange, handleDate } = usePagination(initialPagination)
 
-  const { local, pagina, cantidad, metodoPago, fechaDesde, fechaHasta } = paginationState
-
-  useEffect(() => {
-    VentaServicio.listar(paginationState).then(data => {
-      setListaVentas(data.content)
-      setTotalRegistros(data.totalElements)
-    })
-  }, [])
+  const { local, pagina, cantidad, rubro, fechaDesde, fechaHasta } = paginationState
 
   const filtrarVentas = () => {
     setFirst(0)
@@ -150,7 +143,17 @@ export const VentaHistorialRubroPagina = () => {
           <Column field='usuario' header='Usuario' style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatoFechaCorto(rowData.fecha)} header='Fecha' style={{ width: '10%' }}></Column>
           <Column field={(rowData) => formatoHora(rowData.hora)} header='Hora' style={{ width: '10%' }}></Column>
-          <Column header='Producto/s' style={{ width: '50%' }}></Column>
+          <Column header='Producto/s' style={{ width: '50%' }}
+            body={(rowData) => (
+              <div>
+                {rowData.detalle.map((producto, index) => (
+                  <p className="m-auto" key={index}>
+                    <span>{producto.descripcion}</span>
+                  </p>
+                ))}
+              </div>
+            )}>
+          </Column>
           <Column header='Acciones' alignHeader={'center'} style={{ width: '5%' }}
             body={(rowData) => (
               <div className='flex justify-center'>

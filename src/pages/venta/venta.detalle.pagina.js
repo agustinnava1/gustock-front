@@ -56,7 +56,7 @@ export const VentaDetalle = () => {
       ) : (
         <div>
           <div className="mb-5">
-            <h2 className='text-4xl font-medium mb-3'>Resumen de venta</h2>
+            <h2 className='text-4xl font-medium mb-3'>Resumen de venta #{venta.id}</h2>
             <span className="text-lg">{formatoFechaCompleto(venta.fecha)}</span>
           </div>
           <div className="lg:flex">
@@ -108,10 +108,6 @@ export const VentaDetalle = () => {
                   <div className="flex justify-between mb-1">
                     <span className="text-gray-500 text-md font-medium">Horario</span>
                     <p className='text-md'>{formatoHora(venta.hora)}</p>
-                  </div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-gray-500 text-md font-medium">Nro de venta</span>
-                    <p className='text-md'>{venta.id}</p>
                   </div>
                   <div>
                     <span className="text-gray-500 text-md font-medium">Nota del vendedor:</span>

@@ -22,6 +22,24 @@ class VentaServicio {
         return axios.get(baseUrl + "/listar?" + parametros, config).then(res => res.data)
     }
 
+    listarPorRubro(paginacion) {
+        const parametros = Object.keys(paginacion)
+            .filter(key => paginacion[key] !== null)
+            .map(key => `${key}=${paginacion[key]}`)
+            .join('&');
+
+        return axios.get(baseUrl + "/listar/rubro?" + parametros, config).then(res => res.data)
+    }
+
+    listarPorProducto(paginacion) {
+        const parametros = Object.keys(paginacion)
+            .filter(key => paginacion[key] !== null)
+            .map(key => `${key}=${paginacion[key]}`)
+            .join('&');
+
+        return axios.get(baseUrl + "/listar/producto?" + parametros, config).then(res => res.data)
+    }
+
 }
 
 export default new VentaServicio();

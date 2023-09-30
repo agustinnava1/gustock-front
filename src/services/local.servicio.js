@@ -14,6 +14,8 @@ class LocalServicio{
     borrar(id){return axios.delete(baseUrl + "/eliminar/" + id, config).then(res => res.data)}
 
     listar(){return axios.get(baseUrl + "/listar", config).then(res => res.data)}
+
+    listarLocales(){return axios.get(baseUrl + "/listar/locales", config).then(res => res.data)}
         
 }
 
