@@ -1,15 +1,28 @@
 import { useState } from 'react'
+import { Dialog } from 'primereact/dialog'
 import { AppRouter } from '../router/AppRouter'
+import { InputText } from 'primereact/inputtext'
 import { NavLink, useLocation } from 'react-router-dom'
 
 import Header from '../components/header.component'
-import Buscador from '../components/buscador.componente'
 import Sidebar, { SidebarItem } from '../components/sidebar.component'
-import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings, Search } from 'lucide-react';
+import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings, Search, LogOut } from 'lucide-react';
 
 export const Home = () => {
   const location = useLocation()
   const [mostrarBuscador, setMostrarBuscador] = useState(false)
+
+  function Buscador() {
+    return (
+      <div className="card flex justify-content-center">
+        <Dialog header='Buscar producto' className="bg-blue-500" visible={mostrarBuscador} style={{ width: '50vw' }}
+          onHide={() => setMostrarBuscador(false)}>
+          <InputText placeholder='Ingresa un código, código de barras o descripción'
+            className="p-inputtext-lg w-full !shadow-none" autoFocus />
+        </Dialog>
+      </div>
+    )
+  }
 
   return (
     <div className="flex">
@@ -30,7 +43,7 @@ export const Home = () => {
           <SidebarItem icon={<Clipboard size={20} />} text="Reposición" active={location.pathname === '/reposicion'} />
         </NavLink>
         <NavLink className="text-decoration-none" onClick={() => setMostrarBuscador(true)}>
-          <SidebarItem icon={<Search size={20} />} text="busqueda" />
+          <SidebarItem icon={<Search size={20} />} text="Búsqueda" />
         </NavLink>
         <hr className="mt-3"></hr>
         <NavLink className="text-decoration-none" to={"/mensajeria"}>
@@ -43,12 +56,15 @@ export const Home = () => {
         <NavLink className="text-decoration-none" to={"/ajustes"}>
           <SidebarItem icon={<Settings size={20} />} text="Ajustes" active={location.pathname === '/ajustes'} />
         </NavLink>
+        <NavLink className="text-decoration-none" to={"/"}>
+          <SidebarItem icon={<LogOut size={20} />} text="Salir" />
+        </NavLink>
       </Sidebar>
-      <div className="grow w-screen">
+      <div className="grow w-full">
         <Header></Header>
         <AppRouter></AppRouter>
       </div>
-      {mostrarBuscador && <Buscador></Buscador>}
+      {mostrarBuscador && <Buscador />}
     </div>
   )
 }

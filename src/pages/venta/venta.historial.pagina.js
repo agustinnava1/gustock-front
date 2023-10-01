@@ -21,13 +21,14 @@ import { useCalculateTotal } from '../../hooks/venta.calcular'
 import { calendarioEspañol } from '../../helper/configuracion.regional'
 import { formatCurrency, formatoFechaCorto, formatoHora } from '../../helper/format'
 
+import Swal from 'sweetalert2'
 import VentaFiltros from '../../helper/VentaFiltros'
 import VentaServicio from '../../services/venta.servicio'
 
 export const VentaHistorialPagina = () => {
   const initialPagination = {
     local: null,
-    pagina: null,
+    pagina: 0,
     cantidad: 10,
     fechaDesde: null,
     fechaHasta: null,
@@ -54,13 +55,13 @@ export const VentaHistorialPagina = () => {
 
   const generarRequest = (paginationState, page) => {
     const request = { ...paginationState, pagina: page || 0 };
-  
+
     if (local !== null) {
       request.local = local.nombre;
     }
-  
+
     return request;
-  };  
+  }
 
   const filtrarVentas = () => {
     setFirst(0)
@@ -86,6 +87,35 @@ export const VentaHistorialPagina = () => {
     })
   }
 
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Se eliminará el registro de venta del sistema y cada producto será reintegrado al stock del local",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        VentaServicio.eliminar(id)
+          .then((data) => {
+            setListaVentas(listaVentas.filter((venta) => venta.id !== id));
+            Swal.fire('Eliminado', 'La venta ha sido eliminada del sistema.', 'success');
+          })
+          .catch((error) => {
+            Swal.fire('Error', 'Hubo un problema al eliminar la venta. Por favor, inténtalo de nuevo más tarde.', 'error');
+          });
+      }
+    })
+  }
+
+  const exportarVentas = () => {
+    const request = generarRequest(paginationState)
+    VentaServicio.exportar(request)
+  }
+
   addLocale('es', calendarioEspañol)
 
   const menu = useRef(null)
@@ -98,9 +128,6 @@ export const VentaHistorialPagina = () => {
     {
       label: 'Historial por producto',
       url: '/venta/historial/producto',
-    },
-    {
-      label: 'Exportar a excel'
     }
   ]
 
@@ -118,44 +145,45 @@ export const VentaHistorialPagina = () => {
     </ColumnGroup>
   )
 
+  const paginatorLeft = <Button label='Exportar' type="button" icon="pi pi-download" size='small' className='!invisible' />
+  const paginatorRight = <Button label='Exportar' type="button" icon="pi pi-download" size='small' onClick={exportarVentas} data-pr-tooltip="XLS" />
+
   return (
     <div className='p-5'>
       <h2 className='text-4xl font-medium mb-3'>Historial de ventas</h2>
       <span className='text-xl font-normal'>Gestioná y explorá el registro histórico de las ventas realizadas en todas las sucursales</span>
       <Card className='!shadow-none border my-5'>
-        <div className='flex justify-between'>
-          <div className='md:flex flex-wrap'>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Fecha desde</label>
-              <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha desde'
-                name='fechaDesde' onChange={handleDate} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Fecha hasta</label>
-              <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha hasta'
-                name='fechaHasta' onChange={handleDate} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Local</label>
-              <Dropdown options={listaLocales} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un local'
-                name='local' value={local} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Tipo de pago</label>
-              <Dropdown options={listaMetodosPago} emptyMessage='Sin registros' placeholder='Selecciona un método de pago'
-                name='metodoPago' value={metodoPago} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Cantidad</label>
-              <Dropdown options={listaCantidades} emptyMessage='Sin registros' placeholder='Selecciona la cantidad'
-                name='cantidad' value={cantidad} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1'>
-              <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
-              <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
-            </div>
+        <div className='flex flex-wrap'>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Fecha desde</label>
+            <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha desde'
+              name='fechaDesde' onChange={handleDate} className='p-inputtext-sm w-full' />
           </div>
-          <div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Fecha hasta</label>
+            <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha hasta'
+              name='fechaHasta' onChange={handleDate} className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Local</label>
+            <Dropdown options={listaLocales} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un local'
+              name='local' value={local} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Tipo de pago</label>
+            <Dropdown options={listaMetodosPago} emptyMessage='Sin registros' placeholder='Selecciona un método de pago'
+              name='metodoPago' value={metodoPago} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto w-20 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Cantidad</label>
+            <Dropdown options={listaCantidades} emptyMessage='Sin registros' placeholder='Selecciona la cantidad'
+              name='cantidad' value={cantidad} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
+          </div>
+          <div className='me-3'>
+            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+            <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
+          </div>
+          <div className='me-3'>
             <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
             <Button label='Opciones' iconPos='right' icon='pi pi-caret-down' className='hover:!bg-blue-600'
               onClick={(e) => menu.current.toggle(e)} size='small' />
@@ -184,7 +212,8 @@ export const VentaHistorialPagina = () => {
                     <i className='bi bi-eye-fill'></i>
                   </button>
                 </Link>
-                <button className='bg-red-500 rounded text-xl text-white px-2 py-1 hover:bg-red-600' >
+                <button className='bg-red-500 rounded text-xl text-white px-2 py-1 hover:bg-red-600'
+                  onClick={() => handleDelete(rowData.id)} >
                   <i className='bi bi-trash-fill'></i>
                 </button>
               </div>
@@ -192,6 +221,7 @@ export const VentaHistorialPagina = () => {
           </Column>
         </DataTable>
         <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalRegistros}
+          leftContent={paginatorLeft} rightContent={paginatorRight}
           onPageChange={cambiarPagina} className='mt-5 !p-0'></Paginator>
       </Card >
     </div >

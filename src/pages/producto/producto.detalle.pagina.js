@@ -45,9 +45,12 @@ export const ProductoDetalle = () => {
       <h2 className='text-4xl font-medium'>{producto.descripcion}</h2>
       <div className='lg:flex justify-between mt-5'>
         <div className='lg:w-1/2 mb-5'>
-          <Card className='!rounded-lg !shadow-md'>
-            <img src='/producto-sin-foto.jpg' class="mx-auto w-[535px] max-h-[535px]"></img>
+          <Card className='!rounded !shadow-lg mb-5 border'>
+            <img src='/producto-sin-foto.jpg' class="mx-auto w-[535px] max-h-[430px]"></img>
           </Card>
+          <Panel header="Código de barras" className='!bg-white-100 !rounded-lg !shadow-md mb-5' toggleable>
+            <p>Hola mundo</p>
+          </Panel>
         </div>
         <div className='lg:w-1/2 lg:ml-5'>
           <Card title='Características' subTitle={`${producto.codigo}`} className='!rounded-lg !shadow-md mb-5'>

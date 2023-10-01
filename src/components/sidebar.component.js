@@ -1,6 +1,5 @@
 import { useContext, createContext, useState } from "react"
-import { ChevronLast, ChevronFirst, LogOut } from "lucide-react"
-import { Button } from "primereact/button"
+import { ChevronLast, ChevronFirst } from "lucide-react"
 
 const SidebarContext = createContext()
 
@@ -28,20 +27,6 @@ export default function Sidebar({ children }) {
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex-1 mt-5 px-4">{children}</ul>
         </SidebarContext.Provider>
-
-        <div className="border-t flex p-3">
-        <Button icon={<LogOut size={20} />} severity="info" />
-          <div
-            className={`
-              flex justify-between items-center
-              overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0"}
-          `}
-          >
-            <div className="leading-4">
-              <h4 className="font-semibold">Cerrar sesión</h4>
-            </div>
-          </div>
-        </div>
       </nav>
     </aside>
   )
@@ -57,8 +42,8 @@ export function SidebarItem({ icon, text, active, alert }) {
         font-medium rounded-md cursor-pointer
         transition-colors group
         ${active
-          ? "bg-white text-[#1764C6]"
-          : "hover:bg-white hover:text-[#1764C6] text-white"
+          ? "bg-white text-[#3B71CA]"
+          : "hover:bg-white hover:text-[#3B71CA] text-white"
         }
     `}
     >

@@ -16,7 +16,7 @@ export const RegistrarVenta = () => {
       <h2 className='text-4xl font-medium mb-5'>{nombre} | Registrar venta</h2>
       <div className="lg:flex">
         <div className='w-3/4 me-5'>
-          <Card title='Productos' className="!shadow-md !rounded-lg">
+          <Card title='Productos' className="!shadow-none !rounded border">
             <div className="flex">
               <div className="me-5">
                 <label htmlFor="firstname" className="block font-semibold mb-3">Producto</label>
@@ -43,26 +43,26 @@ export const RegistrarVenta = () => {
               </DataTable>
             </div>
           </Card>
-          <Card title='Resumen de cuenta' className="!shadow-md !rounded-lg border mt-5">
-            <div className="flex rounded border-2 p-5 bg-gray-50">
+          <Card title='Resumen de cuenta' className="!shadow-none !rounded border mt-5">
+            <div className="flex rounded border p-5 bg-[#EFF7FF]">
               <div className="flex-1 me-5">
                 <InputTextarea rows={7} placeholder='Nota interna (Opcional)' className="w-full"></InputTextarea>
               </div>
               <div className="flex-1">
                 <div class="flex flex-col mb-1 text-lg px-5">
                   <div class="flex items-center mb-5">
-                    <label class="flex-1">Descuento por porcentaje</label>
+                    <label class="flex-1 font-medium">Descuento por porcentaje</label>
                     <div class="flex items-center">
                       <InputNumber inputId='porcentaje' suffix="%" size={1} className="p-inputtext-sm" />
                     </div>
                   </div>
                   <div class="flex justify-between mb-1">
-                    <span>Descuento</span>
+                    <span className="font-medium">Descuento</span>
                     <span id="descuento-span">$ 0.00</span>
                     <input id="descuento-input" name="descuento" type="text" hidden></input>
                   </div>
                   <div class="flex justify-between mb-1">
-                    <span>Subtotal</span>
+                    <span className="font-medium">Subtotal</span>
                     <span id="subtotal">$ 0.00</span>
                   </div>
                   <Divider />
@@ -76,7 +76,7 @@ export const RegistrarVenta = () => {
           </Card>
         </div>
         <div className='w-1/4'>
-          <Card className="!shadow-md !rounded-lg border">
+          <Card className="!shadow-lg !rounded border">
             <div className="bg-blue-500 mb-5 p-4 rounded-t-lg">
               <h3 className="text-white font-medium text-xl mb-0">Información de pago</h3>
             </div>
