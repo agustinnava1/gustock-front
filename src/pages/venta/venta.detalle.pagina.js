@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
 import { formatCurrency, formatoFechaCompleto, formatoHora } from "../../helper/format"
-import VentaServicio from "../../services/venta.servicio"
+import VentaService from "../../services/venta.servicio"
 import { Button } from "primereact/button"
 
 export const VentaDetalle = () => {
@@ -21,7 +21,7 @@ export const VentaDetalle = () => {
   }, []);
 
   const cargarDatosVenta = () => {
-    VentaServicio.obtenerPorId(id).then(data => {
+    VentaService.getById(id).then(data => {
       setVenta(data)
       setDetalle(data.detalle)
       setLocal(data.local.nombre)

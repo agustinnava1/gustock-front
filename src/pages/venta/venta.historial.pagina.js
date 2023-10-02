@@ -23,7 +23,7 @@ import { formatCurrency, formatoFechaCorto, formatoHora } from '../../helper/for
 
 import Swal from 'sweetalert2'
 import VentaFiltros from '../../helper/VentaFiltros'
-import VentaServicio from '../../services/venta.servicio'
+import VentaService from '../../services/venta.servicio'
 
 export const VentaHistorialPagina = () => {
   const initialPagination = {
@@ -37,23 +37,23 @@ export const VentaHistorialPagina = () => {
 
   const [rows, setRows] = useState(10)
   const [first, setFirst] = useState(0)
-  const [listaVentas, setListaVentas] = useState([])
-  const [totalRegistros, setTotalRegistros] = useState(null)
+  const [listItems, setListItems] = useState([])
+  const [totalElements, setTotalElements] = useState(null)
   const { listaLocales, listaMetodosPago, listaCantidades } = VentaFiltros()
 
   const { paginationState, onDropdownChange, handleDate } = usePagination(initialPagination)
-  const { totalEfectivo, totalDebito, totalCredito, totalCodigoQr, totalFinal } = useCalculateTotal(listaVentas)
+  const { totalEfectivo, totalDebito, totalCredito, totalCodigoQr, totalFinal } = useCalculateTotal(listItems)
 
   const { local, metodoPago, cantidad } = paginationState
 
   useEffect(() => {
-    VentaServicio.listar(paginationState).then(data => {
-      setListaVentas(data.content)
-      setTotalRegistros(data.totalElements)
+    VentaService.getAll(paginationState).then(data => {
+      setListItems(data.content)
+      setTotalElements(data.totalElements)
     })
   }, [])
 
-  const generarRequest = (paginationState, page) => {
+  const generateRequest = (paginationState, page) => {
     const request = { ...paginationState, pagina: page || 0 };
 
     if (local !== null) {
@@ -63,27 +63,27 @@ export const VentaHistorialPagina = () => {
     return request;
   }
 
-  const filtrarVentas = () => {
+  const filter = () => {
     setFirst(0)
     setRows(cantidad)
 
-    const request = generarRequest(paginationState)
+    const request = generateRequest(paginationState)
 
-    VentaServicio.listar(request).then(data => {
-      setListaVentas(data.content)
-      setTotalRegistros(data.totalElements)
+    VentaService.getAll(request).then(data => {
+      setListItems(data.content)
+      setTotalElements(data.totalElements)
     })
   }
 
-  const cambiarPagina = (event) => {
+  const onPageChange = (event) => {
     setFirst(event.first)
     setRows(event.rows)
 
-    const request = generarRequest(paginationState, event.page)
+    const request = generateRequest(paginationState, event.page)
 
-    VentaServicio.listar(request).then(data => {
-      setListaVentas(data.content)
-      setTotalRegistros(data.totalElements)
+    VentaService.getAll(request).then(data => {
+      setListItems(data.content)
+      setTotalElements(data.totalElements)
     })
   }
 
@@ -99,9 +99,9 @@ export const VentaHistorialPagina = () => {
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        VentaServicio.eliminar(id)
+        VentaService.delete(id)
           .then((data) => {
-            setListaVentas(listaVentas.filter((venta) => venta.id !== id));
+            setListItems(listItems.filter((item) => item.id !== id));
             Swal.fire('Eliminado', 'La venta ha sido eliminada del sistema.', 'success');
           })
           .catch((error) => {
@@ -111,9 +111,9 @@ export const VentaHistorialPagina = () => {
     })
   }
 
-  const exportarVentas = () => {
-    const request = generarRequest(paginationState)
-    VentaServicio.exportar(request)
+  const exportToExcel = () => {
+    const request = generateRequest(paginationState)
+    VentaService.exportToExcel(request)
   }
 
   addLocale('es', calendarioEspañol)
@@ -146,7 +146,7 @@ export const VentaHistorialPagina = () => {
   )
 
   const paginatorLeft = <Button label='Exportar' type="button" icon="pi pi-download" size='small' className='!invisible' />
-  const paginatorRight = <Button label='Exportar' type="button" icon="pi pi-download" size='small' onClick={exportarVentas} data-pr-tooltip="XLS" />
+  const paginatorRight = <Button label='Exportar' type="button" icon="pi pi-download" size='small' onClick={exportToExcel} data-pr-tooltip="XLS" />
 
   return (
     <div className='p-5'>
@@ -181,7 +181,7 @@ export const VentaHistorialPagina = () => {
           </div>
           <div className='me-3'>
             <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
-            <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
+            <Button label="Filtrar" onClick={filter} className='hover:!bg-blue-600' size='small' />
           </div>
           <div className='me-3'>
             <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
@@ -192,7 +192,7 @@ export const VentaHistorialPagina = () => {
         </div>
       </Card >
       <Card className='!shadow-none border'>
-        <DataTable value={listaVentas} footerColumnGroup={footerGroup}
+        <DataTable value={listItems} footerColumnGroup={footerGroup}
           stripedRows emptyMessage='Sin registro de ventas' size='small'>
           <Column field='id' header='Código' className='font-bold' style={{ width: '5%' }}></Column>
           <Column field='local.nombre' header='Local' style={{ width: '10%' }}></Column>
@@ -220,9 +220,9 @@ export const VentaHistorialPagina = () => {
             )}>
           </Column>
         </DataTable>
-        <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalRegistros}
+        <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
           leftContent={paginatorLeft} rightContent={paginatorRight}
-          onPageChange={cambiarPagina} className='mt-5 !p-0'></Paginator>
+          onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
       </Card >
     </div >
   )

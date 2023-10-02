@@ -9,6 +9,7 @@ class StockServicio{
 
     obtenerPorLocal(local){return axios.get(baseUrl + "/listar/" + local, config).then(res => res.data)}
         
+    getAllByProductId(id){return axios.get(baseUrl + "/producto/" + id, config).then(res => res.data)}
 }
 
 export default new StockServicio();

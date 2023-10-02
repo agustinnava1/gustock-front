@@ -6,11 +6,13 @@ import { formatCurrency, formatDate, formatDateLong, formatoFechaCompleto } from
 import StockServicio from '../../services/stock.servicio'
 import ProductoServicio from '../../services/producto.servicio'
 import { Panel } from 'primereact/panel'
+import { DataTable } from 'primereact/datatable'
+import { Column } from 'primereact/column'
 
 export const ProductoDetalle = () => {
   const { id } = useParams();
 
-  const [stock, setStock] = useState([])
+  const [stocks, setStocks] = useState([])
   const [imagen, setImagen] = useState([])
   const [barcode, setBarcode] = useState([])
   const [producto, setProducto] = useState([])
@@ -26,9 +28,10 @@ export const ProductoDetalle = () => {
       setFichaTecnica(data.fichaTecnica);
     })
 
-    /*StockServicio.obtenerPorProducto(id).then(data => {
-      setProducto(data);
-    })*/
+    StockServicio.getAllByProductId(id).then(data => {
+      setStocks(data);
+      console.log(data)
+    })
   };
 
   const generateTableRow = (label, value) => {
@@ -41,8 +44,8 @@ export const ProductoDetalle = () => {
   };
 
   return (
-    <div className='container mx-auto p-5 2xl:px-44'>
-      <h2 className='text-4xl font-medium'>{producto.descripcion}</h2>
+    <div className='container mx-auto px-5 pb-5 2xl:px-44'>
+      <h2 className='text-4xl !text-white text-center bg-blue-600 py-4 font-medium rounded-b-[80px]'>{producto.descripcion}</h2>
       <div className='lg:flex justify-between mt-5'>
         <div className='lg:w-1/2 mb-5'>
           <Card className='!rounded !shadow-lg mb-5 border'>
@@ -53,7 +56,7 @@ export const ProductoDetalle = () => {
           </Panel>
         </div>
         <div className='lg:w-1/2 lg:ml-5'>
-          <Card title='Características' subTitle={`${producto.codigo}`} className='!rounded-lg !shadow-md mb-5'>
+          <Card title='Características' subTitle={`Código: ${producto.codigo}`} className='!rounded-lg !shadow-md mb-5'>
             <table class="min-w-full border text-sm mb-5">
               <thead class="bg-[#efefef] border-b">
                 <tr><th colSpan={2} class="text-start p-2">Lista de precios</th></tr>
@@ -106,7 +109,7 @@ export const ProductoDetalle = () => {
                 <tr className='text-start'>
                   <th className='text-start p-2 border'>Última actualización de precio</th>
                   <td class="border-b p-2">
-                    {producto.ultActPrecio ? formatoFechaCompleto(producto.ultActPrecio) : 'Sin registros'}
+                    {producto.ultActPrecio ? formatDateLong(producto.ultActPrecio) : 'Sin registros'}
                   </td>
                 </tr>
               </tbody>
@@ -116,13 +119,13 @@ export const ProductoDetalle = () => {
             <table className="table w-full">
               <tbody>
                 {[
-                  ['Altura', fichaTecnica.altura + ' cm'],
-                  ['Profundidad', fichaTecnica.profundidad + ' cm'],
-                  ['Ancho', fichaTecnica.ancho + ' cm'],
-                  ['Cm lineal', fichaTecnica.cmLineal + ' cm'],
-                  ['Capacidad', fichaTecnica.capacidad + ' kg'],
-                  ['Peso', fichaTecnica.peso + ' kg'],
-                  ['Litros', fichaTecnica.litros + ' L'],
+                  ['Altura', fichaTecnica.altura !== null ? fichaTecnica.altura + ' cm' : null],
+                  ['Profundidad', fichaTecnica.profundidad !== null ? + fichaTecnica.profundidad + ' cm' : null],
+                  ['Ancho', fichaTecnica.ancho !== null ? fichaTecnica.ancho + ' cm' : null],
+                  ['Cm lineal', fichaTecnica.cmLineal !== null ? fichaTecnica.cmLineal + ' cm' : null],
+                  ['Capacidad', fichaTecnica.capacidad !== null ? fichaTecnica.capacidad + ' kg' : null],
+                  ['Peso', fichaTecnica.peso !== null ? fichaTecnica.peso + ' kg' : null],
+                  ['Litros', fichaTecnica.litros !== null ? fichaTecnica.litros + ' L' : null],
                   ['Ruedas', fichaTecnica.ruedas],
                   ['Colores', fichaTecnica.colores],
                   ['Material', fichaTecnica.material],
@@ -131,37 +134,24 @@ export const ProductoDetalle = () => {
                   ['Organizador', fichaTecnica.organizador],
                   ['P. Notebook', fichaTecnica.portanotebook],
                   ['Observaciones', fichaTecnica.observaciones],
-                ].map(([label, value]) => generateTableRow(label, value))}
+                ].map(([label, value]) => {
+                  if (value !== null) {
+                    return generateTableRow(label, value);
+                  }
+                  return null
+                })}
               </tbody>
             </table>
           </Panel>
         </div>
       </div>
       <Card title='Stock disponible en sucursales' className='!rounded-lg !shadow-md'>
-        <table class="min-w-full border text-sm">
-          <thead class="bg-[#efefef] border-b">
-            <tr>
-              <th class="text-left p-2">Sucursal</th>
-              <th class="text-left p-2">Cantidad</th>
-              <th class="text-left p-2">Última actualización</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="text-left border-b">
-              <td class="p-2">
-                {formatCurrency(producto.precioCredito)}
-              </td>
-              <td class="p-2">
-                {formatCurrency(producto.precioCredito)}
-              </td>
-              <td class="p-2">
-                {formatCurrency(producto.precioCredito)}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <DataTable value={stocks} stripedRows emptyMessage='No se encontraron unidades' size='small'>
+          <Column field={(rowData) => (rowData.local.nombre) + " - " + (rowData.local.direccion)} header='Sucursal' style={{ width: '33%' }}></Column>
+          <Column field={(rowData) => (rowData.cantidad) + " unidades"} header='Cantidad' style={{ width: '33%' }}></Column>
+          <Column field={(rowData) => formatDateLong(rowData.ultActStock)} header='Ult. Act' style={{ width: '33%' }}></Column>
+        </DataTable>
       </Card>
-    </div >
-
+    </div>
   )
 }
