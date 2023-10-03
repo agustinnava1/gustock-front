@@ -3,7 +3,7 @@ import { Button } from "primereact/button"
 export const MensajeriaPagina = () => {
   return (
     <div className="p-5">
-      <div class="bg-white shadow-md rounded-lg container mx-auto">
+      <div class="bg-white shadow-2xl rounded-lg container m-auto">
         <div class="min-w-full border rounded lg:grid lg:grid-cols-3">
           <div class="border-r border-gray-300 lg:col-span-1">
             <ul class="overflow-auto h-[32rem]">
@@ -26,7 +26,7 @@ export const MensajeriaPagina = () => {
           </div>
           <div class="hidden lg:col-span-2 lg:block">
             <div class="w-full">
-              <div class="bg-blue-500 text-white relative flex items-center p-3">
+              <div class="bg-[#1764C6] text-white relative flex items-center p-3">
                 <img class="object-cover w-10 h-10 rounded-full"
                   src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg" alt="username" />
                 <span class="block text-2xl ms-3 font-bold">Agustin</span>

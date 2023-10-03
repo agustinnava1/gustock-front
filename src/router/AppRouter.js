@@ -18,10 +18,11 @@ import { ProductosModificacionMasiva } from '../pages/producto/modificacion.masi
 import { ProductosModificacionRapida } from '../pages/producto/modificacion.rapida'
 
 import { VentaDetalle } from '../pages/venta/venta.detalle.pagina'
-import { RegistrarVenta } from '../pages/venta/venta.registrar.pagina'
+import { RegistrarVentaPagina } from '../pages/venta/venta.registrar.pagina'
 import { VentaHistorialPagina } from '../pages/venta/venta.historial.pagina'
 import { VentaHistorialProductoPagina } from '../pages/venta/venta.historial.producto.pagina'
 import { VentaHistorialRubroPagina } from '../pages/venta/venta.historial.rubro.pagina'
+import { RegistrarDevolucionPagina } from '../pages/venta/devolucion.registrar.pagina'
 
 export const AppRouter = () => {
   return (
@@ -35,8 +36,8 @@ export const AppRouter = () => {
 
         <Route exact path="/deposito/:nombre" element={<LocalPagina />} />
         <Route exact path="/local/:nombre" element={<LocalPagina />} />
-        <Route exact path="/local/:nombre/venta/registrar" element={<RegistrarVenta />} />
-        <Route exact path="/local/:nombre/devolucion/registrar" element={<ProductoDetalle />} />
+        <Route exact path="/local/:nombre/venta/registrar" element={<RegistrarVentaPagina />} />
+        <Route exact path="/local/:nombre/devolucion/registrar" element={<RegistrarDevolucionPagina />} />
 
         <Route exact path="/venta/detalle/:id" element={<VentaDetalle />} />
         <Route exact path="/devolucion/detalle/:id" element={<VentaDetalle />} />

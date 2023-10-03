@@ -43,7 +43,7 @@ export const ProductoBusqueda = () => {
       <h2 class="text-4xl font-medium mb-5">Resultados de busqueda: "{criterio}"</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-5">
         {listaProductos.map((producto) => (
-          <div class="group relative bg-white shadow-sm rounded-lg border hover:shadow-2xl">
+          <div class="group relative bg-white shadow-md rounded-lg border hover:shadow-2xl">
             <div class="border-b">
               <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg"
                 class="h-full w-full object-cover object-center rounded-t-lg"></img>

@@ -137,7 +137,7 @@ export const LocalPagina = () => {
                 <Link to={`/local/${local.nombre}/venta/registrar`}>
                   <Button label='Nueva venta' className='hover:!bg-blue-600 !mb-5 w-full' size='small' />
                 </Link>
-                <Link to={`/local/${local.nombre}/devolucion`}>
+                <Link to={`/local/${local.nombre}/devolucion/registrar`}>
                   <Button label='Devolución' className='hover:!bg-blue-600 w-full' size='small' />
                 </Link>
               </div>

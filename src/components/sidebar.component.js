@@ -11,7 +11,7 @@ export default function Sidebar({ children }) {
 
   return (
     <aside className="hidden lg:flex min-h-screen">
-      <nav className="flex flex-col bg-[#3B71CA]">
+      <nav className="flex flex-col bg-[#1764C6]">
         <div className="p-4 pb-2 flex justify-between items-center">
           <span
             className={`text-2xl font-bold text-white overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>

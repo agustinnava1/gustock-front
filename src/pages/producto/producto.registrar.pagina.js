@@ -113,7 +113,7 @@ export const ProductoRegistrar = () => {
         <div className='lg:w-3/5 lg:ms-5'>
           <Card title='Código universal / N°ro Artículo' className='!rounded !shadow-none border mb-5'>
             <div className='flex'>
-              <InputText value={codigo} onChange={(e) => setCodigo(e.target.value)} className='p-inputtext-sm w-full !me-5'></InputText>
+              <InputText value={codigo} onChange={(e) => setCodigo(e.target.value)} className='p-inputtext-sm w-96 !me-3'></InputText>
               <Button label='Generar' onClick={generarCodigo} size='small' ></Button>
             </div>
           </Card>
