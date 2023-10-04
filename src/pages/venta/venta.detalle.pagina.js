@@ -2,7 +2,7 @@ import { Card } from "primereact/card"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 
-import { formatCurrency, formatoFechaCompleto, formatoHora } from "../../helper/format"
+import { formatCurrency, formatFullDate, formatTime, formatoFechaCompleto, formatoHora } from "../../helper/format"
 import VentaService from "../../services/venta.servicio"
 import { Button } from "primereact/button"
 
@@ -34,7 +34,7 @@ export const VentaDetalle = () => {
   return (
     <div className="container mx-auto pt-5">
       {error ? (
-        <Card className="!rounded-lg !shadow-none border">
+        <Card className="!rounded !shadow-none border">
           <div class="lg:px-24 lg:py-24 md:py-20 md:px-44 px-4 py-24 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-16">
             <div class="xl:pt-20 w-full xl:w-1/2 pb-12 lg:pb-0">
               <div className="mb-5">
@@ -57,12 +57,12 @@ export const VentaDetalle = () => {
         <div>
           <div className="mb-5">
             <h2 className='text-4xl font-medium mb-3'>Resumen de venta #{venta.id}</h2>
-            <span className="text-lg">{formatoFechaCompleto(venta.fecha)}</span>
+            <span className="text-lg">{formatFullDate(venta.fecha)}</span>
           </div>
           <div className="lg:flex">
             <div className="w-1/4 me-5">
-              <div className="bg-white shadow-md rounded-lg border p-4">
-                <div className="bg-blue-500 p-4 rounded-t-lg">
+              <div className="bg-white shadow-md rounded border p-4">
+                <div className="bg-blue-500 p-4 rounded-t">
                   <h3 className="text-white font-medium text-xl mb-0">Detalle de pago</h3>
                 </div>
                 <div className="px-4 pt-4">
@@ -92,8 +92,8 @@ export const VentaDetalle = () => {
                   <span className="text-xl font-medium text-blue-500 mb-0">Total pagado: {formatCurrency(venta.total)}</span>
                 </div>
               </div>
-              <div className="bg-white shadow-md rounded-lg border p-4 mt-5">
-                <div className="bg-blue-500 p-4 rounded-t-lg">
+              <div className="bg-white shadow-md rounded border p-4 mt-5">
+                <div className="bg-blue-500 p-4 rounded-t">
                   <h3 className="text-white font-medium text-xl mb-0">Información adicional</h3>
                 </div>
                 <div className="p-4">
@@ -107,7 +107,7 @@ export const VentaDetalle = () => {
                   </div>
                   <div className="flex justify-between mb-1">
                     <span className="text-gray-500 text-md font-medium">Horario</span>
-                    <p className='text-md'>{formatoHora(venta.hora)}</p>
+                    <p className='text-md'>{formatTime(venta.hora)}</p>
                   </div>
                   <div>
                     <span className="text-gray-500 text-md font-medium">Nota del vendedor:</span>
@@ -123,7 +123,7 @@ export const VentaDetalle = () => {
               {detalleCambio.length > 0 &&
                 <Card title='Productos devueltos' className='!rounded-lg !shadow-none border mb-5'>
                   {detalleCambio.map(producto => (
-                    <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
+                    <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded mt-5 p-5">
                       <div className="flex-auto w-52">
                         <p className="font-medium">{producto.descripcion}</p>
                         <span className="!text-sm">Código: {producto.producto}</span>
@@ -138,7 +138,7 @@ export const VentaDetalle = () => {
 
               <Card title='Productos vendidos' className='!rounded-lg !shadow-none border'>
                 {detalle.map(producto => (
-                  <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded-lg mt-5 p-5">
+                  <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded mt-5 p-5">
                     <div className="flex-auto w-52">
                       <p className="font-medium">{producto.descripcion}</p>
                       <span className="!text-sm">Código: {producto.producto}</span>

@@ -1,7 +1,7 @@
 import { Card } from 'primereact/card'
 import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
-import { formatCurrency, formatDate, formatDateLong, formatoFechaCompleto } from '../../helper/format'
+import { formatCurrency, formatDateTime } from '../../helper/format'
 
 import StockServicio from '../../services/stock.servicio'
 import ProductoServicio from '../../services/producto.servicio'
@@ -109,7 +109,7 @@ export const ProductoDetalle = () => {
                 <tr className='text-start'>
                   <th className='text-start p-2 border'>Última actualización de precio</th>
                   <td class="border-b p-2">
-                    {producto.ultActPrecio ? formatDateLong(producto.ultActPrecio) : 'Sin registros'}
+                    {producto.ultActPrecio ? formatDateTime(producto.ultActPrecio) : 'Sin registros'}
                   </td>
                 </tr>
               </tbody>
@@ -149,7 +149,7 @@ export const ProductoDetalle = () => {
         <DataTable value={stocks} stripedRows emptyMessage='No se encontraron unidades' size='small'>
           <Column field={(rowData) => (rowData.local.nombre) + " - " + (rowData.local.direccion)} header='Sucursal' style={{ width: '33%' }}></Column>
           <Column field={(rowData) => (rowData.cantidad) + " unidades"} header='Cantidad' style={{ width: '33%' }}></Column>
-          <Column field={(rowData) => formatDateLong(rowData.ultActStock)} header='Ult. Act' style={{ width: '33%' }}></Column>
+          <Column field={(rowData) => formatDateTime(rowData.ultActStock)} header='Ult. Act' style={{ width: '33%' }}></Column>
         </DataTable>
       </Card>
     </div>

@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Row } from 'primereact/row'
@@ -12,70 +11,71 @@ import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
-import { TieredMenu } from 'primereact/tieredmenu'
 import { ColumnGroup } from 'primereact/columngroup'
 
 import { usePagination } from '../../hooks/venta.paginacion'
-import { useCalculateTotal } from '../../hooks/venta.calcular'
 
 import { calendarioEspañol } from '../../helper/configuracion.regional'
-import { formatCurrency, formatoFechaCorto, formatoHora } from '../../helper/format'
+import { formatCurrency, formatDate, formatTime } from '../../helper/format'
 
-import VentaFiltros from '../../helper/VentaFiltros'
-import VentaServicio from '../../services/venta.servicio'
-import { InputText } from 'primereact/inputtext'
+import VentaService from '../../services/venta.servicio'
+import VentaFilters from '../../helper/venta.filtros'
 
 export const VentaHistorialRubroPagina = () => {
   const initialPagination = {
     local: null,
-    pagina: null,
-    cantidad: 10,
     rubro: null,
+    pagina: 0,
+    cantidad: 10,
     fechaDesde: null,
     fechaHasta: null
   }
 
   const [rows, setRows] = useState(10)
   const [first, setFirst] = useState(0)
-  const [listaVentas, setListaVentas] = useState([])
-  const [totalRegistros, setTotalRegistros] = useState(null)
-  const { listaLocales, listaCantidades } = VentaFiltros()
+  const [listItems, setListItems] = useState([])
+  const [quantitySold, setQuantitySold] = useState(0)
+  const [totalElements, setTotalElements] = useState(null)
 
+  const { stores, categories, quantities } = VentaFilters()
   const { paginationState, onDropdownChange, handleDate } = usePagination(initialPagination)
 
-  const { local, pagina, cantidad, rubro, fechaDesde, fechaHasta } = paginationState
+  const { local, rubro, cantidad } = paginationState
 
-  const filtrarVentas = () => {
+  const generateRequest = (paginationState, page) => {
+    const request = { ...paginationState, pagina: page || 0 };
+
+    if (local !== null) {
+      request.local = local.nombre;
+    }
+
+    if (rubro !== null) {
+      request.rubro = rubro.descripcion;
+    }
+
+    return request;
+  }
+
+  const filter = () => {
     setFirst(0)
     setRows(cantidad)
 
-    let request
-    if (local !== null) {
-      request = { ...paginationState, pagina: 0, local: local.nombre }
-    } else {
-      request = { ...paginationState, pagina: 0 }
-    }
-
-    VentaServicio.listar(request).then(data => {
-      setListaVentas(data.content)
-      setTotalRegistros(data.totalElements)
+    const request = generateRequest(paginationState)
+  
+    VentaService.getAllByCategory(request).then(data => {
+      setListItems(data.listaVentas)
+      setQuantitySold(data.vendidos)
+      setTotalElements(data.totalElements)
     })
   }
 
-  const cambiarPagina = (event) => {
+  const onPageChange = (event) => {
     setFirst(event.first)
     setRows(event.rows)
 
-    let request
-    if (local !== null) {
-      request = { ...paginationState, pagina: event.page, local: local.nombre }
-    } else {
-      request = { ...paginationState, pagina: event.page }
-    }
-
-    VentaServicio.listar(request).then(data => {
-      setListaVentas(data.content)
-      setTotalRegistros(data.totalElements)
+    const request = generateRequest(paginationState, event.page)
+    VentaService.getAllByCategory(request).then(data => {
+      setListItems(data.listaVentas)
     })
   }
 
@@ -84,8 +84,7 @@ export const VentaHistorialRubroPagina = () => {
   const footerGroup = (
     <ColumnGroup>
       <Row>
-        <Column footer='Total vendidos:' colSpan={10} footerStyle={{ textAlign: 'left' }} />
-        <Column />
+        <Column footer={`Total vendidos: ${quantitySold} unidades`} colSpan={8} footerStyle={{ textAlign: 'left' }} />
       </Row>
     </ColumnGroup>
   )
@@ -94,38 +93,36 @@ export const VentaHistorialRubroPagina = () => {
     <div className='p-5'>
       <h2 className='text-4xl font-medium mb-3'>Historial de ventas por rubro</h2>
       <span className='text-xl font-normal'>Visualización histórica de ventas segmentadas por rubro</span>
-      <Card className='!shadow-none border my-5'>
-        <div className='flex justify-between'>
-          <div className='md:flex flex-wrap'>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Rubro</label>
-              <Dropdown options={listaLocales} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un rubro'
-                name='local' value={local} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Fecha desde</label>
-              <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha desde'
-                name='fechaDesde' onChange={handleDate} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Fecha hasta</label>
-              <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha hasta'
-                name='fechaHasta' onChange={handleDate} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Local</label>
-              <Dropdown options={listaLocales} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un local'
-                name='local' value={local} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1 me-3'>
-              <label className='block font-medium text-lg mb-2'>Cantidad</label>
-              <Dropdown options={listaCantidades} emptyMessage='Sin registros' placeholder='Selecciona la cantidad'
-                name='cantidad' value={cantidad} onChange={onDropdownChange} className='p-inputtext-sm w-52' />
-            </div>
-            <div className='flex-1'>
-              <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
-              <Button label="Filtrar" onClick={filtrarVentas} className='hover:!bg-blue-600' size='small' />
-            </div>
+      <Card className='!shadow border my-5'>
+        <div className='flex flex-wrap'>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Fecha desde</label>
+            <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha desde'
+              name='fechaDesde' onChange={handleDate} className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Fecha hasta</label>
+            <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione fecha hasta'
+              name='fechaHasta' onChange={handleDate} className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Local</label>
+            <Dropdown options={stores} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un local'
+              name='local' value={local} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Rubro</label>
+            <Dropdown options={categories} optionLabel='descripcion' emptyMessage='Sin registros' placeholder='Selecciona un rubro'
+              name='rubro' value={rubro} onChange={onDropdownChange} className='p-inputtext-sm w-full' filter />
+          </div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Cantidad</label>
+            <Dropdown options={quantities} emptyMessage='Sin registros' placeholder='Selecciona la cantidad'
+              name='cantidad' value={cantidad} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
+          </div>
+          <div className='me-3'>
+            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+            <Button label="Filtrar" onClick={filter} className='hover:!bg-blue-600' size='small' />
           </div>
           <div>
             <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
@@ -135,15 +132,15 @@ export const VentaHistorialRubroPagina = () => {
           </div>
         </div>
       </Card >
-      <Card className='!shadow-none border'>
-        <DataTable value={listaVentas} footerColumnGroup={footerGroup}
+      <Card className='!shadow border'>
+        <DataTable value={listItems} footerColumnGroup={footerGroup}
           stripedRows emptyMessage='Sin registro de ventas' size='small'>
           <Column field='id' header='Código' className='font-bold' style={{ width: '5%' }}></Column>
           <Column field='local.nombre' header='Local' style={{ width: '10%' }}></Column>
           <Column field='usuario' header='Usuario' style={{ width: '10%' }}></Column>
-          <Column field={(rowData) => formatoFechaCorto(rowData.fecha)} header='Fecha' style={{ width: '10%' }}></Column>
-          <Column field={(rowData) => formatoHora(rowData.hora)} header='Hora' style={{ width: '10%' }}></Column>
-          <Column header='Producto/s' style={{ width: '50%' }}
+          <Column field={(rowData) => formatDate(rowData.fecha)} header='Fecha' style={{ width: '10%' }}></Column>
+          <Column field={(rowData) => formatTime(rowData.hora)} header='Hora' style={{ width: '10%' }}></Column>
+          <Column header='Producto/s' style={{ width: '40%' }}
             body={(rowData) => (
               <div>
                 {rowData.detalle.map((producto, index) => (
@@ -154,6 +151,7 @@ export const VentaHistorialRubroPagina = () => {
               </div>
             )}>
           </Column>
+          <Column field={(rowData) => formatCurrency(rowData.total)} header='Total' style={{ width: '10%' }}></Column>
           <Column header='Acciones' alignHeader={'center'} style={{ width: '5%' }}
             body={(rowData) => (
               <div className='flex justify-center'>
@@ -166,8 +164,8 @@ export const VentaHistorialRubroPagina = () => {
             )}>
           </Column>
         </DataTable>
-        <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalRegistros}
-          onPageChange={cambiarPagina} className='mt-5 !p-0'></Paginator>
+        <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
+          onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
       </Card >
     </div >
   )

@@ -9,33 +9,25 @@ export function formatCurrency(number) {
   }).format(number);
 }
 
-export function formatDate(number) {
-  return new Intl.DateTimeFormat("es-sp", {
-    dateStyle: "short",
-    timeStyle: "short",
-  }).format(new Date(number));
-}
-
-export function formatDateLong(number) {
-  return new Intl.DateTimeFormat("es-sp", {
-    dateStyle: "long",
-    timeStyle: "short"
-  }).format(new Date(number));
-}
-
-export function formatoHora(time) {
+export function formatTime(time) {
   const timeObject = DateTime.fromISO(`1970-01-01T${time}`, { zone: 'UTC' });
   const formattedTime = timeObject.toFormat('HH:mm');
   return formattedTime;
 };
 
-export function formatoFechaCorto(fecha) {
+export function formatDate(fecha) {
   const dateObject = DateTime.fromISO(fecha, { zone: 'America/Argentina/Buenos_Aires' });
   const formattedDate = dateObject.toFormat('dd/MM/yyyy');
   return formattedDate;
 };
 
-export function formatoFechaCompleto(fecha) {
+export function formatDateTime(fecha) {
+  const dateObject = DateTime.fromISO(fecha, { zone: 'America/Argentina/Buenos_Aires' });
+  const formattedDate = dateObject.toFormat('dd/MM/yyyy HH:mm'); // Include 'HH:mm' for hour and minutes
+  return formattedDate;
+}
+
+export function formatFullDate(fecha) {
   const dateObject = DateTime.fromISO(fecha, { zone: 'America/Argentina/Buenos_Aires' });
   const formato = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const fechaCompleta = dateObject.toLocaleString(formato);
