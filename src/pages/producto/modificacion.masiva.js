@@ -6,25 +6,81 @@ import { DataTable } from 'primereact/datatable';
 import React, { useEffect, useState } from 'react';
 
 import { formatDate, formatCurrency } from "../../helper/format";
-import ProductoServicio from '../../services/producto.servicio';
+import ProductoService from '../../services/producto.servicio';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
+import { usePagination } from '../../hooks/use.paginacion';
+import ProductFilters from '../../helper/producto.filtros';
+import { Paginator } from 'primereact/paginator';
 
 export const ProductosModificacionMasiva = () => {
+  const initialPagination = {
+    pagina: 0,
+    cantidad: 10,
+    marca: null,
+    rubro: null,
+    proveedor: null,
+  }
 
-  const [listaProductos, setListaProductos] = useState([])
+  const [rows, setRows] = useState(10)
+  const [first, setFirst] = useState(0)
+  const [listProducts, setListProducts] = useState([])
+  const [totalElements, setTotalElements] = useState(null)
 
-  const columns = [
-    { field: 'descripcion', header: 'Descripcion' },
-    { field: 'precioEfectivo', header: 'Efectivo' },
-    { field: 'precioDebito', header: 'Débito' },
-    { field: 'precioCredito', header: 'Crédito' }
-  ];
+  const { paginationState, onDropdownChange } = usePagination(initialPagination)
+  const { proveedor, rubro, marca, cantidad } = paginationState
+
+  const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters();
 
   useEffect(() => {
-    ProductoServicio.listar().then((data) => setListaProductos(data));
-  }, []);
+    ProductoService.getAll(paginationState).then(data => {
+      setListProducts(data.content)
+      setTotalElements(data.totalElements)
+    })
+  }, [])
+
+  const generateRequest = (paginationState, page) => {
+    const request = { ...paginationState, pagina: page || 0 };
+
+    if (marca !== null) {
+      request.marca = marca.descripcion;
+    }
+
+    if (rubro !== null) {
+      request.rubro = rubro.descripcion;
+    }
+
+    if (proveedor !== null) {
+      request.proveedor = proveedor.razonSocial;
+    }
+
+    return request;
+  }
+
+  const filter = () => {
+    setFirst(0)
+    setRows(cantidad)
+
+    const request = generateRequest(paginationState)
+
+    ProductoService.getAll(request).then(data => {
+      setListProducts(data.listItems)
+      setTotalElements(data.totalElements)
+    })
+  }
+
+  const onPageChange = (event) => {
+    setFirst(event.first)
+    setRows(event.rows)
+
+    const request = generateRequest(paginationState, event.page)
+
+    ProductoService.getAll(request).then(data => {
+      setListProducts(data.listItems)
+    })
+  }
+
 
   const isPositiveInteger = (val) => {
     let str = String(val);
@@ -78,33 +134,67 @@ export const ProductosModificacionMasiva = () => {
     return <InputNumber value={options.value} onValueChange={(e) => options.editorCallback(e.value)} className='w-full' />;
   };
 
+  const columns = [
+    { field: 'descripcion', header: 'Descripción', width: '25%' },
+    { field: 'precioEfectivo', header: 'Precio Efectivo', width: '25%' },
+    { field: 'precioDebito', header: 'Precio Débito', width: '25%' },
+    { field: 'precioCredito', header: 'Precio Crédito', width: '25%' },
+  ];
+
   return (
-    <div className='m-5'>
+    <div className='p-5'>
       <h2 className="sm:text-4xl text-5xl font-medium mb-3">Modificación masiva de productos</h2>
       <span class="text-xl font-normal">Todos los campos a excepción del código son editables. Para guardar los cambios realizados presione el botón al final de la tabla "Guardar cambios"</span>
 
-      <Card className='drop-shadow !shadow-none mt-5'>
-        <div className='flex justify-between mb-5'>
-          <div className='md:flex w-2/3'>
-            <Dropdown placeholder="Selecciona un proveedor" className='flex-1 me-3' />
-            <Dropdown placeholder="Selecciona un rubro" className='flex-1 me-3' />
-            <Dropdown placeholder="Selecciona una marca" className='flex-1 me-3' />
-            <Dropdown placeholder="Selecciona la cantidad" className='flex-1 me-3' />
-            <Button label="Filtrar" className='flex-1 me-3' />
+      <Card className='!shadow border mt-5'>
+        <div className='flex flex-wrap'>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Proveedor</label>
+            <Dropdown options={listProviders} optionLabel='razonSocial' filter
+              name='proveedor' value={proveedor} onChange={onDropdownChange} emptyMessage='Sin registros'
+              placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
           </div>
-          <div className='w-1/6 text-end'>
-            <Button label="Opciones" />
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Rubro</label>
+            <Dropdown options={listCategories} optionLabel='descripcion' filter
+              name='rubro' value={rubro} onChange={onDropdownChange} emptyMessage='Sin registros'
+              placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Marca</label>
+            <Dropdown options={listBrands} optionLabel='descripcion' filter
+              name='marca' value={marca} onChange={onDropdownChange} emptyMessage='Sin registros'
+              placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Cantidad</label>
+            <Dropdown options={listQuantities}
+              name='cantidad' value={cantidad} onChange={onDropdownChange} emptyMessage="Sin registros"
+              placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='me-3'>
+            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+            <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
+          </div>
+          <div>
+            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+            <Button label='Volver' className='hover:!bg-blue-600' size='small' />
           </div>
         </div>
-        <DataTable value={listaProductos} editMode="cell" size='small'
-          stripedRows paginator rows={15} rowsPerPageOptions={[10, 20, 30, 40, 50, 100]}>
+      </Card>
+      <Card className='!shadow border mt-5'>
+        <DataTable value={listProducts} stripedRows editMode="cell" size='small'>
           <Column field="codigo" header="Código" style={{ width: '10%' }}></Column>
+
           {columns.map(({ field, header }) => {
             return <Column key={field} field={field} header={header} style={{ width: '25%' }}
               body={field.includes('precio') && formatCurrency()}
               editor={(opciones) => editarCelda(opciones)} onCellEditComplete={onCellEditComplete} />
           })}
+          
         </DataTable>
+        <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
+          onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
       </Card>
     </div>
   );

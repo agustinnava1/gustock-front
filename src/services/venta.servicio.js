@@ -7,9 +7,9 @@ class VentaService {
 
     getById(id) { return axios.get(baseUrl + "/" + id, config).then(res => res.data) }
 
-    save(product) { return axios.post(baseUrl + "/crear", product, config).then(res => res.data) }
+    save(venta) { return axios.post(baseUrl + "/crear", venta, config).then(res => res.data) }
 
-    update(product) { return axios.put(baseUrl + "/modificar/" + product.id, product, config).then(res => res.data) }
+    update(venta) { return axios.put(baseUrl + "/modificar/" + venta.id, venta, config).then(res => res.data) }
 
     delete(id) { return axios.delete(baseUrl + "/eliminar/" + id, config).then(res => res.data) }
 

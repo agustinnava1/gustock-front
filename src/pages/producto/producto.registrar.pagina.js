@@ -12,7 +12,7 @@ import { InputTextarea } from 'primereact/inputtextarea'
 
 import JsBarcode from 'jsbarcode';
 
-import ProductoFiltros from '../../helper/ProductoFiltros'
+import ProductoFiltros from '../../helper/producto.filtros'
 
 export const ProductoRegistrar = () => {
   const [codigo, setCodigo] = useState('');

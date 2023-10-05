@@ -23,7 +23,7 @@ export const ProductoDetalle = () => {
   }, []);
 
   const cargarProducto = () => {
-    ProductoServicio.obtenerPorId(id).then(data => {
+    ProductoServicio.getById(id).then(data => {
       setProducto(data);
       setFichaTecnica(data.fichaTecnica);
     })

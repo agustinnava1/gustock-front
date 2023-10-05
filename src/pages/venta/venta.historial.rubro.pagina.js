@@ -13,7 +13,7 @@ import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
 import { ColumnGroup } from 'primereact/columngroup'
 
-import { usePagination } from '../../hooks/venta.paginacion'
+import { usePagination } from '../../hooks/use.paginacion'
 
 import { calendarioEspañol } from '../../helper/configuracion.regional'
 import { formatCurrency, formatDate, formatTime } from '../../helper/format'
@@ -34,7 +34,7 @@ export const VentaHistorialRubroPagina = () => {
   const [rows, setRows] = useState(10)
   const [first, setFirst] = useState(0)
   const [listItems, setListItems] = useState([])
-  const [quantitySold, setQuantitySold] = useState(0)
+  const [soldQuantity, setSoldQuantity] = useState(0)
   const [totalElements, setTotalElements] = useState(null)
 
   const { stores, categories, quantities } = VentaFilters()
@@ -63,8 +63,8 @@ export const VentaHistorialRubroPagina = () => {
     const request = generateRequest(paginationState)
   
     VentaService.getAllByCategory(request).then(data => {
-      setListItems(data.listaVentas)
-      setQuantitySold(data.vendidos)
+      setListItems(data.listItems)
+      setSoldQuantity(data.soldQuantity)
       setTotalElements(data.totalElements)
     })
   }
@@ -84,7 +84,7 @@ export const VentaHistorialRubroPagina = () => {
   const footerGroup = (
     <ColumnGroup>
       <Row>
-        <Column footer={`Total vendidos: ${quantitySold} unidades`} colSpan={8} footerStyle={{ textAlign: 'left' }} />
+        <Column footer={`Total vendidos: ${soldQuantity} unidades`} colSpan={8} footerStyle={{ textAlign: 'left' }} />
       </Row>
     </ColumnGroup>
   )

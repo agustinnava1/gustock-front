@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import { Row } from 'primereact/row'
 import { Card } from 'primereact/card'
 import { Link } from "react-router-dom"
 import { Button } from 'primereact/button'
@@ -8,55 +9,59 @@ import { Dropdown } from 'primereact/dropdown'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
 import { TieredMenu } from 'primereact/tieredmenu'
+import { ColumnGroup } from 'primereact/columngroup'
+import { usePagination } from '../../hooks/use.paginacion'
 
 import { formatDate, formatCurrency } from "../../helper/format"
 
-import ProductoFiltros from '../../helper/ProductoFiltros'
-import ProductoServicio from '../../services/producto.servicio'
+import StockService from '../../services/stock.servicio'
+import ProductFilters from '../../helper/producto.filtros'
+import ProductoService from '../../services/producto.servicio'
 
 export const ProductosPagina = () => {
-  const [listaProductos, setListaProductos] = useState([])
-  const { listaProveedores, listaRubros, listaMarcas, listaCantidades } = ProductoFiltros();
+  const initialPagination = {
+    pagina: 0,
+    cantidad: 10,
+    marca: null,
+    rubro: null,
+    proveedor: null,
+  }
 
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-
-  const [proveedor, setProveedor] = useState(null)
-  const [rubro, setRubro] = useState(null)
-  const [marca, setMarca] = useState(null)
-
-  const [first, setFirst] = useState(0)
   const [rows, setRows] = useState(10)
+  const [first, setFirst] = useState(0)
+  const [totalStock, setTotalStock] = useState(0)
+  const [listProducts, setListProducts] = useState([])
+  const [totalElements, setTotalElements] = useState(null)
 
-  const [cantidad, setCantidad] = useState(10)
-  const [totalRegistros, setTotalRegistros] = useState(null)
-  const [paginacionRequest, setPaginacionRequest] = useState({})
+  const { paginationState, onDropdownChange } = usePagination(initialPagination)
+  const { proveedor, rubro, marca, cantidad } = paginationState
+
+  const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters();
 
   useEffect(() => {
-    ProductoServicio.listar(paginacionRequest).then(data => {
-      setListaProductos(data.content)
-      setTotalRegistros(data.totalElements)
+    ProductoService.getAll(paginationState).then(data => {
+      setListProducts(data.content)
+      setTotalElements(data.totalElements)
     })
   }, [])
 
-  const handleCantidad = (e) => {
-    setCantidad(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, cantidad: e.target.value })
-  };
+  const generateRequest = (paginationState, page) => {
+    const request = { ...paginationState, pagina: page || 0 };
 
-  const handleMarca = (e) => {
-    setMarca(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, marca: e.target.value.descripcion })
-  };
+    if (marca !== null) {
+      request.marca = marca.descripcion;
+    }
 
-  const handleRubro = (e) => {
-    setRubro(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, rubro: e.target.value.descripcion })
-  };
+    if (rubro !== null) {
+      request.rubro = rubro.descripcion;
+    }
 
-  const handleProveedor = (e) => {
-    setProveedor(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, proveedor: e.target.value.razonSocial })
-  };
+    if (proveedor !== null) {
+      request.proveedor = proveedor.razonSocial;
+    }
+
+    return request;
+  }
 
   const menu = useRef(null);
 
@@ -73,67 +78,77 @@ export const ProductosPagina = () => {
       label: 'Modificación masiva',
       url: '/productos/modificacion/masiva',
     },
-    {
-      label: 'Exportar a excel',
-      url: '/productos/modificacion/masiva',
-    }
   ];
 
-  const filtrarVentas = () => {
+  const filter = () => {
     setFirst(0)
     setRows(cantidad)
 
-    const request = { ...paginacionRequest, pagina: 0 }
-    ProductoServicio.listar(request).then(data => {
-      setListaProductos(data.content)
-      setTotalRegistros(data.totalElements)
+    const request = generateRequest(paginationState)
+
+    ProductoService.getAllWithStock(request).then(data => {
+      setTotalStock(data.totalStock)
+      setListProducts(data.listItems)
+      setTotalElements(data.totalElements)
     })
   };
 
-  const cambiarPagina = (event) => {
+  const onPageChange = (event) => {
     setFirst(event.first)
     setRows(event.rows)
 
-    const request = { ...paginacionRequest, pagina: event.page }
-    ProductoServicio.listar(request).then(data => {
-      setListaProductos(data.content)
-      setTotalRegistros(data.totalElements)
+    const request = generateRequest(paginationState, event.page)
+
+    ProductoService.getAllWithStock(request).then(data => {
+      setListProducts(data.listItems)
     })
   };
 
+  const getTotalStock = (id) => {
+    
+  }
+
+  const footerGroup = (
+    <ColumnGroup>
+      <Row>
+        <Column footer={`Total stock: ${totalStock} unidades`} colSpan={8} footerStyle={{ textAlign: 'left' }} />
+      </Row>
+    </ColumnGroup>
+  )
+
   return (
     <div className='p-5'>
-      <h2 className='sm:text-4xl text-5xl font-medium mb-3'>Mis productos</h2>
+      <h2 className='text-4xl font-medium mb-3'>Mis productos</h2>
       <span className='text-xl font-normal'>Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema</span>
-      <Card className='!shadow-none border my-5'>
+      <Card className='!shadow border my-5'>
         <div className='flex flex-wrap'>
           <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
             <label className='block font-medium text-lg mb-2'>Proveedor</label>
-            <Dropdown options={listaProveedores} optionLabel='razonSocial' filter
-              value={proveedor} onChange={handleProveedor} emptyMessage='Sin registros'
+            <Dropdown options={listProviders} optionLabel='razonSocial' filter
+              name='proveedor' value={proveedor} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
             <label className='block font-medium text-lg mb-2'>Rubro</label>
-            <Dropdown options={listaRubros} optionLabel='descripcion' filter
-              value={rubro} onChange={handleRubro} emptyMessage='Sin registros'
+            <Dropdown options={listCategories} optionLabel='descripcion' filter
+              name='rubro' value={rubro} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
             <label className='block font-medium text-lg mb-2'>Marca</label>
-            <Dropdown options={listaMarcas} optionLabel='descripcion' filter
-              value={marca} onChange={handleMarca} emptyMessage='Sin registros'
+            <Dropdown options={listBrands} optionLabel='descripcion' filter
+              name='marca' value={marca} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
             <label className='block font-medium text-lg mb-2'>Cantidad</label>
-            <Dropdown options={listaCantidades}
-              value={cantidad} onChange={handleCantidad} emptyMessage="Sin registros"
+            <Dropdown options={listQuantities}
+              name='cantidad' value={cantidad} onChange={onDropdownChange} emptyMessage="Sin registros"
               placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
           </div>
           <div className='me-3'>
             <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
-            <Button label='Filtrar' onClick={filtrarVentas} className='hover:!bg-blue-600 me-3' size='small' />
+            <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
           </div>
           <div>
             <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
@@ -143,9 +158,9 @@ export const ProductosPagina = () => {
           </div>
         </div>
       </Card>
-      <Card className='!rounded !shadow-none border mt-5'>
-        <DataTable value={listaProductos} selectionMode='single' selection={productoSeleccionado}
-          onSelectionChange={(e) => setProductoSeleccionado(e.value)} stripedRows emptyMessage='No se encontraron resultados' size='small'>
+      <Card className='!shadow border mt-5'>
+        <DataTable value={listProducts} footerColumnGroup={footerGroup}
+          stripedRows emptyMessage='No se encontraron resultados' size='small'>
           <Column field='codigo' header='Código' style={{ width: '10%' }}></Column>
           <Column field='descripcion' header='Descripción' style={{ width: '30%' }}></Column>
           <Column field='precioEfectivo' header='Efectivo' style={{ width: '10%' }}
@@ -159,7 +174,8 @@ export const ProductosPagina = () => {
           </Column>
           <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '10%' }}
             body={(rowData) => rowData.ultActPrecio ? formatDate(rowData.ultActPrecio) : ''}></Column>
-          <Column header='Unidades' alignHeader={'center'} style={{ width: '10%' }}></Column>
+          <Column header='Unidades' alignHeader={'center'} style={{ width: '10%' }}>
+          </Column>
           <Column header='Acciones' alignHeader={'center'} style={{ width: '10%' }}
             body={(rowData) => (
               <div className='flex justify-center'>
@@ -180,8 +196,8 @@ export const ProductosPagina = () => {
             )}>
           </Column>
         </DataTable>
-        <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalRegistros}
-          onPageChange={cambiarPagina} className='mt-5 !p-0'></Paginator>
+        <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
+          onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
       </Card>
     </div >
   )

@@ -14,7 +14,7 @@ import { Paginator } from 'primereact/paginator'
 import { InputText } from 'primereact/inputtext'
 import { ColumnGroup } from 'primereact/columngroup'
 
-import { usePagination } from '../../hooks/venta.paginacion'
+import { usePagination } from '../../hooks/use.paginacion'
 
 import { calendarioEspañol } from '../../helper/configuracion.regional'
 import { formatDate, formatTime } from '../../helper/format'
@@ -35,7 +35,7 @@ export const VentaHistorialProductoPagina = () => {
   const [rows, setRows] = useState(10)
   const [first, setFirst] = useState(0)
   const [listItems, setListItems] = useState([])
-  const [quantitySold, setQuantitySold] = useState(0)
+  const [soldQuantity, setSoldQuantity] = useState(0)
   const [totalElements, setTotalElements] = useState(null)
 
   const { paginationState, onDropdownChange, onInputChange, handleDate } = usePagination(initialPagination)
@@ -61,8 +61,8 @@ export const VentaHistorialProductoPagina = () => {
     const request = generateRequest(paginationState)
 
     VentaService.getAllByProduct(request).then(data => {
-      setListItems(data.listaVentas)
-      setQuantitySold(data.vendidos)
+      setListItems(data.listItems)
+      setSoldQuantity(data.soldQuantity)
       setTotalElements(data.totalElements)
     })
   }
@@ -83,7 +83,7 @@ export const VentaHistorialProductoPagina = () => {
   const footerGroup = (
     <ColumnGroup>
       <Row>
-        <Column footer={`Total vendidos: ${quantitySold} unidades`} colSpan={8} footerStyle={{ textAlign: 'left' }} />
+        <Column footer={`Total vendidos: ${soldQuantity} unidades`} colSpan={8} footerStyle={{ textAlign: 'left' }} />
       </Row>
     </ColumnGroup>
   )
@@ -143,7 +143,7 @@ export const VentaHistorialProductoPagina = () => {
             body={(rowData) => (
               <div>
                 {rowData.detalle.map((producto, index) => (
-                  <p className="m-auto" key={index}>
+                  <p className='m-auto' key={index}>
                     <span>{producto.descripcion}</span>
                   </p>
                 ))}

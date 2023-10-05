@@ -15,7 +15,7 @@ import { Paginator } from 'primereact/paginator'
 import { TieredMenu } from 'primereact/tieredmenu'
 import { ColumnGroup } from 'primereact/columngroup'
 
-import { usePagination } from '../../hooks/venta.paginacion'
+import { usePagination } from '../../hooks/use.paginacion'
 import { useCalculateTotal } from '../../hooks/venta.calcular'
 
 import { calendarioEspañol } from '../../helper/configuracion.regional'
@@ -68,7 +68,7 @@ export const VentaHistorialPagina = () => {
     setRows(cantidad)
 
     const request = generateRequest(paginationState)
-    
+
     VentaService.getAll(request).then(data => {
       setListItems(data.content)
       setTotalElements(data.totalElements)
@@ -80,7 +80,7 @@ export const VentaHistorialPagina = () => {
     setRows(event.rows)
 
     const request = generateRequest(paginationState, event.page)
-    
+
     VentaService.getAll(request).then(data => {
       setListItems(data.content)
     })

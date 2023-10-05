@@ -17,14 +17,12 @@ import { calendarioEspañol } from '../helper/configuracion.regional'
 
 import LocalServicio from '../services/local.servicio'
 import StockServicio from '../services/stock.servicio'
-import ProductoFiltros from '../helper/ProductoFiltros'
 
 export const LocalPagina = () => {
   const { nombre } = useParams()
   const [local, setLocal] = useState([])
   const [isExpanded, setIsExpanded] = useState(false)
   const [listaProductos, setListaProductos] = useState([])
-  const { listaProveedores, listaRubros, listaMarcas, listaCantidades } = ProductoFiltros();
 
   const [proveedor, setProveedor] = useState(null)
   const [rubro, setRubro] = useState(null)
@@ -51,26 +49,6 @@ export const LocalPagina = () => {
       setListaProductos(data.content);
     })
   }, []);
-
-  const handleCantidad = (e) => {
-    setCantidad(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, cantidad: e.target.value })
-  };
-
-  const handleMarca = (e) => {
-    setMarca(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, marca: e.target.value.descripcion })
-  };
-
-  const handleRubro = (e) => {
-    setRubro(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, rubro: e.target.value.descripcion })
-  };
-
-  const handleProveedor = (e) => {
-    setProveedor(e.target.value)
-    setPaginacionRequest({ ...paginacionRequest, proveedor: e.target.value.razonSocial })
-  };
 
   const filtrarVentas = () => {
     setFirst(0)
@@ -174,25 +152,25 @@ export const LocalPagina = () => {
             <div className='flex border-2 rounded-lg shadow-sm mb-5 p-5'>
               <div className='flex-1 me-3'>
                 <label htmlFor="proveedor" className='block font-medium text-lg mb-2'>Proveedor</label>
-                <Dropdown options={listaProveedores} optionLabel='razonSocial' filter
-                  value={proveedor} onChange={handleProveedor} emptyMessage='Sin registros'
+                <Dropdown options={''} optionLabel='razonSocial' filter
+                  value={proveedor} onChange={''} emptyMessage='Sin registros'
                   placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-1 me-3'>
                 <label htmlFor="rubro" className='block font-medium text-lg mb-2'>Rubro</label>
-                <Dropdown options={listaRubros} optionLabel='descripcion' filter
-                  value={rubro} onChange={handleRubro} emptyMessage='Sin registros'
+                <Dropdown options={''} optionLabel='descripcion' filter
+                  value={rubro} onChange={''} emptyMessage='Sin registros'
                   placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-1 me-3'>
                 <label htmlFor="marca" className='block font-medium text-lg mb-2'>Marca</label>
-                <Dropdown options={listaMarcas} optionLabel='descripcion' filter
-                  value={marca} onChange={handleMarca} emptyMessage='Sin registros'
+                <Dropdown options={''} optionLabel='descripcion' filter
+                  value={marca} onChange={''} emptyMessage='Sin registros'
                   placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-1 me-3'>
                 <label htmlFor="stock" className='block font-medium text-lg mb-2'>Stock</label>
-                <Dropdown value={rubro} options={listaRubros} optionLabel="descripcion" className='p-inputtext-sm w-full'
+                <Dropdown value={rubro} options={''} optionLabel="descripcion" className='p-inputtext-sm w-full'
                   onChange={(e) => setRubro(e.value)} />
               </div>
               <div className='flex-1 me-3'>
@@ -202,8 +180,8 @@ export const LocalPagina = () => {
               </div>
               <div className='flex-1 me-3'>
                 <label htmlFor="cantidad" className='block font-medium text-lg w-full mb-2'>Cantidad</label>
-                <Dropdown options={listaCantidades}
-                  value={cantidad} onChange={handleCantidad} emptyMessage="Sin registros"
+                <Dropdown options={''}
+                  value={cantidad} onChange={''} emptyMessage="Sin registros"
                   placeholder='Selecciona la cantidad' className='p-inputtext-sm me-3 w-full' />
               </div>
               <div className='flex-1 me-3'>
