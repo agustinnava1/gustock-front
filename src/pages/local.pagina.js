@@ -16,7 +16,8 @@ import { formatDate, formatCurrency } from '../helper/format'
 import { calendarioEspañol } from '../helper/configuracion.regional'
 
 import LocalServicio from '../services/local.servicio'
-import StockServicio from '../services/stock.servicio'
+import StockService from '../services/stock.servicio'
+import { Panel } from 'primereact/panel'
 
 export const LocalPagina = () => {
   const { nombre } = useParams()
@@ -45,7 +46,7 @@ export const LocalPagina = () => {
       setLocal(data)
     })
 
-    StockServicio.obtenerPorLocal(nombre).then(data => {
+    StockService.getByStore(nombre).then(data => {
       setListaProductos(data.content);
     })
   }, []);
@@ -55,7 +56,7 @@ export const LocalPagina = () => {
     setRows(cantidad)
 
     const request = { ...paginacionRequest, pagina: 0 }
-    StockServicio.obtenerPorLocal(request).then(data => {
+    StockService.getByStore(request).then(data => {
       setListaProductos(data.content)
       setTotalRegistros(data.totalElements)
     })
@@ -66,7 +67,7 @@ export const LocalPagina = () => {
     setRows(event.rows)
 
     const request = { ...paginacionRequest, pagina: event.page }
-    StockServicio.obtenerPorLocal(request).then(data => {
+    StockService.getByStore(request).then(data => {
       setListaProductos(data.content)
       setTotalRegistros(data.totalElements)
     })
@@ -84,7 +85,7 @@ export const LocalPagina = () => {
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        StockServicio.eliminar(id)
+        StockService.delete(id)
           .then((data) => {
             setListaProductos(listaProductos.filter((stock) => stock.id !== id));
             Swal.fire('Eliminado', 'El producto ha sido eliminado del local.', 'success');
@@ -102,7 +103,7 @@ export const LocalPagina = () => {
   return (
     <div className='lg:flex lg:justify-between p-5'>
       <div className='lg:w-1/6'>
-        <Card title="Local" className='text-center !rounded !shadow-lg border'>
+        <Card title="Local" className='text-center !shadow border'>
           <div className='p-5'>
             <h2 className="text-2xl font-bold">{local.nombre}</h2>
             <p className="text-xl">{local.direccion}</p>
@@ -110,7 +111,7 @@ export const LocalPagina = () => {
         </Card>
         {local.tipo === 'LOCAL' &&
           <div>
-            <Card title="Venta" className='text-center !rounded !shadow-lg border mt-5'>
+            <Card title="Venta" className='text-center !shadow border mt-5'>
               <div className='p-5'>
                 <Link to={`/local/${local.nombre}/venta/registrar`}>
                   <Button label='Nueva venta' className='hover:!bg-blue-600 !mb-5 w-full' size='small' />
@@ -120,18 +121,21 @@ export const LocalPagina = () => {
                 </Link>
               </div>
             </Card>
-            <Card title="Turno" className='text-center !rounded !shadow-lg border mt-5'>
+            <Card title="Turno" className='text-center !shadow border mt-5'>
               <div className='p-5'>
                 <Button label='Abrir turno' className='hover:!bg-blue-600 !mb-5 w-full' size='small' />
                 <Button label='Cerrar turno' className='hover:!bg-blue-600 w-full' size='small' />
               </div>
+            </Card>
+            <Card className='text-center px-5 !shadow border mt-5'>
+              <Button label='Ver caja' className='hover:!bg-blue-600 w-full' size='small' />
             </Card>
           </div>
         }
       </div>
 
       <div className='lg:w-5/6 lg:ms-5'>
-        <Card title="Productos" className='!rounded !shadow-none border'>
+        <Card title="Productos" className='!shadow-none border'>
           <div className='flex justify-between mt-5 mb-5'>
             <div>
               <Button label='Filtrar' className='peer hover:!bg-blue-600' size='small' onClick={toggleExpand}>
@@ -149,7 +153,7 @@ export const LocalPagina = () => {
           </div>
 
           <div className={`overflow-hidden transition-all duration-500 max-h-0 peer-pressed:max-h-40 ${isExpanded ? 'max-h-40' : ''}`}>
-            <div className='flex border-2 rounded-lg shadow-sm mb-5 p-5'>
+            <div className='flex border rounded mb-5 p-5'>
               <div className='flex-1 me-3'>
                 <label htmlFor="proveedor" className='block font-medium text-lg mb-2'>Proveedor</label>
                 <Dropdown options={''} optionLabel='razonSocial' filter

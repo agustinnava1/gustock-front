@@ -20,10 +20,10 @@ export const AdminPagina = () => {
   return (
     <div className='p-5'>
       <div>
-        <h2 className='text-4xl font-medium mb-5 pb-3 border-b-2 border-[#415484]'>Mis Locales</h2>
+        <h2 className='text-4xl font-medium mb-5'>Mis Locales</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
           {locales.map(local => (
-            <Card className='!rounded !shadow-none border text-center' key={local.id}>
+            <Card className='!shadow border text-center' key={local.id}>
               <div className='bg-blue-500 rounded-t py-5'>
                 <i className='bi bi-shop text-white text-8xl'></i>
               </div>
@@ -40,10 +40,10 @@ export const AdminPagina = () => {
       </div>
 
       <div>
-        <h2 className='text-4xl font-medium my-5 pb-3 border-b-2 border-[#415484]'>Mis Depósitos</h2>
+        <h2 className='text-4xl font-medium my-5'>Mis Depósitos</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
           {depositos.map(deposito => (
-            <Card className='!rounded !shadow-none border text-center' key={deposito.id}>
+            <Card className='!shadow border text-center' key={deposito.id}>
               <div className='bg-sky-500 rounded-t py-5'>
                 <i className='bi bi-shop-window text-white text-8xl'></i>
               </div>

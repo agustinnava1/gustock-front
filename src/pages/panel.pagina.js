@@ -12,8 +12,8 @@ export const PanelPagina = () => {
 
   return (
     <div className='m-5'>
-      <h2 className="sm:text-4xl text-5xl font-medium mb-5">Panel de administración</h2>
-      <span className="text-xl font-normal">Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema.</span>
+      <h2 className="text-4xl font-medium mb-3">Panel de administración</h2>
+      <span className="text-xl font-normal">Registra, actualiza y elimina registros del sistema</span>
 
       <Accordion activeIndex={0} className='mt-5 drop-shadow'>
         <AccordionTab header="Proveedor">
