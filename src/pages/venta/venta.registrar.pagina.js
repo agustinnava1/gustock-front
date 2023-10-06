@@ -7,35 +7,72 @@ import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { Divider } from "primereact/divider"
 import { useParams } from "react-router-dom"
+import { useState } from "react"
+import { Dropdown } from "primereact/dropdown"
+import { useRequest } from "../../hooks/use.request"
+
+import productoService from "../../services/producto.servicio"
+import Swal from "sweetalert2"
 
 export const RegistrarVentaPagina = () => {
   const { nombre } = useParams()
+
+  const initialRequest = {
+    local: nombre,
+    codigo: null,
+    tipoPrecio: null
+  }
+
+  const prices = [
+    { label: 'CONTADO', value: 'CONTADO' },
+    { label: 'DEBITO', value: 'DEBITO' },
+    { label: 'CREDITO', value: 'CREDITO' }
+  ];
+
+  const [listProducts, setListProducts] = useState([])
+
+  const { requestState, onDropdownChange, onInputChange } = useRequest(initialRequest)
+  const { local, tipoPrecio, codigo } = requestState
+
+  const handleSearchProduct = (e) => {
+    e.preventDefault()
+    productoService.getByCodeOrBarcode(requestState).then(data => {
+      setListProducts(prevList => [...prevList, data])
+    }).catch((error) => {
+      console.log(error)
+      Swal.fire('Error', 'No se encontro ningun producto con ese codigo o barcode.', 'error')
+    })
+  }
 
   return (
     <div className='container mx-auto p-5'>
       <h2 className='text-4xl font-medium mb-5'>{nombre} | Nueva venta</h2>
       <div className="lg:flex">
         <div className='w-3/4 me-5'>
-          <Card title='Agregar producto' className="!shadow-none !rounded border mb-5">
-            <div className="flex">
-              <InputText placeholder='Artículo o código de barras' className="p-inputtext-sm w-full !me-3" />
-              <InputText className="p-inputtext-sm !me-3" />
-              <Button label="Agregar" type="submit" size="small" className="hover:!bg-blue-600"></Button>
-            </div>
+          <Card title='Agregar producto' className="!shadow border mb-5">
+            <form onSubmit={handleSearchProduct}>
+              <div className="flex w-full">
+                <InputText name="codigo" placeholder='Artículo o código de barras'
+                  className="flex-auto p-inputtext-sm w-96 !me-3" onChange={onInputChange} required />
+                <Dropdown  name="tipoPrecio" value={tipoPrecio} options={prices} onChange={onDropdownChange} emptyMessage="Sin registros"
+                  className="flex-auto p-inputtext-sm !me-3" placeholder="Selecciona un tipo de precio" aria-required='true' />
+                <Button label="Agregar" type="submit" size="small" className="hover:!bg-blue-600"></Button>
+              </div>
+            </form>
           </Card>
-          <Card title='Productos' className="!shadow-none !rounded border mb-5">
-            <DataTable editMode="cell" tableStyle={{ minWidth: '50rem' }}
+          <Card title='Productos' className="!shadow border mb-5">
+            <DataTable value={listProducts} editMode="cell" tableStyle={{ minWidth: '50rem' }}
               emptyMessage="No se agregaron productos a la venta" size="small">
-              <Column header="Código" style={{ width: '15%' }}></Column>
-              <Column header="Descripción" style={{ width: '30%' }}></Column>
-              <Column header="Precio unitario" style={{ width: '15%' }}></Column>
-              <Column header="Cantidad" style={{ width: '10%' }}></Column>
-              <Column header="Stock" style={{ width: '10%' }}></Column>
-              <Column header="Subtotal" style={{ width: '15%' }}></Column>
+              <Column field='code' header="Código" style={{ width: '15%' }}></Column>
+              <Column field='description' header="Descripción" style={{ width: '30%' }}></Column>
+              <Column field='price' header="Precio unitario" style={{ width: '15%' }}></Column>
+              <Column field='' header="Cantidad" style={{ width: '10%' }}></Column>
+              <Column field='stock' header="Stock" style={{ width: '10%' }}></Column>
+              <Column field='' header="Subtotal" style={{ width: '15%' }}></Column>
               <Column header="Borrar" style={{ width: '5%' }}></Column>
             </DataTable>
           </Card>
-          <Card title='Resumen de cuenta' className="!shadow-none !rounded border">
+          <Card title='Resumen de cuenta' className="!shadow border">
             <div className="flex rounded p-5 bg-gray-100">
               <div className="flex-1 me-5">
                 <InputTextarea rows={7} placeholder='Nota interna (Opcional)' className="w-full"></InputTextarea>
@@ -67,7 +104,7 @@ export const RegistrarVentaPagina = () => {
             </div>
           </Card>
         </div>
-        <Card className="w-1/4 !shadow-lg !rounded border h-full">
+        <Card className="w-1/4 !shadow border h-full">
           <div className="bg-blue-500 mb-5 p-4 rounded-t">
             <h3 className="text-white font-medium text-xl mb-0">Información de pago</h3>
           </div>

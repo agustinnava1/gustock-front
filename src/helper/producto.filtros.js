@@ -10,7 +10,7 @@ function ProductFilters() {
   const [listQuantities, setListQuantities] = useState([10, 20, 30, 40, 50, "TODOS"]);
 
   useEffect(() => {
-    const fetchProveedores = ProveedorServicio.listar().then((res) => setListProviders(res));
+    const fetchProveedores = ProveedorServicio.getAll().then((res) => setListProviders(res));
     const fetchRubros = RubroService.getAll().then((res) => setListCategories(res));
     const fetchMarcas = MarcaServicio.listar().then((res) => setListBrands(res));
 

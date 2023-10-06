@@ -1,45 +1,39 @@
 import axios from "axios";
 import { BASE_URL, config } from "../helper/AxionHelper";
+import { builderParams } from "../helper/builder.params"
 
-const baseUrl = BASE_URL + "/producto";
+const baseUrl = BASE_URL + "/product";
 
-class ProductoService {
+class ProductService {
+
+    create(product) { return axios.post(baseUrl + "/", product, config).then(res => res.data) }
+
+    update(product) { return axios.put(baseUrl + "/" + product.id, product, config).then(res => res.data) }
+
+    delete(id) { return axios.delete(baseUrl + "/" + id, config).then(res => res.data) }
 
     getById(id) { return axios.get(baseUrl + "/" + id, config).then(res => res.data) }
 
-    save(producto) { return axios.post(baseUrl + "/crear", producto, config).then(res => res.data) }
-
-    update(producto) { return axios.put(baseUrl + "/modificar/" + producto.id, producto, config).then(res => res.data) }
-
-    delete(id) { return axios.delete(baseUrl + "/eliminar/" + id, config).then(res => res.data) }
-
-    getAll(pagination) {
-        const params = Object.keys(pagination)
-            .filter(key => pagination[key] !== null)
-            .map(key => `${key}=${pagination[key]}`)
-            .join('&');
-
-        return axios.get(baseUrl + "/listar?" + params, config).then(res => res.data)
+    getByCodeOrBarcode(request) { 
+        const params = builderParams(request)
+        return axios.get(baseUrl + "/search/code?" + params, config).then(res => res.data) 
     }
 
-    getAllWithStock(pagination) {
-        const params = Object.keys(pagination)
-            .filter(key => pagination[key] !== null)
-            .map(key => `${key}=${pagination[key]}`)
-            .join('&');
-
-        return axios.get(baseUrl + "/listar/stock?" + params, config).then(res => res.data)
+    getAllByFilters(request) {
+        const params = builderParams(request)
+        return axios.get(baseUrl + "/list?" + params, config).then(res => res.data)
     }
 
-    getAllByCriteria(pagination) {
-        const params = Object.keys(pagination)
-            .filter(key => pagination[key] !== null)
-            .map(key => `${key}=${pagination[key]}`)
-            .join('&');
+    getAllWithStock(request) {
+        const params = builderParams(request)
+        return axios.get(baseUrl + "/list/stock?" + params, config).then(res => res.data)
+    }
 
-        return axios.get(baseUrl + "/buscar?" + params, config).then(res => res.data)
+    getAllByCriteria(request) {
+        const params = builderParams(request)
+        return axios.get(baseUrl + "/search?" + params, config).then(res => res.data)
     }
 
 }
 
-export default new ProductoService();
+export default new ProductService();

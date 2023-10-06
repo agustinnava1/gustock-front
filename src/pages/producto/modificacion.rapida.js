@@ -13,51 +13,50 @@ import { usePagination } from '../../hooks/use.paginacion'
 import { formatCurrency, formatDate } from '../../helper/format'
 
 import ProductFilters from '../../helper/producto.filtros'
-import ProductoService from '../../services/producto.servicio'
+import ProductService from '../../services/producto.servicio'
 
 export const ProductosModificacionRapida = () => {
   const initialPagination = {
-    pagina: 0,
-    cantidad: 10,
-    marca: null,
-    rubro: null,
-    proveedor: null,
+    page: 0,
+    recordsQuantity: 10,
+    brand: null,
+    category: null,
+    provider: null,
   }
 
   const [rows, setRows] = useState(10)
   const [first, setFirst] = useState(0)
-  const [totalStock, setTotalStock] = useState(0)
   const [listProducts, setListProducts] = useState([])
   const [totalElements, setTotalElements] = useState(null)
   const [selectedProducts, setSelectedProducts] = useState([])
 
   const { paginationState, onDropdownChange } = usePagination(initialPagination)
-  const { proveedor, rubro, marca, cantidad } = paginationState
+  const { provider, category, brand, recordsQuantity } = paginationState
 
   const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters();
 
   const [option, setOption] = useState(null)
 
   useEffect(() => {
-    ProductoService.getAll(paginationState).then(data => {
+    ProductService.getAllByFilters(paginationState).then(data => {
       setListProducts(data.content)
       setTotalElements(data.totalElements)
     })
   }, [])
 
   const generateRequest = (paginationState, page) => {
-    const request = { ...paginationState, pagina: page || 0 };
+    const request = { ...paginationState, page: page || 0 };
 
-    if (marca !== null) {
-      request.marca = marca.descripcion;
+    if (brand !== null) {
+      request.brand = brand.descripcion;
     }
 
-    if (rubro !== null) {
-      request.rubro = rubro.descripcion;
+    if (category !== null) {
+      request.category = category.descripcion;
     }
 
-    if (proveedor !== null) {
-      request.proveedor = proveedor.razonSocial;
+    if (provider !== null) {
+      request.provider = provider.razonSocial;
     }
 
     return request;
@@ -65,12 +64,12 @@ export const ProductosModificacionRapida = () => {
 
   const filter = () => {
     setFirst(0)
-    setRows(cantidad)
+    setRows(recordsQuantity)
 
     const request = generateRequest(paginationState)
 
-    ProductoService.getAll(request).then(data => {
-      setListProducts(data.listItems)
+    ProductService.getAllByFilters(request).then(data => {
+      setListProducts(data.content)
       setTotalElements(data.totalElements)
     })
   }
@@ -81,8 +80,8 @@ export const ProductosModificacionRapida = () => {
 
     const request = generateRequest(paginationState, event.page)
 
-    ProductoService.getAll(request).then(data => {
-      setListProducts(data.listItems)
+    ProductService.getAllByFilters(request).then(data => {
+      setListProducts(data.content)
     })
   }
 
@@ -126,25 +125,25 @@ export const ProductosModificacionRapida = () => {
               <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
                 <label className='block font-medium text-lg mb-2'>Proveedor</label>
                 <Dropdown options={listProviders} optionLabel='razonSocial' filter
-                  name='proveedor' value={proveedor} onChange={onDropdownChange} emptyMessage='Sin registros'
+                  name='provider' value={provider} onChange={onDropdownChange} emptyMessage='Sin registros'
                   placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
                 <label className='block font-medium text-lg mb-2'>Rubro</label>
                 <Dropdown options={listCategories} optionLabel='descripcion' filter
-                  name='rubro' value={rubro} onChange={onDropdownChange} emptyMessage='Sin registros'
+                  name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
                   placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
                 <label className='block font-medium text-lg mb-2'>Marca</label>
                 <Dropdown options={listBrands} optionLabel='descripcion' filter
-                  name='marca' value={marca} onChange={onDropdownChange} emptyMessage='Sin registros'
+                  name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
                   placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
               </div>
               <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
                 <label className='block font-medium text-lg mb-2'>Cantidad</label>
                 <Dropdown options={listQuantities}
-                  name='cantidad' value={cantidad} onChange={onDropdownChange} emptyMessage="Sin registros"
+                  name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
                   placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
               </div>
               <div className='me-3'>
