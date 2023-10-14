@@ -20,7 +20,8 @@ h1, h2, label{
 }
 
 .p-datatable .p-datatable-thead > tr > th{
-  background-color: #EFF7FF!important;
+  color: white!important;
+  background-color: #2493D8!important;
 }
 
 .p-panel.p-panel-toggleable .p-panel-header {
@@ -31,7 +32,7 @@ h1, h2, label{
 .p-panel .p-panel-header .p-panel-title{
   font-size: 1.5rem!important;
   font-weight: 700!important;
-  color: rgb(59 130 246)!important;
+  color: #1764C6!important;
 }
 
 .hover-scale {
@@ -45,4 +46,16 @@ h1, h2, label{
 
 .p-accordion .p-accordion-header .p-accordion-header-link{
   background-color: white!important;
+}
+
+.p-button-danger{
+  color: #1764c6!important;
+  background-color: #c6ddf0!important;
+  border: 1px solid #c6ddf0!important;
+}
+
+.p-button-danger:hover{
+  color: #ffffff!important;
+  background-color: #2493D8!important;
+  border: 1px solid #2493D8!important;
 }

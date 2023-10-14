@@ -170,17 +170,11 @@ export const ProductosPagina = () => {
         <DataTable value={listProducts} stripedRows emptyMessage='No se encontraron resultados' size='small'>
           <Column field='codigo' header='Código' style={{ width: '10%' }}></Column>
           <Column field='descripcion' header='Descripción' style={{ width: '30%' }}></Column>
-          <Column field='precioEfectivo' header='Efectivo' style={{ width: '10%' }}
-            body={(rowData) => rowData.precioEfectivo ? formatCurrency(rowData.precioEfectivo) : '$ 0'}>
-          </Column>
-          <Column field='precioDebito' header='Débito' style={{ width: '10%' }}
-            body={(rowData) => rowData.precioDebito ? formatCurrency(rowData.precioDebito) : '$ 0'}>
-          </Column>
-          <Column field='precioCredito' header='Crédito' style={{ width: '10%' }}
-            body={(rowData) => rowData.precioCredito ? formatCurrency(rowData.precioCredito) : '$ 0'}>
-          </Column>
+          <Column field={(rowData) => formatCurrency(rowData.precioEfectivo)} header='Efectivo' style={{ width: '10%' }} />
+          <Column field={(rowData) => formatCurrency(rowData.precioDebito)} header='Débito' style={{ width: '10%' }} />
+          <Column field={(rowData) => formatCurrency(rowData.precioCredito)} header='Crédito' style={{ width: '10%' }} />
           <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '10%' }}
-            body={(rowData) => rowData.ultActPrecio ? formatDate(rowData.ultActPrecio) : ''}></Column>
+            body={(rowData) => rowData.ultActPrecio ? formatDate(rowData.ultActPrecio) : '-'}></Column>
           <Column header='Acciones' alignHeader={'center'} style={{ width: '10%' }}
             body={(rowData) => (
               <div className='flex justify-center'>

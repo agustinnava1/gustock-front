@@ -16,7 +16,7 @@ class ProductService {
 
     getByCodeOrBarcode(request) { 
         const params = builderParams(request)
-        return axios.get(baseUrl + "/search/code?" + params, config).then(res => res.data) 
+        return axios.get(baseUrl + "/code?" + params, config).then(res => res.data) 
     }
 
     getAllByFilters(request) {
@@ -26,13 +26,15 @@ class ProductService {
 
     getAllWithStock(request) {
         const params = builderParams(request)
-        return axios.get(baseUrl + "/list/stock?" + params, config).then(res => res.data)
+        return axios.get(baseUrl + "/stock?" + params, config).then(res => res.data)
     }
 
     getAllByCriteria(request) {
         const params = builderParams(request)
         return axios.get(baseUrl + "/search?" + params, config).then(res => res.data)
     }
+
+    updatePrices(request) { return axios.put(baseUrl + "/update/prices", request, config).then(res => res.data) }
 
 }
 

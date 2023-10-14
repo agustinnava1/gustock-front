@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import { Button } from 'primereact/button'
 import { useEffect, useState } from 'react'
 
-import LocalServicio from '../services/local.servicio'
+import LocalService from '../services/local.servicio'
 
 export const AdminPagina = () => {
   const [sucursales, setSucursales] = useState([]);
 
   useEffect(() => {
-    LocalServicio.listar().then(data => {
+    LocalService.getAll().then(data => {
       setSucursales(data)
     })
   }, [])

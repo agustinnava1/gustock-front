@@ -1,13 +1,14 @@
 import { Card } from 'primereact/card'
+import { Panel } from 'primereact/panel'
+import { Column } from 'primereact/column'
 import { useEffect, useState } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams } from 'react-router-dom'
+import { DataTable } from 'primereact/datatable'
+
 import { formatCurrency, formatDateTime } from '../../helper/format'
 
-import StockServicio from '../../services/stock.servicio'
-import ProductoServicio from '../../services/producto.servicio'
-import { Panel } from 'primereact/panel'
-import { DataTable } from 'primereact/datatable'
-import { Column } from 'primereact/column'
+import StockService from '../../services/stock.servicio'
+import ProductService from '../../services/producto.servicio'
 
 export const ProductoDetalle = () => {
   const { id } = useParams();
@@ -19,16 +20,16 @@ export const ProductoDetalle = () => {
   const [fichaTecnica, setFichaTecnica] = useState([])
 
   useEffect(() => {
-    cargarProducto()
+    load()
   }, []);
 
-  const cargarProducto = () => {
-    ProductoServicio.getById(id).then(data => {
+  const load = () => {
+    ProductService.getById(id).then(data => {
       setProducto(data);
       setFichaTecnica(data.fichaTecnica);
     })
 
-    StockServicio.getAllByProductId(id).then(data => {
+    StockService.getAllByProductId(id).then(data => {
       setStocks(data);
       console.log(data)
     })
@@ -44,19 +45,19 @@ export const ProductoDetalle = () => {
   };
 
   return (
-    <div className='container mx-auto px-5 pb-5 2xl:px-44'>
-      <h2 className='text-4xl !text-white text-center bg-blue-600 py-4 font-medium rounded-b-[80px]'>{producto.descripcion}</h2>
+    <div className='container mx-auto px-5 pb-5 2xl:px-52'>
+
       <div className='lg:flex justify-between mt-5'>
-        <div className='lg:w-1/2 mb-5'>
-          <Card className='!rounded !shadow-lg mb-5 border'>
+        <div className='lg:w-1/2'>
+          <Card className='!shadow mb-5 border'>
             <img src='/producto-sin-foto.jpg' class="mx-auto w-[535px] max-h-[430px]"></img>
           </Card>
-          <Panel header="Código de barras" className='!bg-white-100 !rounded-lg !shadow-md mb-5' toggleable>
-            <p>Hola mundo</p>
+          <Panel header="Código de barras" className='!shadow mb-5' collapsed='true' toggleable>
+           
           </Panel>
         </div>
         <div className='lg:w-1/2 lg:ml-5'>
-          <Card title='Características' subTitle={`Código: ${producto.codigo}`} className='!rounded-lg !shadow-md mb-5'>
+          <Card title={`${producto.descripcion}`} subTitle={`Código: ${producto.codigo}`} className='!shadow border mb-5'>
             <table class="min-w-full border text-sm mb-5">
               <thead class="bg-[#efefef] border-b">
                 <tr><th colSpan={2} class="text-start p-2">Lista de precios</th></tr>
@@ -115,7 +116,7 @@ export const ProductoDetalle = () => {
               </tbody>
             </table>
           </Card>
-          <Panel header="Ficha Técnica" className='!bg-white-100 !rounded-lg !shadow-md mb-5' toggleable>
+          <Panel header="Ficha Técnica" className='!shadow mb-5' collapsed='true' toggleable>
             <table className="table w-full">
               <tbody>
                 {[
@@ -145,7 +146,7 @@ export const ProductoDetalle = () => {
           </Panel>
         </div>
       </div>
-      <Card title='Stock disponible en sucursales' className='!rounded-lg !shadow-md'>
+      <Card title='Stock disponible en sucursales' className='!shadow border'>
         <DataTable value={stocks} stripedRows emptyMessage='No se encontraron unidades' size='small'>
           <Column field={(rowData) => (rowData.local.nombre) + " - " + (rowData.local.direccion)} header='Sucursal' style={{ width: '33%' }}></Column>
           <Column field={(rowData) => (rowData.cantidad) + " unidades"} header='Cantidad' style={{ width: '33%' }}></Column>

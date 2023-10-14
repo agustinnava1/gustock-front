@@ -34,7 +34,7 @@ export const ProductosModificacionMasiva = () => {
   const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters();
 
   useEffect(() => {
-    ProductoService.getAll(paginationState).then(data => {
+    ProductoService.getAllByFilters(paginationState).then(data => {
       setListProducts(data.content)
       setTotalElements(data.totalElements)
     })
@@ -64,7 +64,7 @@ export const ProductosModificacionMasiva = () => {
 
     const request = generateRequest(paginationState)
 
-    ProductoService.getAll(request).then(data => {
+    ProductoService.getAllByFilters(request).then(data => {
       setListProducts(data.listItems)
       setTotalElements(data.totalElements)
     })
@@ -76,7 +76,7 @@ export const ProductosModificacionMasiva = () => {
 
     const request = generateRequest(paginationState, event.page)
 
-    ProductoService.getAll(request).then(data => {
+    ProductoService.getAllByFilters(request).then(data => {
       setListProducts(data.listItems)
     })
   }
@@ -187,7 +187,7 @@ export const ProductosModificacionMasiva = () => {
           <Column field="codigo" header="Código" style={{ width: '10%' }}></Column>
 
           {columns.map(({ field, header }) => {
-            return <Column key={field} field={field} header={header} style={{ width: '25%' }}
+            return <Column key={field} field={field} header={header} style={{ width: '20%' }}
               body={field.includes('precio') && formatCurrency()}
               editor={(opciones) => editarCelda(opciones)} onCellEditComplete={onCellEditComplete} />
           })}

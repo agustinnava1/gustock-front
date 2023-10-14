@@ -8,10 +8,12 @@ import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
 import { RadioButton } from 'primereact/radiobutton'
 import { InputNumber } from 'primereact/inputnumber'
+
 import { usePagination } from '../../hooks/use.paginacion'
 
 import { formatCurrency, formatDate } from '../../helper/format'
 
+import Swal from 'sweetalert2'
 import ProductFilters from '../../helper/producto.filtros'
 import ProductService from '../../services/producto.servicio'
 
@@ -35,7 +37,11 @@ export const ProductosModificacionRapida = () => {
 
   const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters();
 
+  /* Params request to update prices */
   const [option, setOption] = useState(null)
+  const [pctDebit, setPctDebit] = useState(null)
+  const [pctCredit, setPctCredit] = useState(null)
+  const [pctEffective, setPctEffective] = useState(null)
 
   useEffect(() => {
     ProductService.getAllByFilters(paginationState).then(data => {
@@ -85,6 +91,24 @@ export const ProductosModificacionRapida = () => {
     })
   }
 
+  const handleUpdatePrices = () => {
+    const selectedProductIds = selectedProducts.map(product => product.id);
+    const request = {
+      productsIds: selectedProductIds,
+      action: option,
+      pctEffective: pctEffective,
+      pctDebit: pctDebit,
+      pctCredit: pctCredit
+    }
+
+    ProductService.updatePrices(request).then(data => {
+      filter()
+      Swal.fire('Actualizado', 'Se han actualizado ' + data + ' productos con éxito.', 'success')
+    }).catch((error) => {
+      Swal.fire('Error', 'Hubo un problema al intentar actualizar los productos. Por favor, inténtalo de nuevo más tarde.', 'error')
+    })
+  }
+
   return (
     <div className='m-5'>
       <h2 className='sm:text-4xl text-5xl font-medium mb-3'>Actualización rápida de precios</h2>
@@ -92,32 +116,35 @@ export const ProductosModificacionRapida = () => {
       <div className='flex'>
         <Card title='Parámetros' subTitle='Defina un porcentaje y luego seleccione que tipo de acción desea realizar'
           className='w-1/6 h-full !shadow border mt-5'>
-          <div>
-            <div className='mb-3'>
-              <label className='block font-medium mb-3'>Efectivo</label>
-              <InputNumber className='p-inputtext-sm w-full' suffix="%"></InputNumber>
+            <div>
+              <div className='mb-3'>
+                <label className='block font-medium mb-3'>Efectivo</label>
+                <InputNumber name='pctEffective' className='p-inputtext-sm w-full' suffix="%"
+                  value={pctEffective} onChange={(e) => setPctEffective(e.value)} />
+              </div>
+              <div className='mb-3'>
+                <label className='block font-medium mb-3'>Débito</label>
+                <InputNumber name='pctDebit' className='p-inputtext-sm w-full' suffix="%"
+                  value={pctDebit} onChange={(e) => setPctDebit(e.value)} />
+              </div>
+              <div className='mb-3'>
+                <label className='block font-medium mb-3'>Crédito</label>
+                <InputNumber name='pctCredit' className='p-inputtext-sm w-full' suffix="%"
+                  value={pctCredit} onChange={(e) => setPctCredit(e.value)} />
+              </div>
             </div>
-            <div className='mb-3'>
-              <label className='block font-medium mb-3'>Débito</label>
-              <InputNumber className='p-inputtext-sm w-full' suffix="%"></InputNumber>
+            <hr className='my-5'></hr>
+            <div className='mb-5'>
+              <div className='flex align-items-center mb-5'>
+                <RadioButton inputId='increase' value='increase' onChange={(e) => setOption(e.value)} checked={option === 'increase'} />
+                <label htmlFor='increase' className="ml-2">Aumentar</label>
+              </div>
+              <div className='flex align-items-center'>
+                <RadioButton inputId='decrease' value='decrease' onChange={(e) => setOption(e.value)} checked={option === 'decrease'} />
+                <label htmlFor='decrease' className='ml-2'>Disminuir</label>
+              </div>
             </div>
-            <div className='mb-3'>
-              <label className='block font-medium mb-3'>Crédito</label>
-              <InputNumber className='p-inputtext-sm w-full' suffix="%"></InputNumber>
-            </div>
-          </div>
-          <hr className='my-5'></hr>
-          <div className='mb-5'>
-            <div className='flex align-items-center mb-5'>
-              <RadioButton inputId='aumentar' name='aumentar' value='aumentar' onChange={(e) => setOption(e.value)} checked={option === 'aumentar'} />
-              <label htmlFor='aumentar' className="ml-2">Aumentar</label>
-            </div>
-            <div className='flex align-items-center'>
-              <RadioButton inputId='disminuir' name='disminuir' value='disminuir' onChange={(e) => setOption(e.value)} checked={option === 'disminuir'} />
-              <label htmlFor='disminuir' className='ml-2'>Disminuir</label>
-            </div>
-          </div>
-          <Button label='Grabar' className='w-full hover:!bg-blue-600' size='small'></Button>
+            <Button label='Grabar' onClick={handleUpdatePrices} className='w-full hover:!bg-blue-600' size='small'></Button>
         </Card>
         <div className='w-5/6 ms-5 mt-5'>
           <Card className='!shadow border mb-5'>
@@ -157,22 +184,17 @@ export const ProductosModificacionRapida = () => {
             </div>
           </Card>
           <Card className='!shadow border'>
-            <DataTable value={listProducts} selectionMode={'checkbox'}
+            <DataTable value={listProducts} selectionMode={'checkbox'} emptyMessage="No se encontraron productos"
               selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id" >
-              <Column selectionMode='multiple' style={{ width: '5%' }}></Column>
-              <Column field='codigo' header='Código' style={{ width: '10%' }}></Column>
-              <Column field='descripcion' header='Descripción' style={{ width: '40%' }}></Column>
-              <Column field='precioEfectivo' header='Efectivo' style={{ width: '10%' }}
-                body={(rowData) => rowData.precioEfectivo ? formatCurrency(rowData.precioEfectivo) : ''}>
-              </Column>
-              <Column field='precioDebito' header='Débito' style={{ width: '10%' }}
-                body={(rowData) => rowData.precioDebito ? formatCurrency(rowData.precioDebito) : ''}>
-              </Column>
-              <Column field='precioCredito' header='Crédito' style={{ width: '10%' }}
-                body={(rowData) => rowData.precioCredito ? formatCurrency(rowData.precioCredito) : ''}>
-              </Column>
+              <Column selectionMode='multiple' style={{ width: '5%' }} />
+              <Column field="id" header="ID" style={{ width: '10%' }} />
+              <Column field='codigo' header='Código' style={{ width: '10%' }} />
+              <Column field='descripcion' header='Descripción' style={{ width: '35%' }} />
+              <Column field={(rowData) => formatCurrency(rowData.precioEfectivo)} header='Efectivo' style={{ width: '10%' }} />
+              <Column field={(rowData) => formatCurrency(rowData.precioDebito)} header='Débito' style={{ width: '10%' }} />
+              <Column field={(rowData) => formatCurrency(rowData.precioCredito)} header='Crédito' style={{ width: '10%' }} />
               <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '15%' }}
-                body={(rowData) => rowData.ultActPrecio ? formatDate(rowData.ultActPrecio) : ''}></Column>
+                body={(rowData) => rowData.ultActPrecio ? formatDate(rowData.ultActPrecio) : ''} />
             </DataTable>
             <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
               onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
