@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Card } from 'primereact/card'
 import { Link } from "react-router-dom"
@@ -7,7 +7,6 @@ import { Column } from 'primereact/column'
 import { Dropdown } from 'primereact/dropdown'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
-import { TieredMenu } from 'primereact/tieredmenu'
 import { usePagination } from '../../hooks/use.paginacion'
 
 import { formatDate, formatCurrency } from "../../helper/format"
@@ -19,10 +18,10 @@ import ProductService from '../../services/producto.servicio'
 export const ProductosPagina = () => {
   const initialPagination = {
     page: 0,
-    recordsQuantity: 10,
     brand: null,
     category: null,
     provider: null,
+    recordsQuantity: 10
   }
 
   const [rows, setRows] = useState(10)
@@ -33,7 +32,7 @@ export const ProductosPagina = () => {
   const { paginationState, onDropdownChange } = usePagination(initialPagination)
   const { provider, category, brand, recordsQuantity } = paginationState
 
-  const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters();
+  const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters()
 
   useEffect(() => {
     ProductService.getAllByFilters(paginationState).then(data => {
@@ -43,39 +42,16 @@ export const ProductosPagina = () => {
   }, [])
 
   const generateRequest = (paginationState, page) => {
-    const request = { ...paginationState, page: page || 0 };
-
-    if (brand !== null) {
-      request.brand = brand.descripcion;
+    const request = { 
+      ...paginationState, 
+      page: page || 0,
+      brand: brand?.descripcion,
+      category: category?.descripcion,
+      provider: provider?.razonSocial,
     }
 
-    if (category !== null) {
-      request.category = category.descripcion;
-    }
-
-    if (provider !== null) {
-      request.provider = provider.razonSocial;
-    }
-
-    return request;
+    return request
   }
-
-  const menu = useRef(null);
-
-  const items = [
-    {
-      label: 'Agregar producto',
-      url: '/producto/registrar',
-    },
-    {
-      label: 'Modificación rápida',
-      url: '/productos/modificacion/rapida',
-    },
-    {
-      label: 'Modificación masiva',
-      url: '/productos/modificacion/masiva',
-    },
-  ];
 
   const filter = () => {
     setFirst(0)
@@ -103,7 +79,7 @@ export const ProductosPagina = () => {
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "Se eliminará el producto del sistema de manera permanente, esto no afectará a las ventas registradas sobre este mismo.",
+      text: "Se eliminará el producto del sistema de manera permanente, esto no afectará a las ventas registradas.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -114,12 +90,12 @@ export const ProductosPagina = () => {
       if (result.isConfirmed) {
         ProductService.delete(id)
           .then((data) => {
-            setListProducts(listProducts.filter((product) => product.id !== id));
-            Swal.fire('Eliminado', 'El producto ' + data + ' ha sido eliminado del sistema con éxito.', 'success');
+            setListProducts(listProducts.filter((product) => product.id !== id))
+            Swal.fire('Eliminado', 'El producto "' + data + '" ha sido eliminado del sistema con éxito.', 'success')
           })
           .catch((error) => {
-            Swal.fire('Error', 'Hubo un problema al eliminar el producto. Por favor, inténtalo de nuevo más tarde.', 'error');
-          });
+            Swal.fire('Error', 'Hubo un problema al eliminar el producto. Por favor, inténtalo de nuevo más tarde.', 'error')
+          })
       }
     })
   }
@@ -127,7 +103,7 @@ export const ProductosPagina = () => {
   return (
     <div className='p-5'>
       <h2 className='text-4xl font-medium mb-3'>Mis productos</h2>
-      <span className='text-xl font-normal'>Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema</span>
+      <span className='text-xl font-normal'>Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema.</span>
       <Card className='!shadow border my-5'>
         <div className='flex flex-wrap'>
           <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
@@ -151,7 +127,7 @@ export const ProductosPagina = () => {
           <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
             <label className='block font-medium text-lg mb-2'>Cantidad</label>
             <Dropdown options={listQuantities}
-              name='quantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
+              name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
               placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
           </div>
           <div className='me-3'>
@@ -160,36 +136,34 @@ export const ProductosPagina = () => {
           </div>
           <div>
             <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
-            <Button label='Opciones' iconPos='right' icon='pi pi-caret-down' className='hover:!bg-blue-600'
-              onClick={(e) => menu.current.toggle(e)} size='small' />
-            <TieredMenu model={items} popup ref={menu} breakpoint="767px" className='m-0 p-0' />
+            <Button label='Exportar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
           </div>
         </div>
       </Card>
       <Card className='!shadow border mt-5'>
         <DataTable value={listProducts} stripedRows emptyMessage='No se encontraron resultados' size='small'>
-          <Column field='codigo' header='Código' style={{ width: '10%' }}></Column>
-          <Column field='descripcion' header='Descripción' style={{ width: '30%' }}></Column>
-          <Column field={(rowData) => formatCurrency(rowData.precioEfectivo)} header='Efectivo' style={{ width: '10%' }} />
-          <Column field={(rowData) => formatCurrency(rowData.precioDebito)} header='Débito' style={{ width: '10%' }} />
-          <Column field={(rowData) => formatCurrency(rowData.precioCredito)} header='Crédito' style={{ width: '10%' }} />
+          <Column field='code' header='Código' className='rounded-tl-lg' style={{ width: '10%' }}></Column>
+          <Column field='description' header='Descripción' style={{ width: '30%' }}></Column>
+          <Column field={(rowData) => formatCurrency(rowData.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
+          <Column field={(rowData) => formatCurrency(rowData.priceDebit)} header='Débito' style={{ width: '10%' }} />
+          <Column field={(rowData) => formatCurrency(rowData.priceCredit)} header='Crédito' style={{ width: '10%' }} />
           <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '10%' }}
-            body={(rowData) => rowData.ultActPrecio ? formatDate(rowData.ultActPrecio) : '-'}></Column>
-          <Column header='Acciones' alignHeader={'center'} style={{ width: '10%' }}
+            body={(rowData) => rowData.lastPrice ? formatDate(rowData.lastPrice) : '-'}></Column>
+          <Column header='Acciones' className='rounded-tr-lg' alignHeader={'center'} style={{ width: '10%' }}
             body={(rowData) => (
               <div className='flex justify-center'>
-                <Link to={`/producto/detalle/${rowData.id}`} className='me-3'>
+                <Link to={`/producto/detalle/${rowData.idProduct}`} className='me-3'>
                   <button className='bg-blue-500 rounded text-xl text-white px-2 py-1'>
                     <i className='bi bi-eye-fill'></i>
                   </button>
                 </Link>
-                <Link to={`/producto/modificar/${rowData.id}`} className='me-3'>
+                <Link to={`/producto/modificar/${rowData.idProduct}`} className='me-3'>
                   <button className='bg-yellow-500 rounded text-xl text-white px-2 py-1'>
                     <i className='bi bi-pencil-fill'></i>
                   </button>
                 </Link>
                 <button className='bg-red-500 rounded text-xl text-white px-2 py-1'
-                  onClick={() => handleDelete(rowData.id)} >
+                  onClick={() => handleDelete(rowData.idProduct)} >
                   <i className='bi bi-trash-fill'></i>
                 </button>
               </div>

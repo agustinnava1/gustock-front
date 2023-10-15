@@ -111,20 +111,17 @@ export const RegistrarVentaPagina = () => {
           <div class="flex items-center justify-between mb-3">
             <span className="text-lg font-semibold">Contado</span>
             <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10} className="p-inputtext-sm"
-              minFractionDigits={0}
-              maxFractionDigits={0} />
+              minFractionDigits={0} maxFractionDigits={0} />
           </div>
           <div class="flex items-center justify-between mb-3">
             <span className="text-lg font-semibold">Débito</span>
             <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10} className="p-inputtext-sm"
-              minFractionDigits={0}
-              maxFractionDigits={0} />
+              minFractionDigits={0} maxFractionDigits={0} />
           </div>
           <div class="flex items-center justify-between">
             <span className="text-lg font-semibold">Código QR</span>
             <InputNumber inputId="currency-ars" mode="currency" currency="ARS" locale="es-AR" size={10} className="p-inputtext-sm"
-              minFractionDigits={0}
-              maxFractionDigits={0} />
+              minFractionDigits={0} maxFractionDigits={0} />
           </div>
           <Divider />
           <div class="flex items-center justify-between mb-3">

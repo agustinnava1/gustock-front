@@ -1,16 +1,40 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+
+import { Button } from 'react-bootstrap'
 import { AppRouter } from '../router/AppRouter'
+import { TieredMenu } from 'primereact/tieredmenu'
 import { NavLink, useLocation } from 'react-router-dom'
 
 import Header from '../components/header.component'
 import { SearchComponent } from '../components/search.component'
 import Sidebar, { SidebarItem } from '../components/sidebar.component'
+
 import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings, Search, LogOut } from 'lucide-react';
 
 export const Home = () => {
   const location = useLocation()
 
   const [showSearch, setShowSearch] = useState(false)
+
+  const productMenu = useRef(null);
+  const productItems = [
+    {
+      label: 'Ver productos',
+      url: '/productos',
+    },
+    {
+      label: 'Agregar producto',
+      url: '/producto/registrar',
+    },
+    {
+      label: 'Modificación rápida',
+      url: '/productos/modificacion/rapida',
+    },
+    {
+      label: 'Modificación masiva',
+      url: '/productos/modificacion/masiva',
+    },
+  ];
 
   return (
     <div className="flex">
@@ -24,9 +48,16 @@ export const Home = () => {
         <NavLink className="text-decoration-none" to={"/venta/historial"}>
           <SidebarItem icon={<ShoppingCart size={20} />} text="Ventas" active={location.pathname === '/ventas'} />
         </NavLink>
-        <NavLink className="text-decoration-none" to={"/productos"}>
-          <SidebarItem icon={<Package size={20} />} text="Productos" active={location.pathname === '/productos'} />
-        </NavLink>
+
+        <Button className="text-start text-decoration-none" onClick={(e) => productMenu.current.toggle(e)} >
+          <SidebarItem icon={<Package size={20} />} text="Productos"
+            active={location.pathname === '/productos' ||
+                    location.pathname === '/producto/registrar' || 
+                    location.pathname === '/productos/modificacion/rapida' || 
+                    location.pathname === '/productos/modificacion/masiva'} />
+          <TieredMenu model={productItems} popup ref={productMenu} breakpoint="767px" className='m-0 p-0' />
+        </Button>
+
         <NavLink className="text-decoration-none" to={"/reposicion"}>
           <SidebarItem icon={<Clipboard size={20} />} text="Reposición" active={location.pathname === '/reposicion'} />
         </NavLink>

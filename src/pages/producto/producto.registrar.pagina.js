@@ -102,7 +102,7 @@ export const ProductoRegistrar = () => {
   }
 
   const deleteBarcode = () => {
-    setBarcodeValue("")
+    setBarcodeValue(null)
     document.getElementById("barcode-svg").innerHTML = ""
   }
 
