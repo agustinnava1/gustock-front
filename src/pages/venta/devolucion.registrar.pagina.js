@@ -10,11 +10,11 @@ import { useParams } from "react-router-dom"
 import { RadioButton } from "primereact/radiobutton"
 
 export const RegistrarDevolucionPagina = () => {
-  const { nombre } = useParams()
+  const { name } = useParams()
 
   return (
     <div className='container mx-auto p-5'>
-      <h2 className='text-4xl font-medium mb-5'>{nombre} | Devolución o cambio de producto</h2>
+      <h2 className='text-4xl font-medium mb-5'>{name} | Devolución o cambio de producto</h2>
       <div className="lg:flex">
         <div className='w-3/4 me-5'>
           <Card title='Agregar producto' className="!shadow-none !rounded border mb-5">
@@ -39,25 +39,25 @@ export const RegistrarDevolucionPagina = () => {
           <Card title='Producto/s a devolver' className="!shadow-none !rounded border mb-5">
             <DataTable editMode="cell" tableStyle={{ minWidth: '50rem' }}
               emptyMessage="No se agregaron productos" size="small">
-              <Column header="Código" style={{ width: '15%' }}></Column>
+              <Column header="Código" className="rounded-tl-md" style={{ width: '15%' }}></Column>
               <Column header="Descripción" style={{ width: '30%' }}></Column>
               <Column header="Precio unitario" style={{ width: '15%' }}></Column>
               <Column header="Cantidad" style={{ width: '10%' }}></Column>
               <Column header="Stock" style={{ width: '10%' }}></Column>
               <Column header="Subtotal" style={{ width: '15%' }}></Column>
-              <Column header="Borrar" style={{ width: '5%' }}></Column>
+              <Column header="Borrar" className="rounded-tr-md" style={{ width: '5%' }}></Column>
             </DataTable>
           </Card>
           <Card title='Producto/s a vender' className="!shadow-none !rounded border mb-5">
             <DataTable editMode="cell" tableStyle={{ minWidth: '50rem' }}
               emptyMessage="No se agregaron productos a la venta" size="small">
-              <Column header="Código" style={{ width: '15%' }}></Column>
+              <Column header="Código" className="rounded-tl-md" style={{ width: '15%' }}></Column>
               <Column header="Descripción" style={{ width: '30%' }}></Column>
               <Column header="Precio unitario" style={{ width: '15%' }}></Column>
               <Column header="Cantidad" style={{ width: '10%' }}></Column>
               <Column header="Stock" style={{ width: '10%' }}></Column>
               <Column header="Subtotal" style={{ width: '15%' }}></Column>
-              <Column header="Borrar" style={{ width: '5%' }}></Column>
+              <Column header="Borrar" className="rounded-tr-md" style={{ width: '5%' }}></Column>
             </DataTable>
           </Card>
           <Card title='Resumen de cuenta' className="!shadow-none !rounded border">

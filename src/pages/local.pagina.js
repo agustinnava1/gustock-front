@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Card } from 'primereact/card'
+import { Panel } from 'primereact/panel'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { Calendar } from 'primereact/calendar'
@@ -9,69 +10,89 @@ import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
 import { Link, useParams } from 'react-router-dom'
 
-import Swal from 'sweetalert2';
 import { addLocale } from 'primereact/api'
 import { ChevronDown, Download, Plus } from 'lucide-react'
 import { formatDate, formatCurrency } from '../helper/format'
 import { calendarioEspañol } from '../helper/configuracion.regional'
 
-import LocalServicio from '../services/local.servicio'
+import { usePagination } from '../hooks/use.paginacion'
+
+import Swal from 'sweetalert2'
+
+import ShopService from '../services/local.servicio'
 import StockService from '../services/stock.servicio'
-import { Panel } from 'primereact/panel'
+import ProductFilters from '../helper/producto.filtros'
 
 export const LocalPagina = () => {
-  const { nombre } = useParams()
-  const [local, setLocal] = useState([])
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [listaProductos, setListaProductos] = useState([])
+  const { name } = useParams()
+  const [shop, setShop] = useState([])
 
-  const [proveedor, setProveedor] = useState(null)
-  const [rubro, setRubro] = useState(null)
-  const [marca, setMarca] = useState(null)
-  const [fecha, setFecha] = useState(null)
+  const initialPagination = {
+    page: 0,
+    brand: null,
+    category: null,
+    provider: null,
+    lastUpdate: null,
+    recordsQuantity: 10
+  }
 
-  const [first, setFirst] = useState(0);
-  const [rows, setRows] = useState(10);
+  const [rows, setRows] = useState(10)
+  const [first, setFirst] = useState(0)
+  const [listProducts, setListProducts] = useState([])
+  const [totalElements, setTotalElements] = useState(null)
 
-  const [cantidad, setCantidad] = useState(10)
-  const [totalRegistros, setTotalRegistros] = useState(null)
-  const [paginacionRequest, setPaginacionRequest] = useState({})
+  const { paginationState, handleDate, onDropdownChange } = usePagination(initialPagination)
+  const { provider, category, brand, lastUpdate, recordsQuantity } = paginationState
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded)
-  };
+  const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters()
 
   useEffect(() => {
-    LocalServicio.obtenerPorNombre(nombre).then(data => {
-      setLocal(data)
+    ShopService.getByName(name).then(data => {
+      setShop(data)
     })
 
-    StockService.getByStore(nombre).then(data => {
-      setListaProductos(data.content);
+    StockService.getAllByShop(name, paginationState).then(data => {
+      setListProducts(data.content)
+      setTotalElements(data.totalElements)
+      console.log(data.content)
     })
   }, []);
 
-  const filtrarVentas = () => {
+  const generateRequest = (paginationState, page) => {
+    const request = {
+      ...paginationState,
+      page: page || 0,
+      brand: brand?.descripcion,
+      category: category?.descripcion,
+      provider: provider?.razonSocial,
+    }
+
+    return request
+  }
+
+  const filter = () => {
     setFirst(0)
-    setRows(cantidad)
+    setRows(recordsQuantity)
 
-    const request = { ...paginacionRequest, pagina: 0 }
-    StockService.getByStore(request).then(data => {
-      setListaProductos(data.content)
-      setTotalRegistros(data.totalElements)
+    const request = generateRequest(paginationState)
+
+    StockService.getAllByShop(name, request).then(data => {
+      setListProducts(data.content)
+      console.log(data.content)
+      setTotalElements(data.totalElements)
     })
-  };
+  }
 
-  const cambiarPagina = (event) => {
+  const onPageChange = (event) => {
     setFirst(event.first)
     setRows(event.rows)
 
-    const request = { ...paginacionRequest, pagina: event.page }
-    StockService.getByStore(request).then(data => {
-      setListaProductos(data.content)
-      setTotalRegistros(data.totalElements)
+    const request = generateRequest(paginationState, event.page)
+
+    StockService.getAllByShop(name, request).then(data => {
+      setListProducts(data.content)
     })
-  };
+  }
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -87,11 +108,10 @@ export const LocalPagina = () => {
       if (result.isConfirmed) {
         StockService.delete(id)
           .then((data) => {
-            setListaProductos(listaProductos.filter((stock) => stock.id !== id));
+            setListProducts(listProducts.filter((stock) => stock.id !== id));
             Swal.fire('Eliminado', 'El producto ha sido eliminado del local.', 'success');
           })
           .catch((error) => {
-            console.error('Error deleting product:', error);
             Swal.fire('Error', 'Hubo un problema al eliminar el producto. Por favor, inténtalo de nuevo más tarde.', 'error');
           });
       }
@@ -101,22 +121,22 @@ export const LocalPagina = () => {
   addLocale('es', calendarioEspañol);
 
   return (
-    <div className='lg:flex lg:justify-between p-5'>
+    <div className='lg:flex lg:justify-between gap-5 p-5'>
       <div className='lg:w-1/6'>
         <Card title="Local" className='text-center !shadow border'>
           <div className='p-5'>
-            <h2 className="text-2xl font-bold">{local.nombre}</h2>
-            <p className="text-xl">{local.direccion}</p>
+            <h2 className="text-2xl font-bold">{shop.nombre}</h2>
+            <p className="text-xl">{shop.direccion}</p>
           </div>
         </Card>
-        {local.tipo === 'LOCAL' &&
+        {shop.tipo === 'LOCAL' &&
           <div>
             <Card title="Venta" className='text-center !shadow border mt-5'>
               <div className='p-5'>
-                <Link to={`/local/${local.nombre}/venta/registrar`}>
+                <Link to={`/local/${shop.nombre}/venta/registrar`}>
                   <Button label='Nueva venta' className='hover:!bg-blue-600 !mb-5 w-full' size='small' />
                 </Link>
-                <Link to={`/local/${local.nombre}/devolucion/registrar`}>
+                <Link to={`/local/${shop.nombre}/devolucion/registrar`}>
                   <Button label='Devolución' className='hover:!bg-blue-600 w-full' size='small' />
                 </Link>
               </div>
@@ -127,102 +147,78 @@ export const LocalPagina = () => {
                 <Button label='Cerrar turno' className='hover:!bg-blue-600 w-full' size='small' />
               </div>
             </Card>
-            <Card className='text-center px-5 !shadow border mt-5'>
-              <Button label='Ver caja' className='hover:!bg-blue-600 w-full' size='small' />
-            </Card>
           </div>
         }
       </div>
 
-      <div className='lg:w-5/6 lg:ms-5'>
-        <Card title="Productos" className='!shadow-none border'>
-          <div className='flex justify-between mt-5 mb-5'>
-            <div>
-              <Button label='Filtrar' className='peer hover:!bg-blue-600' size='small' onClick={toggleExpand}>
-                <ChevronDown size={20} className='ms-2' />
-              </Button>
+      <div className='lg:w-5/6'>
+        <Card title="Productos" className='!shadow border'>
+          <div className='flex flex-wrap mb-5'>
+            <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+              <label className='block font-medium text-lg mb-2'>Proveedor</label>
+              <Dropdown options={listProviders} optionLabel='razonSocial' filter
+                name='provider' value={provider} onChange={onDropdownChange} emptyMessage='Sin registros'
+                placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+              <label className='block font-medium text-lg mb-2'>Rubro</label>
+              <Dropdown options={listCategories} optionLabel='descripcion' filter
+                name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
+                placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
+              <label className='block font-medium text-lg mb-2'>Marca</label>
+              <Dropdown options={listBrands} optionLabel='descripcion' filter
+                name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
+                placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto w-32 md:w-36 mr-3 mb-3 lg:mb-0'>
+              <label htmlFor="stock" className='block font-medium text-lg mb-2'>Stock</label>
+              <Dropdown optionLabel="descripcion" className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto w-32 md:w-36 mr-3 mb-3 lg:mb-0'>
+              <label htmlFor="ultPrecio" className='block font-medium text-lg w-full mb-2'>Ult. Precio</label>
+              <Calendar dateFormat="dd/mm/yy" locale="es" placeholder='Selecciona una fecha'
+                name='lastUpdate' onChange={handleDate} className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto w-32 md:w-36 mr-3 mb-3 lg:mb-0'>
+              <label className='block font-medium text-lg mb-2'>Cantidad</label>
+              <Dropdown options={listQuantities}
+                name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
+                placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='mr-3'>
+              <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+              <Button label='Aplicar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
             </div>
             <div>
-              <Button label='Exportar a excel' className='hover:!bg-blue-600 !me-5' size='small'>
+              <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+              <Button label='Exportar' className='hover:!bg-blue-600' size='small'>
                 <Download size={20} className='ms-2' />
               </Button>
-              <Button label='Agregar' className='hover:!bg-blue-600' size='small' >
-                <Plus size={20} className='ms-2' />
-              </Button>
             </div>
           </div>
 
-          <div className={`overflow-hidden transition-all duration-500 max-h-0 peer-pressed:max-h-40 ${isExpanded ? 'max-h-40' : ''}`}>
-            <div className='flex border rounded mb-5 p-5'>
-              <div className='flex-1 me-3'>
-                <label htmlFor="proveedor" className='block font-medium text-lg mb-2'>Proveedor</label>
-                <Dropdown options={''} optionLabel='razonSocial' filter
-                  value={proveedor} onChange={''} emptyMessage='Sin registros'
-                  placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
-              </div>
-              <div className='flex-1 me-3'>
-                <label htmlFor="rubro" className='block font-medium text-lg mb-2'>Rubro</label>
-                <Dropdown options={''} optionLabel='descripcion' filter
-                  value={rubro} onChange={''} emptyMessage='Sin registros'
-                  placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
-              </div>
-              <div className='flex-1 me-3'>
-                <label htmlFor="marca" className='block font-medium text-lg mb-2'>Marca</label>
-                <Dropdown options={''} optionLabel='descripcion' filter
-                  value={marca} onChange={''} emptyMessage='Sin registros'
-                  placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
-              </div>
-              <div className='flex-1 me-3'>
-                <label htmlFor="stock" className='block font-medium text-lg mb-2'>Stock</label>
-                <Dropdown value={rubro} options={''} optionLabel="descripcion" className='p-inputtext-sm w-full'
-                  onChange={(e) => setRubro(e.value)} />
-              </div>
-              <div className='flex-1 me-3'>
-                <label htmlFor="ultPrecio" className='block font-medium text-lg w-full mb-2'>Ult. Precio</label>
-                <Calendar value={fecha} onChange={(e) => setFecha(e.value)} dateFormat="dd/mm/yy" locale="es"
-                  placeholder='Selecciona una fecha' className='p-inputtext-sm' />
-              </div>
-              <div className='flex-1 me-3'>
-                <label htmlFor="cantidad" className='block font-medium text-lg w-full mb-2'>Cantidad</label>
-                <Dropdown options={''}
-                  value={cantidad} onChange={''} emptyMessage="Sin registros"
-                  placeholder='Selecciona la cantidad' className='p-inputtext-sm me-3 w-full' />
-              </div>
-              <div className='flex-1 me-3'>
-                <label htmlFor="cantidad" className='block font-medium text-lg w-full mb-2 invisible'>Cantidad</label>
-                <Button label='Aplicar' size='small' className='hover:!bg-blue-600' />
-              </div>
-            </div>
-          </div>
-
-          <DataTable value={listaProductos} stripedRows size='small'>
-            <Column field="producto.codigo" header="Código" style={{ width: '5%' }}></Column>
-            <Column field="producto.descripcion" header="Descripción" style={{ width: '30%' }}></Column>
-            <Column field="producto.precioEfectivo" header="Efectivo" style={{ width: '10%' }}
-              body={(rowData) => rowData.producto.precioEfectivo ? formatCurrency(rowData.producto.precioEfectivo) : ''}>
+          <DataTable value={listProducts} stripedRows size='small' emptyMessage='No se encontraron resultados'>
+            <Column field="product.code" header="Código" className='rounded-tl-md' style={{ width: '5%' }} />
+            <Column field="product.description" header="Descripción" style={{ width: '30%' }} />
+            <Column field={(rowData) => formatCurrency(rowData.product.priceEffective)} header="Efectivo" style={{ width: '10%' }} />
+            <Column field={(rowData) => formatCurrency(rowData.product.priceDebit)} header="Débito" style={{ width: '10%' }} />
+            <Column field={(rowData) => formatCurrency(rowData.product.priceCredit)} header="Crédito" style={{ width: '10%' }} />
+            <Column field={(rowData) => formatDate(rowData.product.lastPrice)} header="Ult. Precio" style={{ width: '10%' }} />
+            <Column field={(rowData) => formatDate(rowData.lastUpdate)} header="Ult. Stock" style={{ width: '10%' }} />
+            <Column field="quantity" header="Unidades" alignHeader={'center'} style={{ width: '5%' }}
+              body={(rowData) => (<p className='text-center'>{rowData.quantity}</p>)}>
             </Column>
-            <Column field="producto.precioDebito" header="Débito" style={{ width: '10%' }}
-              body={(rowData) => rowData.producto.precioDebito ? formatCurrency(rowData.producto.precioDebito) : ''}>
-            </Column>
-            <Column field="producto.precioCredito" header="Crédito" style={{ width: '10%' }}
-              body={(rowData) => rowData.producto.precioCredito ? formatCurrency(rowData.producto.precioCredito) : ''}>
-            </Column>
-            <Column field='producto.ultActPrecio' header="Ult. Precio" style={{ width: '10%' }}
-              body={(rowData) => rowData.producto.ultActPrecio ? formatDate(rowData.producto.ultActPrecio) : ''}></Column>
-            <Column field="ultActStock" header="Ult. Stock" style={{ width: '10%' }}
-              body={(rowData) => rowData.ultActStock ? formatDate(rowData.ultActStock) : ''}></Column>
-            <Column field="cantidad" header="Unidades" alignHeader={'center'} style={{ width: '5%' }}
-              body={(rowData) => (<p className='text-center'>{rowData.cantidad}</p>)}>
-            </Column>
-            <Column header="Acciones" alignHeader={'center'} style={{ width: '10%' }}
+            <Column header="Acciones" alignHeader={'center'} className='rounded-tr-md' style={{ width: '10%' }}
               body={(rowData) => (
                 <div className='flex'>
-                  <Link to={`/producto/detalle/${rowData.producto.id}`} className='me-3'>
+                  <Link to={`/producto/detalle/${rowData.product.idProduct}`} className='me-3'>
                     <button className='bg-blue-500 rounded text-xl text-white px-2 py-1'>
                       <i className='bi bi-eye-fill'></i>
                     </button>
                   </Link>
-                  <Link to={`/producto/modificar/${rowData.producto.id}`} className='me-3'>
+                  <Link to={`/producto/modificar/${rowData.product.idProduct}`} className='me-3'>
                     <button className='bg-yellow-500 rounded text-xl text-white px-2 py-1'>
                       <i className='bi bi-pencil-fill'></i>
                     </button>
@@ -235,7 +231,8 @@ export const LocalPagina = () => {
               )}>
             </Column>
           </DataTable>
-          <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalRegistros} className='mt-5 !p-0'></Paginator>
+          <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
+            onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
         </Card>
       </div >
     </div >

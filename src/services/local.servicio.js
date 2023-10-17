@@ -1,22 +1,22 @@
 import axios from "axios";
 import { BASE_URL, config } from "../helper/AxionHelper";
 
-const baseUrl = BASE_URL + "/local";
+const baseUrl = BASE_URL + "/api/shop";
 
-class StoreService{
+class ShopService{
 
     getByName(name){return axios.get(baseUrl + "/" + name, config).then(res => res.data)}
 
-    save(local){return axios.post(baseUrl + "/crear", local, config).then(res => res.data)}
+    create(local){return axios.post(baseUrl + "/", local, config).then(res => res.data)}
 
-    update(local){return axios.put(baseUrl + "/modificar/" + local.id, local, config).then(res => res.data)}
+    update(local){return axios.put(baseUrl + "/" + local.id, local, config).then(res => res.data)}
 
-    delete(id){return axios.delete(baseUrl + "/eliminar/" + id, config).then(res => res.data)}
+    delete(id){return axios.delete(baseUrl + "/" + id, config).then(res => res.data)}
 
-    getAll(){return axios.get(baseUrl + "/listar", config).then(res => res.data)}
+    getAll(){return axios.get(baseUrl + "/list", config).then(res => res.data)}
 
-    listarLocales(){return axios.get(baseUrl + "/listar/locales", config).then(res => res.data)}
+    getAllByTypeShop(){return axios.get(baseUrl + "/list/shops", config).then(res => res.data)}
         
 }
 
-export default new StoreService();
+export default new ShopService();

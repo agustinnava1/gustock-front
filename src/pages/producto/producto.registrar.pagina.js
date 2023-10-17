@@ -7,35 +7,33 @@ import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import { DataTable } from 'primereact/datatable'
 import { InputNumber } from 'primereact/inputnumber'
-import { RadioButton } from 'primereact/radiobutton'
-import { InputTextarea } from 'primereact/inputtextarea'
 
 import Swal from 'sweetalert2'
 import JsBarcode from 'jsbarcode'
-import html2canvas from 'html2canvas'
 
 import { useForm } from '../../hooks/use.form'
 
 import StoreService from '../../services/local.servicio'
 import ProductFilters from '../../helper/producto.filtros'
 import ProductoService from '../../services/producto.servicio'
+import SpecificationsForm from './components/specifications.form'
+
+const initialProduct = {
+  code: '',
+  description: '',
+  brand: null,
+  category: null,
+  provider: null,
+  priceDebit: 0,
+  priceCredit: 0,
+  priceEffective: 0,
+}
 
 export const ProductoRegistrar = () => {
   const [code, setCode] = useState('')
   const [listStores, setListStores] = useState([])
 
-  const initialProduct = {
-    code: '',
-    description: '',
-    brand: null,
-    category: null,
-    provider: null,
-    priceDebit: 0,
-    priceCredit: 0,
-    priceEffective: 0,
-  }
-
-  const { formState, onInputChange, onDropdownChange } = useForm(initialProduct)
+  const { formState, onInputChange, onDropdownChange } = useForm(initialProduct);
   const { listProviders, listCategories, listBrands } = ProductFilters()
   const { description, brand, category, provider, priceDebit, priceCredit, priceEffective } = formState
 
@@ -98,7 +96,7 @@ export const ProductoRegistrar = () => {
     setBarcodeValue(parseInt(concatenatedText, 10))
 
     /* create png */
-    
+
   }
 
   const deleteBarcode = () => {
@@ -106,8 +104,31 @@ export const ProductoRegistrar = () => {
     document.getElementById("barcode-svg").innerHTML = ""
   }
 
+  /* Procesamiento de ficha tecnica */
+  const initialSpecifications = {
+    height: null, depth: null, width: null, length: null, capacity: null, weight: null,
+    liters: null, wheels: null, colors: null, material: null, warranty: null,
+    lights: null, notebook: null, organizer: null, observations: null,
+  }
+
+  const [specifications, setSpecifications] = useState(initialSpecifications);
+
+  const handleSpecificationsChange = (newSpecifications) => {
+    setSpecifications(newSpecifications);
+  }
+
   /* Procesamiento de formulario */
   const handleCreateProduct = () => {
+    if (code === '') {
+      Swal.fire('Error', 'El código del producto es obligatorio.', 'error');
+      return;
+    }
+
+    if (description === '') {
+      Swal.fire('Error', 'El campo descripción es obligatorio', 'error');
+      return;
+    }
+
     const product = {
       ...formState,
       code: code,
@@ -123,6 +144,7 @@ export const ProductoRegistrar = () => {
       Swal.fire('Registrado', 'Se ha registrado el producto: "' + data.description + '" con éxito.', 'success')
     }).catch((error) => {
       console.log(product)
+      console.log(specifications)
       Swal.fire('Error', 'Hubo un problema al intentar registrar el producto. Por favor, inténtalo de nuevo más tarde.', 'error')
     })
   }
@@ -216,9 +238,9 @@ export const ProductoRegistrar = () => {
             </div>
           </Card>
           <Card title='Distribución' className='!shadow border overscroll-auto'>
-            <div style={{ maxHeight: '245px', overflowY: 'auto' }}>
-              <DataTable value={listStores} stripedRows showGridlines size="small" className='border' emptyMessage="No se encontraron locales">
-                <Column header='Sucursal' style={{ width: '80%' }}
+            <div style={{ maxHeight: '248px', overflowY: 'auto' }}>
+              <DataTable value={listStores} stripedRows size="small" emptyMessage="No se encontraron locales">
+                <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
                   body={(rowData) => (
                     <div className='flex'>
                       <p className='font-medium'>{rowData.nombre}</p>
@@ -226,7 +248,7 @@ export const ProductoRegistrar = () => {
                     </div>
                   )}>
                 </Column>
-                <Column header='Cantidad' style={{ width: '20%' }}
+                <Column header='Cantidad' className='rounded-tr-md' style={{ width: '20%' }}
                   body={
                     <InputNumber placeholder='0' inputClassName='p-inputtext-sm w-full'></InputNumber>
                   }>
@@ -237,129 +259,7 @@ export const ProductoRegistrar = () => {
         </div>
 
         <div className='w-2/5'>
-          <Card title="Especificaciones" className='!shadow border mb-5'>
-            <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
-              <div className='mb-3'>
-                <label className='block text-lg font-medium mb-2'>Altura</label>
-                <InputNumber placeholder='0' suffix=' CM' inputClassName='p-inputtext-sm w-full'
-                  name='height' value={priceCredit} onValueChange={onInputChange} />
-              </div>
-              <div className='mb-3'>
-                <label className='block text-lg font-medium mb-2'>Profundidad</label>
-                <InputNumber placeholder='0' suffix=' CM' inputClassName='p-inputtext-sm w-full'
-                  name='depth' value={priceCredit} onValueChange={onInputChange} />
-              </div>
-              <div className='mb-3'>
-                <label className='block text-lg font-medium mb-2'>Ancho</label>
-                <InputNumber placeholder='0' suffix=' CM' inputClassName='p-inputtext-sm w-full'
-                  name='width' value={priceCredit} onValueChange={onInputChange} />
-              </div>
-              <div className='mb-3'>
-                <label className='block text-lg font-medium mb-2'>Cm lineal</label>
-                <InputNumber placeholder='0' suffix=' CM' inputClassName='p-inputtext-sm w-full'
-                  name='length' value={priceCredit} onValueChange={onInputChange} />
-              </div>
-            </div>
-            <hr className='my-3'></hr>
-            <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
-              <div className='mb-3'>
-                <label className='block text-lg font-medium mb-2' htmlFor='capacidad'>Capacidad</label>
-                <InputNumber placeholder='0,0' suffix=' kg' inputClassName='p-inputtext-sm w-full'
-                  name='height' value={priceCredit} onValueChange={onInputChange} />
-              </div>
-              <div className="mb-3">
-                <label className="block text-lg font-medium mb-2" htmlFor="peso">Peso</label>
-                <InputNumber placeholder='0,0' suffix=' kg' inputClassName='p-inputtext-sm w-full'
-                  name='height' value={priceCredit} onValueChange={onInputChange} />
-              </div>
-              <div className="mb-3">
-                <label className="block text-lg font-medium mb-2" htmlFor="litros">Litros</label>
-                <InputNumber placeholder='0.0' suffix=' L' inputClassName='p-inputtext-sm w-full'
-                  name='height' value={priceCredit} onValueChange={onInputChange} />
-              </div>
-              <div className="mb-3">
-                <label className="block text-lg font-medium mb-2" htmlFor="ruedas">Ruedas</label>
-                <InputNumber placeholder='0' inputClassName='p-inputtext-sm w-full'
-                  name='height' value={priceCredit} onValueChange={onInputChange} />
-              </div>
-            </div>
-            <hr className="my-3"></hr>
-            <div className="flex justify-between gap-4">
-              <div className="w-full lg:w-1/2">
-                <div className="mb-3">
-                  <label className="block text-lg font-medium mb-2" htmlFor="colores">Colores</label>
-                  <InputText name="colors" placeholder="Ejemplo: rojo, azul" className='p-inputtext-sm w-full'
-                  />
-                </div>
-                <div className="mb-3">
-                  <label className="block text-lg font-medium mb-2" htmlFor="material">Material</label>
-                  <InputText name="material" placeholder="Ejemplo: cuero, poliéster" className='p-inputtext-sm w-full' />
-                </div>
-                <div className="mb-3">
-                  <label className="block text-lg font-medium mb-2" htmlFor="garantia">Garantía</label>
-                  <InputText name="warranty" placeholder="Ejemplo: 6 meses, 1 año" className='p-inputtext-sm w-full' />
-                </div>
-              </div>
-              <div className="w-full lg:w-1/2 2xl:w-2/5">
-                <div className="mb-3">
-                  <label className="block text-lg font-medium mb-2">Luces</label>
-                  <div className="flex gap-3 mb-4 py-2">
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="lights1" name="lights1" value="Si" />
-                      <label htmlFor="lights1" className="ml-2">Si</label>
-                    </div>
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="lights2" name="lights2" value="No" />
-                      <label htmlFor="lights2" className="ml-2">No</label>
-                    </div>
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="lights3" name="lights3" value="No aplica" />
-                      <label htmlFor="lights3" className="ml-2">No aplica</label>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="block text-lg font-medium mb-2">Organizador</label>
-                  <div className="flex gap-3 mb-4 py-2">
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="organizador1" name="organizador1" value="Si" />
-                      <label htmlFor="organizador1" className="ml-2">Si</label>
-                    </div>
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="organizador2" name="organizador2" value="No" />
-                      <label htmlFor="organizador2" className="ml-2">No</label>
-                    </div>
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="organizador3" name="organizador3" value="No aplica" />
-                      <label htmlFor="organizador3" className="ml-2">No aplica</label>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <label className="block text-lg font-medium mb-2">P. Notebook</label>
-                  <div className="flex gap-3 mb-4 py-2">
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="luces1" name="luces" value="Si" />
-                      <label htmlFor="luces1" className="ml-2">Si</label>
-                    </div>
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="luces2" name="luces2" value="No" />
-                      <label htmlFor="luces2" className="ml-2">No</label>
-                    </div>
-                    <div className="flex align-items-center">
-                      <RadioButton inputId="luces3" name="luces3" value="No aplica" />
-                      <label htmlFor="luces3" className="ml-2">No aplica</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <hr className="my-3"></hr>
-            <div>
-              <label className="text-lg font-medium" for="observaciones">Observaciones</label>
-              <InputTextarea rows={1} placeholder='Detalles adicionales del producto (opcional)' className="w-full !mt-3" />
-            </div>
-          </Card>
+          <SpecificationsForm initialSpecifications={initialSpecifications} onSpecificationsChange={handleSpecificationsChange} />
           <div className='flex text-center'>
             <Button label='Cancelar' severity='danger' className='w-96 !mr-3' size='small' />
             <Button label='Confirmar' className='w-96 hover:!bg-blue-600' size='small'

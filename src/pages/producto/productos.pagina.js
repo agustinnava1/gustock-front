@@ -14,6 +14,7 @@ import { formatDate, formatCurrency } from "../../helper/format"
 import Swal from 'sweetalert2'
 import ProductFilters from '../../helper/producto.filtros'
 import ProductService from '../../services/producto.servicio'
+import ListProductsExport from '../../components/export.products.component'
 
 export const ProductosPagina = () => {
   const initialPagination = {
@@ -90,7 +91,7 @@ export const ProductosPagina = () => {
       if (result.isConfirmed) {
         ProductService.delete(id)
           .then((data) => {
-            setListProducts(listProducts.filter((product) => product.id !== id))
+            setListProducts(listProducts.filter((product) => product.idProduct !== id))
             Swal.fire('Eliminado', 'El producto "' + data + '" ha sido eliminado del sistema con éxito.', 'success')
           })
           .catch((error) => {
@@ -136,20 +137,20 @@ export const ProductosPagina = () => {
           </div>
           <div>
             <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
-            <Button label='Exportar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
+            <ListProductsExport products={listProducts} />
           </div>
         </div>
       </Card>
       <Card className='!shadow border mt-5'>
         <DataTable value={listProducts} stripedRows emptyMessage='No se encontraron resultados' size='small'>
-          <Column field='code' header='Código' className='rounded-tl-lg' style={{ width: '10%' }}></Column>
+          <Column field='code' header='Código' className='rounded-tl-md' style={{ width: '10%' }}></Column>
           <Column field='description' header='Descripción' style={{ width: '30%' }}></Column>
           <Column field={(rowData) => formatCurrency(rowData.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
           <Column field={(rowData) => formatCurrency(rowData.priceDebit)} header='Débito' style={{ width: '10%' }} />
           <Column field={(rowData) => formatCurrency(rowData.priceCredit)} header='Crédito' style={{ width: '10%' }} />
           <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '10%' }}
             body={(rowData) => rowData.lastPrice ? formatDate(rowData.lastPrice) : '-'}></Column>
-          <Column header='Acciones' className='rounded-tr-lg' alignHeader={'center'} style={{ width: '10%' }}
+          <Column header='Acciones' className='rounded-tr-md' alignHeader={'center'} style={{ width: '10%' }}
             body={(rowData) => (
               <div className='flex justify-center'>
                 <Link to={`/producto/detalle/${rowData.idProduct}`} className='me-3'>

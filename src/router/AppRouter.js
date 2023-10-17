@@ -34,10 +34,10 @@ export const AppRouter = () => {
         <Route exact path="/notificaciones" element={<NotificacionesPagina />} />
         <Route exact path="/ajustes" element={<AjustesPagina />} />
 
-        <Route exact path="/deposito/:nombre" element={<LocalPagina />} />
-        <Route exact path="/local/:nombre" element={<LocalPagina />} />
-        <Route exact path="/local/:nombre/venta/registrar" element={<RegistrarVentaPagina />} />
-        <Route exact path="/local/:nombre/devolucion/registrar" element={<RegistrarDevolucionPagina />} />
+        <Route exact path="/deposito/:name" element={<LocalPagina />} />
+        <Route exact path="/local/:name" element={<LocalPagina />} />
+        <Route exact path="/local/:name/venta/registrar" element={<RegistrarVentaPagina />} />
+        <Route exact path="/local/:name/devolucion/registrar" element={<RegistrarDevolucionPagina />} />
 
         <Route exact path="/venta/detalle/:id" element={<VentaDetalle />} />
         <Route exact path="/devolucion/detalle/:id" element={<VentaDetalle />} />

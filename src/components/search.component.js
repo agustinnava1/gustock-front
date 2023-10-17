@@ -17,10 +17,12 @@ export const SearchComponent = ({ visible, onHide }) => {
   return (
     <div>
       <div className="card flex justify-content-center">
-        <Dialog header="Buscar producto" className="bg-blue-500" visible={visible} onHide={onHide}>
-          <InputText value={searchValue} onChange={(e) => setSearchValue(e.target.value)}
-            className="p-inputtext-lg !mb-5 w-full !shadow-none" placeholder='Ingrese código, código de barras o descripción' autoFocus />
-          <Button label="Buscar" className="w-full" size="small" onClick={redirectToSearch} />
+        <Dialog header='Buscar producto' headerClassName='!text-blue-500' className="bg-blue-500 w-1/4" visible={visible} onHide={onHide}>
+          <div className="p-inputgroup flex-1">
+            <InputText value={searchValue} onChange={(e) => setSearchValue(e.target.value)}
+              className="!shadow-none w-full" placeholder='Ingrese código, código de barras o descripción' autoFocus />
+            <Button icon="pi pi-search"  onClick={redirectToSearch} />
+          </div>
         </Dialog>
       </div>
     </div>

@@ -7,7 +7,7 @@ import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { Divider } from "primereact/divider"
 import { useParams } from "react-router-dom"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { Dropdown } from "primereact/dropdown"
 import { useRequest } from "../../hooks/use.request"
 
@@ -15,10 +15,10 @@ import productoService from "../../services/producto.servicio"
 import Swal from "sweetalert2"
 
 export const RegistrarVentaPagina = () => {
-  const { nombre } = useParams()
+  const { name } = useParams()
 
   const initialRequest = {
-    local: nombre,
+    local: name,
     codigo: null,
     tipoPrecio: null
   }
@@ -46,7 +46,7 @@ export const RegistrarVentaPagina = () => {
 
   return (
     <div className='container mx-auto p-5'>
-      <h2 className='text-4xl font-medium mb-5'>{nombre} | Nueva venta</h2>
+      <h2 className='text-4xl font-medium mb-5'>{name} | Nueva venta</h2>
       <div className="lg:flex">
         <div className='w-3/4 me-5'>
           <Card title='Agregar producto' className="!shadow border mb-5">
@@ -63,13 +63,13 @@ export const RegistrarVentaPagina = () => {
           <Card title='Productos' className="!shadow border mb-5">
             <DataTable value={listProducts} editMode="cell" tableStyle={{ minWidth: '50rem' }}
               emptyMessage="No se agregaron productos a la venta" size="small">
-              <Column field='code' header="Código" style={{ width: '15%' }}></Column>
+              <Column field='code' header="Código" className="rounded-tl-md" style={{ width: '15%' }}></Column>
               <Column field='description' header="Descripción" style={{ width: '30%' }}></Column>
               <Column field='price' header="Precio unitario" style={{ width: '15%' }}></Column>
               <Column field='' header="Cantidad" style={{ width: '10%' }}></Column>
               <Column field='stock' header="Stock" style={{ width: '10%' }}></Column>
               <Column field='' header="Subtotal" style={{ width: '15%' }}></Column>
-              <Column header="Borrar" style={{ width: '5%' }}></Column>
+              <Column header="Borrar" className="rounded-tr-md" style={{ width: '5%' }}></Column>
             </DataTable>
           </Card>
           <Card title='Resumen de cuenta' className="!shadow border">
