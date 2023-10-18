@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { setUser } from "../helper/AxionHelper";
+import { useContext, useState } from "react"
 
-import { Button } from 'primereact/button';
-import { Message } from 'primereact/message';
-import { InputText } from 'primereact/inputtext';
+import { Button } from 'primereact/button'
+import { Message } from 'primereact/message'
+import { InputText } from 'primereact/inputtext'
 
-import AuthService from '../services/auth.service';
+import jwtDecode from 'jwt-decode'
+import Cookies from 'universal-cookie'
+
+import UserContext from "../user.context"
+import AuthService from '../services/auth.service'
+import { useNavigate } from "react-router-dom"
 
 export const Login = () => {
-  useEffect(() => {
-    const loggedUserJSON = localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-    }
-  }, [])
-
+  const cookies = new Cookies()
+  const navigate = useNavigate();
+  
+  const [ user, setUser ] = useContext(UserContext);
   const [errorMessage, setErrorMessage] = useState();
 
   const [userDetail, setUserDetail] = useState({
@@ -38,23 +38,26 @@ export const Login = () => {
     }
 
     AuthService.login(userDetail).then((resp) => {
-      localStorage.setItem(
-        'loggedUser', JSON.stringify(resp)
-      )
+      const decoded = jwtDecode(resp.token);
+      cookies.set('jwt_authorization', resp.token, {
+        expires: new Date(decoded.exp * 1000),
+      })
+      setUser(decoded)
     }).catch((error) => {
-      setErrorMessage('Usuario o contraseña incorrecto');
+      setErrorMessage('Usuario o contraseña incorrecto')
       setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+        setErrorMessage(null)
+      }, 5000)
     })
   }
 
   return (
     <div className="h-screen" >
-      <div className="grid grid-cols-1 md:grid-cols-2 bg-white">
-        <div className="flex justify-center items-center">
-          <div className="text-center p-40 shadow-md border rounded-lg">
-            <h1 className="text-4xl font-semibold text-indigo-400 mb-5">GUSTOCK</h1>
+      <div className="md:flex bg-white">
+
+        <div className="bg-[#1764C6] md:w-1/2 flex justify-center items-center p-5 lg:p-0">
+          <div className="bg-white text-center p-32 shadow-md border rounded-lg">
+            <h1 className="text-4xl !text-[#1764C6] font-semibold mb-5">GUSTOCK</h1>
             <h2 className="text-2xl mb-5">Ingreso al sistema</h2>
 
             <form onSubmit={handleLogin} className="text-center mb-5">
@@ -72,16 +75,17 @@ export const Login = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-md mb-3" />
               </div>
 
-              <Button className="w-full" label="Iniciar sesión" type="submit" />
+              <Button className="w-full hover:!bg-blue-600" label="Iniciar sesión" type="submit" />
             </form >
             {errorMessage && <Message severity="error" text={errorMessage} />}
           </div>
         </div >
 
-        <div className="hidden md:block">
+        <div className="hidden md:block w-1/2">
           <img className="h-screen max-w-full"
             src='/local.jpg' />
         </div>
+
       </div>
     </div>
   )

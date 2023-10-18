@@ -1,23 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import App from './App'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import reportWebVitals from './reportWebVitals'
 
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom'
 
 import './index.css'
-
-import "primereact/resources/themes/lara-light-blue/theme.css";
 //import 'primereact/resources/themes/viva-light/theme.css'
 
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
+import 'primeicons/primeicons.css'
+import 'primereact/resources/primereact.min.css'
+import 'primereact/resources/themes/lara-light-blue/theme.css'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  
   <BrowserRouter>
-    <App />
+      <App />
   </BrowserRouter>
 );
 

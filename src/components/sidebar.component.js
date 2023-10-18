@@ -6,8 +6,8 @@ const SidebarContext = createContext()
 export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(false)
 
-  const usuario = JSON.parse(localStorage.getItem("loggedUser"));
-  const rol = usuario.rol.match(/\[ROLE_(.*?)\]/)[1];
+  /*const usuario = JSON.parse(localStorage.getItem("loggedUser"));
+  const rol = usuario.rol.match(/\[ROLE_(.*?)\]/)[1];*/
 
   return (
     <aside className="hidden lg:flex min-h-screen">

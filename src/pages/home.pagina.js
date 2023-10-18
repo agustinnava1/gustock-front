@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 
 import { Button } from 'react-bootstrap'
 import { AppRouter } from '../router/AppRouter'
@@ -11,11 +11,17 @@ import Sidebar, { SidebarItem } from '../components/sidebar.component'
 
 import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings, Search, LogOut } from 'lucide-react';
 
+import Cookies from 'universal-cookie'
+import UserContext from '../user.context'
+
 export const Home = () => {
+  const cookies = new Cookies()
   const location = useLocation()
 
+  const [ user, setUser ] = useContext(UserContext)
   const [showSearch, setShowSearch] = useState(false)
 
+  console.log(user)
   const productMenu = useRef(null);
   const productItems = [
     {
@@ -35,6 +41,11 @@ export const Home = () => {
       url: '/productos/modificacion/masiva',
     },
   ];
+
+  const logOut = () => {
+    setUser(null)
+    cookies.remove('jwt_authorization')
+  }
 
   return (
     <div className="flex">
@@ -75,7 +86,7 @@ export const Home = () => {
         <NavLink className="text-decoration-none" to={"/ajustes"}>
           <SidebarItem icon={<Settings size={20} />} text="Ajustes" active={location.pathname === '/ajustes'} />
         </NavLink>
-        <NavLink className="text-decoration-none" to={"/"}>
+        <NavLink className="text-decoration-none" onClick={logOut()}>
           <SidebarItem icon={<LogOut size={20} />} text="Salir" />
         </NavLink>
       </Sidebar>
