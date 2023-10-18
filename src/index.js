@@ -3,6 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import reportWebVitals from './reportWebVitals'
 
+import { UserProvider } from './user.context'
 import { BrowserRouter } from 'react-router-dom'
 
 import './index.css'
@@ -15,7 +16,9 @@ import 'primereact/resources/themes/lara-light-blue/theme.css'
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <BrowserRouter>
+    <UserProvider>
       <App />
+    </UserProvider>
   </BrowserRouter>
 );
 

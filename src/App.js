@@ -1,37 +1,35 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import jwtDecode from 'jwt-decode'
-import Cookies from 'universal-cookie'
 
 import { Home } from './pages/home.pagina'
 import { Login } from './pages/login.pagina'
+import UserContext from '../src/user.context'
+import getCookie from '../src/hooks/get.cookie'
 
-import { UserProvider } from './user.context'
 
 function App() {
-  const cookies = new Cookies()
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useContext(UserContext);
 
   useEffect(() => {
-    const jwtToken = cookies.get('jwt_authorization')
+    const jwtToken = getCookie('jwt_authorization');
     if (jwtToken) {
-      const decoded = jwtDecode(jwtToken)
-      setUser(decoded)
-    }
-  }, [setUser])
-
-  const renderContent = () => {
-    if (user) {
-      return <Home />
+      const decoded = jwtDecode(jwtToken);
+      setUser(decoded);
     } else {
-      return <Login />
+      setUser(null)
     }
-  }
+  }, [])
 
+  console.log("user:" + user)
   return (
-    <UserProvider value={[user, setUser]}>
-      {renderContent()}
-    </UserProvider>
+    <div>
+      {user ?
+        <Home />
+        :
+        <Login />
+      }
+    </div>
   );
 }
 

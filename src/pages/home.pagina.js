@@ -11,17 +11,15 @@ import Sidebar, { SidebarItem } from '../components/sidebar.component'
 
 import { HomeIcon, LayoutDashboard, ShoppingCart, Package, Clipboard, MessageSquare, Bell, Settings, Search, LogOut } from 'lucide-react';
 
-import Cookies from 'universal-cookie'
 import UserContext from '../user.context'
+import removeCookie from '../hooks/remove.cookie'
 
 export const Home = () => {
-  const cookies = new Cookies()
   const location = useLocation()
 
   const [ user, setUser ] = useContext(UserContext)
   const [showSearch, setShowSearch] = useState(false)
 
-  console.log(user)
   const productMenu = useRef(null);
   const productItems = [
     {
@@ -44,7 +42,7 @@ export const Home = () => {
 
   const logOut = () => {
     setUser(null)
-    cookies.remove('jwt_authorization')
+    removeCookie('jwt_authorization')
   }
 
   return (
@@ -86,7 +84,8 @@ export const Home = () => {
         <NavLink className="text-decoration-none" to={"/ajustes"}>
           <SidebarItem icon={<Settings size={20} />} text="Ajustes" active={location.pathname === '/ajustes'} />
         </NavLink>
-        <NavLink className="text-decoration-none" onClick={logOut()}>
+        
+        <NavLink className="text-decoration-none" onClick={logOut}> 
           <SidebarItem icon={<LogOut size={20} />} text="Salir" />
         </NavLink>
       </Sidebar>
