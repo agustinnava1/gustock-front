@@ -27,6 +27,7 @@ import { RegistrarDevolucionPagina } from '../pages/venta/devolucion.registrar.p
 export const AppRouter = () => {
   return (
       <Routes>
+        <Route exact path="/inicio" element={<AdminPagina />} />
         <Route exact path="/panel" element={<PanelPagina />} />
         <Route exact path="/reposicion" element={<ReposicionPagina />} />
         <Route exact path="/mensajeria" element={<MensajeriaPagina />} />
