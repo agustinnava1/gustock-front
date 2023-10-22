@@ -13,7 +13,7 @@ import JsBarcode from 'jsbarcode'
 
 import { useForm } from '../../hooks/use.form'
 
-import StoreService from '../../services/local.servicio'
+import ShopService from '../../services/local.servicio'
 import ProductFilters from '../../helper/producto.filtros'
 import ProductoService from '../../services/producto.servicio'
 import SpecificationsForm from './components/specifications.form'
@@ -31,15 +31,15 @@ const initialProduct = {
 
 export const ProductoRegistrar = () => {
   const [code, setCode] = useState('')
-  const [listStores, setListStores] = useState([])
+  const [listShops, setListShops] = useState([])
 
   const { formState, onInputChange, onDropdownChange } = useForm(initialProduct);
   const { listProviders, listCategories, listBrands } = ProductFilters()
   const { description, brand, category, provider, priceDebit, priceCredit, priceEffective } = formState
 
   useEffect(() => {
-    StoreService.getAll().then(data => {
-      setListStores(data)
+    ShopService.getAll().then(data => {
+      setListShops(data)
     })
   }, []);
 
@@ -117,6 +117,17 @@ export const ProductoRegistrar = () => {
     setSpecifications(newSpecifications);
   }
 
+  const handleQuantityChange = (shopId, newValue) => {
+    const updatedListShops = listShops.map(shop => {
+      if (shop.id === shopId) {
+        return { ...shop, quantity: newValue }
+      }
+      return shop
+    })
+
+    setListShops(updatedListShops)
+  }
+
   /* Procesamiento de formulario */
   const handleCreateProduct = () => {
     if (code === '') {
@@ -138,6 +149,7 @@ export const ProductoRegistrar = () => {
       idProvider: provider?.id,
       base64Image: base64Image,
       base64barcode: base64Barcode,
+      specifications: specifications
     }
 
     ProductoService.create(product).then(data => {
@@ -151,7 +163,7 @@ export const ProductoRegistrar = () => {
 
   return (
     <div className='p-5'>
-      <h2 className='text-4xl font-medium mb-5'>Crear nuevo producto</h2>
+      <h2 className='text-3xl font-medium mb-5'>Crear nuevo producto</h2>
       <div className='md:flex justify-between gap-5'>
         <div>
           <Card title='Imagen' className='!shadow border mb-5'>
@@ -159,10 +171,10 @@ export const ProductoRegistrar = () => {
                 file:text-lg file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
               type='file' accept='image/*' onChange={handleImageChange} />
             {selectedImage ?
-              <div className='h-[300px] w-[300px] mt-3'>
+              <div className='h-[300px] w-[350px] mt-3'>
                 <img id='imgPreview' src={imgPreviewSrc} alt='Preview' className='w-full h-full object-cover rounded' />
               </div> :
-              <div className='h-[300px] w-[300px] mt-3'>
+              <div className='h-[300px] w-[350px] mt-3'>
                 <img src='/producto-sin-foto.jpg' className='w-full h-full object-cover rounded'></img>
               </div>
             }
@@ -175,7 +187,7 @@ export const ProductoRegistrar = () => {
             </div>
             <div className='flex mt-4'>
               <Button label='Generar' onClick={generateBarcode} className='w-full !me-3 hover:!bg-blue-600' size='small' disabled={barcodeValue} />
-              <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='danger' size='small' disabled={!barcodeValue} />
+              <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='secondary' size='small' disabled={!barcodeValue} />
             </div>
           </Card>
         </div>
@@ -239,7 +251,7 @@ export const ProductoRegistrar = () => {
           </Card>
           <Card title='Distribución' className='!shadow border overscroll-auto'>
             <div style={{ maxHeight: '248px', overflowY: 'auto' }}>
-              <DataTable value={listStores} stripedRows size="small" emptyMessage="No se encontraron locales">
+              <DataTable value={listShops} stripedRows size="small" emptyMessage="No se encontraron locales">
                 <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
                   body={(rowData) => (
                     <div className='flex'>
@@ -249,9 +261,12 @@ export const ProductoRegistrar = () => {
                   )}>
                 </Column>
                 <Column header='Cantidad' className='rounded-tr-md' style={{ width: '20%' }}
-                  body={
-                    <InputNumber placeholder='0' inputClassName='p-inputtext-sm w-full'></InputNumber>
-                  }>
+                   body={(rowData) => (
+                    <InputNumber value={"0"}
+                      placeholder="0"
+                      inputClassName="p-inputtext-sm w-full"
+                    />
+                  )}>
                 </Column>
               </DataTable>
             </div>
@@ -261,9 +276,9 @@ export const ProductoRegistrar = () => {
         <div className='w-2/5'>
           <SpecificationsForm initialSpecifications={initialSpecifications} onSpecificationsChange={handleSpecificationsChange} />
           <div className='flex text-center'>
-            <Button label='Cancelar' severity='danger' className='w-96 !mr-3' size='small' />
-            <Button label='Confirmar' className='w-96 hover:!bg-blue-600' size='small'
+            <Button label='Confirmar' className='w-full hover:!bg-blue-600 !mr-3' size='small'
               onClick={handleCreateProduct} />
+            <Button label='Cancelar' severity='secondary' className='w-full' size='small' />
           </div>
         </div>
       </div>

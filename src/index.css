@@ -4,7 +4,7 @@
 
 body{
   color: #2A2B2A;
-  background-color: rgb(249, 249, 251)!important;
+  background-color: #eff3f8!important;
 }
 
 h1, h2, label{
@@ -48,14 +48,18 @@ h1, h2, label{
   background-color: white!important;
 }
 
-.p-button-danger{
+.p-button-secondary{
   color: #1764c6!important;
   background-color: #c6ddf0!important;
   border: 1px solid #c6ddf0!important;
 }
 
-.p-button-danger:hover{
+.p-button-secondary:hover{
   color: #ffffff!important;
   background-color: #2493D8!important;
   border: 1px solid #2493D8!important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+  background-color: #3B82F6!important;
 }

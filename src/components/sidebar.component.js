@@ -10,24 +10,26 @@ export default function Sidebar({ children }) {
   const rol = usuario.rol.match(/\[ROLE_(.*?)\]/)[1];*/
 
   return (
-    <aside className="hidden lg:flex min-h-screen">
-      <nav className="flex flex-col bg-[#1764C6]">
-        <div className="p-4 pb-2 flex justify-between items-center">
-          <span
-            className={`text-2xl font-bold text-white overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
-            Navegación
-          </span>
-          <button
-            onClick={() => setExpanded((curr) => !curr)}
-            className="p-2.5 rounded-lg bg-white">
-            {expanded ? <ChevronFirst /> : <ChevronLast />}
-          </button>
-        </div>
+    <aside className="bg-[#1764C6] hidden lg:block min-h-screen">
+      <div className={`${expanded ? "w-[250px]" : "w-auto"}`}>
+        <nav>
+          <div className="p-4 pb-2 flex justify-between items-center">
+            <span
+              className={`text-2xl font-bold text-white overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
+              Menú
+            </span>
+            <button
+              onClick={() => setExpanded((curr) => !curr)}
+              className="p-2.5 rounded-lg bg-white">
+              {expanded ? <ChevronFirst /> : <ChevronLast />}
+            </button>
+          </div>
 
-        <SidebarContext.Provider value={{ expanded }}>
-          <ul className="flex-1 mt-5 px-4">{children}</ul>
-        </SidebarContext.Provider>
-      </nav>
+          <SidebarContext.Provider value={{ expanded }}>
+            <ul className="flex-1 mt-5 px-4">{children}</ul>
+          </SidebarContext.Provider>
+        </nav>
+      </div>
     </aside>
   )
 }

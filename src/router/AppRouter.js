@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import UserContext from '../user.context'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 import { AdminPagina } from '../pages/admin.pagina'
@@ -25,6 +26,8 @@ import { VentaHistorialRubroPagina } from '../pages/venta/venta.historial.rubro.
 import { RegistrarDevolucionPagina } from '../pages/venta/devolucion.registrar.pagina'
 
 export const AppRouter = () => {
+  const [ user, setUser ] = useContext(UserContext)
+
   return (
       <Routes>
         <Route exact path="/inicio" element={<AdminPagina />} />

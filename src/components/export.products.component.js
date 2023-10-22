@@ -56,7 +56,7 @@ const ListProductsExport = ({ products }) => {
 
   return (
     <div>
-      <Button label='Exportar a excel' onClick={handleExport} className='hover:!bg-blue-600 me-3' size='small' />
+      <Button label='Exportar a excel' onClick={handleExport} severity='secondary' size='small' />
     </div>
   );
 };

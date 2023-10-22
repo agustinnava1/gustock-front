@@ -92,7 +92,7 @@ export const ProductosModificacionMasiva = () => {
   };
 
   const editText = (options) => {
-    return <InputText type="text" className='p-inputtext-sm w-full' 
+    return <InputText type="text" className='p-inputtext-sm w-full'
       value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />
   };
 
@@ -104,58 +104,61 @@ export const ProductosModificacionMasiva = () => {
 
   const columns = [
     { field: 'description', header: 'Descripción', width: '25%' },
-    { field: 'priceEffective', header: 'Precio Efectivo', width: '25%' },
-    { field: 'priceDebit', header: 'Precio Débito', width: '25%' },
-    { field: 'priceCredit', header: 'Precio Crédito', width: '25%' },
+    { field: 'priceEffective', header: 'Precio Efectivo', width: '20%' },
+    { field: 'priceDebit', header: 'Precio Débito', width: '20%' },
+    { field: 'priceCredit', header: 'Precio Crédito', width: '20%' },
   ];
 
   return (
     <div className='p-5'>
-      <h2 className="sm:text-4xl text-5xl font-medium mb-3">Modificación masiva de productos</h2>
+      <h2 className="text-3xl font-medium mb-2">Modificación masiva de productos</h2>
       <span class="text-xl font-normal">Todos los campos a excepción del código son editables. Para guardar los cambios realizados presione el botón al final de la tabla "Guardar cambios"</span>
-
       <Card className='!shadow border mt-5'>
-        <div className='flex flex-wrap'>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Proveedor</label>
+        <div className='flex flex-wrap gap-3'>
+          <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
             <Dropdown options={listProviders} optionLabel='razonSocial' filter
               name='provider' value={provider} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
           </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Rubro</label>
+          <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
             <Dropdown options={listCategories} optionLabel='descripcion' filter
               name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
           </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Marca</label>
+          <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
             <Dropdown options={listBrands} optionLabel='descripcion' filter
               name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
           </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Cantidad</label>
+          <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
             <Dropdown options={listQuantities}
               name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
               placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
           </div>
-          <div className='me-3'>
-            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
-            <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
+          <div>
+            <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600' size='small' />
           </div>
         </div>
       </Card>
       <Card className='!shadow border mt-5'>
-        <DataTable value={listProducts} stripedRows editMode="cell">
+        <DataTable value={listProducts} stripedRows editMode="cell" size='small'>
           <Column field="code" header="Código" style={{ width: '10%' }}></Column>
 
           {columns.map(({ field, header }) => {
-            return <Column key={field} field={field} header={header} style={{ width: '20%' }}
-              editor={(opciones) => editCell(opciones)} onCellEditComplete={onCellEditComplete} 
+            return <Column key={field} field={field} header={header}
+              editor={(opciones) => editCell(opciones)} onCellEditComplete={onCellEditComplete}
               body={(rowData) => field.includes('price') ? formatCurrency(rowData[field]) : rowData[field]} />
           })}
 
+          <Column className='rounded-tr-md' alignHeader={'center'} style={{ width: '10%' }}
+            body={(product) => (
+              <div className='flex justify-center'>
+                <button className='text-blue-500 border border-blue-500 rounded px-2 py-1'>
+                  <i className='bi bi-eye-fill'></i>
+                </button>
+              </div>
+            )}>
+          </Column>
         </DataTable>
         <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
           onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>

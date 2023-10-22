@@ -121,9 +121,9 @@ export const ProductosModificacionRapida = () => {
 
   return (
     <div className='m-5'>
-      <h2 className='sm:text-4xl text-5xl font-medium mb-3'>Actualización rápida de precios</h2>
+      <h2 className='text-3xl font-medium mb-2'>Actualización rápida de precios</h2>
       <span className='text-xl font-normal'>Presione la casilla para seleccionar un producto. Los artículos seleccionados se actualizarán al presionar "Actualizar".</span>
-      <div className='flex mt-5'>
+      <div className='flex gap-5 mt-5'>
         <Card title='Parámetros' subTitle='Defina un porcentaje y luego seleccione el tipo de acción que desea realizar'
           className='w-1/6 h-full !shadow border'>
           <div className='flex justify-between mb-3'>
@@ -152,41 +152,36 @@ export const ProductosModificacionRapida = () => {
           </div>
           <Button label='Actualizar' onClick={handleUpdatePrices} className='w-full hover:!bg-blue-600' size='small'></Button>
         </Card>
-        <div className='w-5/6 ms-5'>
-        <Card className='!shadow border mb-5'>
-        <div className='flex flex-wrap'>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Proveedor</label>
-            <Dropdown options={listProviders} optionLabel='razonSocial' filter
-              name='provider' value={provider} onChange={onDropdownChange} emptyMessage='Sin registros'
-              placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Rubro</label>
-            <Dropdown options={listCategories} optionLabel='descripcion' filter
-              name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
-              placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Marca</label>
-            <Dropdown options={listBrands} optionLabel='descripcion' filter
-              name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
-              placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Cantidad</label>
-            <Dropdown options={listQuantities}
-              name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
-              placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='me-3'>
-            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
-            <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
-          </div>
-        </div>
-      </Card>
+        <div className='w-5/6'>
+          <Card className='!shadow border mb-5'>
+            <div className='flex flex-wrap gap-3'>
+              <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
+                <Dropdown options={listProviders} optionLabel='razonSocial' filter
+                  name='provider' value={provider} onChange={onDropdownChange} emptyMessage='Sin registros'
+                  placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
+              </div>
+              <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
+                <Dropdown options={listCategories} optionLabel='descripcion' filter
+                  name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
+                  placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
+              </div>
+              <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
+                <Dropdown options={listBrands} optionLabel='descripcion' filter
+                  name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
+                  placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
+              </div>
+              <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
+                <Dropdown options={listQuantities}
+                  name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
+                  placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
+              </div>
+              <div>
+                <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600' size='small' />
+              </div>
+            </div>
+          </Card>
           <Card className='!shadow border'>
-            <DataTable value={listProducts} selectionMode={'checkbox'} emptyMessage="No se encontraron productos"
+            <DataTable value={listProducts} selectionMode={'checkbox'} emptyMessage="No se encontraron productos" size='small'
               selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="idProduct" >
               <Column selectionMode='multiple' className='rounded-tl-lg' style={{ width: '5%' }} />
               <Column field="idProduct" header="ID" style={{ width: '10%' }} />
@@ -195,8 +190,17 @@ export const ProductosModificacionRapida = () => {
               <Column field={(rowData) => formatCurrency(rowData.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
               <Column field={(rowData) => formatCurrency(rowData.priceDebit)} header='Débito' style={{ width: '10%' }} />
               <Column field={(rowData) => formatCurrency(rowData.priceCredit)} header='Crédito' style={{ width: '10%' }} />
-              <Column field='ultActPrecio' header='Ult. Precio' className='rounded-tr-lg' style={{ width: '15%' }}
+              <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '15%' }}
                 body={(rowData) => rowData.lastPrice ? formatDate(rowData.lastPrice) : ''} />
+              <Column className='rounded-tr-md' alignHeader={'center'} style={{ width: '10%' }}
+                body={(product) => (
+                  <div className='flex justify-center'>
+                    <button className='text-blue-500 border border-blue-500 rounded px-2 py-1'>
+                      <i className='bi bi-eye-fill'></i>
+                    </button>
+                  </div>
+                )}>
+              </Column>
             </DataTable>
             <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
               onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>

@@ -12,7 +12,7 @@ export const PanelPagina = () => {
 
   return (
     <div className='m-5'>
-      <h2 className="text-4xl font-medium mb-3">Panel de administración</h2>
+      <h2 className="text-4xl font-medium mb-3">Control de registros</h2>
       <span className="text-xl font-normal">Registra, actualiza y elimina registros del sistema</span>
 
       <Accordion activeIndex={0} className='mt-5 drop-shadow'>

@@ -43,8 +43,8 @@ export const ProductosPagina = () => {
   }, [])
 
   const generateRequest = (paginationState, page) => {
-    const request = { 
-      ...paginationState, 
+    const request = {
+      ...paginationState,
       page: page || 0,
       brand: brand?.descripcion,
       category: category?.descripcion,
@@ -83,15 +83,15 @@ export const ProductosPagina = () => {
       text: "Se eliminará el producto del sistema de manera permanente, esto no afectará a las ventas registradas.",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#3B82F6',
+      cancelButtonColor: '#2493D8',
       confirmButtonText: 'Si, eliminar',
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
       if (result.isConfirmed) {
         ProductService.delete(id)
           .then((data) => {
-            setListProducts(listProducts.filter((product) => product.idProduct !== id))
+            filter()
             Swal.fire('Eliminado', 'El producto "' + data + '" ha sido eliminado del sistema con éxito.', 'success')
           })
           .catch((error) => {
@@ -103,40 +103,34 @@ export const ProductosPagina = () => {
 
   return (
     <div className='p-5'>
-      <h2 className='text-4xl font-medium mb-3'>Mis productos</h2>
-      <span className='text-xl font-normal'>Mantén un control preciso de tu inventario y supervisa todos los productos registrados en el sistema.</span>
+      <h2 className='text-3xl font-medium mb-2'>Mis productos</h2>
+      <span class='text-xl font-normal'>Vista general y control de todos los productos registrados en el sistema.</span>
       <Card className='!shadow border my-5'>
-        <div className='flex flex-wrap'>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Proveedor</label>
+        <div className='flex flex-wrap gap-3'>
+          <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
             <Dropdown options={listProviders} optionLabel='razonSocial' filter
               name='provider' value={provider} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
           </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Rubro</label>
+          <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
             <Dropdown options={listCategories} optionLabel='descripcion' filter
               name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
           </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Marca</label>
+          <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
             <Dropdown options={listBrands} optionLabel='descripcion' filter
               name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
           </div>
-          <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
-            <label className='block font-medium text-lg mb-2'>Cantidad</label>
+          <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
             <Dropdown options={listQuantities}
               name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
               placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
           </div>
-          <div className='me-3'>
-            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
+          <div>
             <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
           </div>
           <div>
-            <label className='block font-medium text-lg mb-2 invisible'>Boton</label>
             <ListProductsExport products={listProducts} />
           </div>
         </div>
@@ -145,26 +139,26 @@ export const ProductosPagina = () => {
         <DataTable value={listProducts} stripedRows emptyMessage='No se encontraron resultados' size='small'>
           <Column field='code' header='Código' className='rounded-tl-md' style={{ width: '10%' }}></Column>
           <Column field='description' header='Descripción' style={{ width: '30%' }}></Column>
-          <Column field={(rowData) => formatCurrency(rowData.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
-          <Column field={(rowData) => formatCurrency(rowData.priceDebit)} header='Débito' style={{ width: '10%' }} />
-          <Column field={(rowData) => formatCurrency(rowData.priceCredit)} header='Crédito' style={{ width: '10%' }} />
+          <Column field={(product) => formatCurrency(product.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
+          <Column field={(product) => formatCurrency(product.priceDebit)} header='Débito' style={{ width: '10%' }} />
+          <Column field={(product) => formatCurrency(product.priceCredit)} header='Crédito' style={{ width: '10%' }} />
           <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '10%' }}
-            body={(rowData) => rowData.lastPrice ? formatDate(rowData.lastPrice) : '-'}></Column>
+            body={(product) => product.lastPrice ? formatDate(product.lastPrice) : '-'}></Column>
           <Column header='Acciones' className='rounded-tr-md' alignHeader={'center'} style={{ width: '10%' }}
-            body={(rowData) => (
+            body={(product) => (
               <div className='flex justify-center'>
-                <Link to={`/producto/detalle/${rowData.idProduct}`} className='me-3'>
-                  <button className='bg-blue-500 rounded text-xl text-white px-2 py-1'>
+                <Link to={`/producto/detalle/${product.idProduct}`} className='me-3'>
+                  <button className='text-blue-500 border border-blue-500 rounded px-2 py-1'>
                     <i className='bi bi-eye-fill'></i>
                   </button>
                 </Link>
-                <Link to={`/producto/modificar/${rowData.idProduct}`} className='me-3'>
-                  <button className='bg-yellow-500 rounded text-xl text-white px-2 py-1'>
+                <Link to={`/producto/modificar/${product.idProduct}`} className='me-3'>
+                  <button className='text-sky-500 border border-sky-500 rounded px-2 py-1'>
                     <i className='bi bi-pencil-fill'></i>
                   </button>
                 </Link>
-                <button className='bg-red-500 rounded text-xl text-white px-2 py-1'
-                  onClick={() => handleDelete(rowData.idProduct)} >
+                <button className='text-cyan-500 border border-cyan-500 rounded px-2 py-1'
+                  onClick={() => handleDelete(product.idProduct)} >
                   <i className='bi bi-trash-fill'></i>
                 </button>
               </div>

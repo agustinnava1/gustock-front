@@ -1,8 +1,8 @@
 import { Card } from 'primereact/card'
-import { Panel } from 'primereact/panel'
 import { Column } from 'primereact/column'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { TabMenu } from 'primereact/tabmenu'
 import { DataTable } from 'primereact/datatable'
 
 import { formatCurrency, formatDateTime } from '../../helper/format'
@@ -11,13 +11,20 @@ import StockService from '../../services/stock.servicio'
 import ProductService from '../../services/producto.servicio'
 
 export const ProductoDetalle = () => {
-  const { id } = useParams();
+  const { id } = useParams()
+
+  const items = [
+    { label: 'Stock' },
+    { label: 'Ficha técnica' },
+    { label: 'Código de barras' },
+  ]
 
   const [stocks, setStocks] = useState([])
   const [imagen, setImagen] = useState([])
   const [barcode, setBarcode] = useState([])
   const [producto, setProducto] = useState([])
   const [fichaTecnica, setFichaTecnica] = useState([])
+  const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
     load()
@@ -33,31 +40,26 @@ export const ProductoDetalle = () => {
       setStocks(data);
       console.log(data)
     })
-  };
+  }
 
   const generateTableRow = (label, value) => {
     return value !== null ? (
       <tr key={label} className='border-b'>
         <th className='text-left p-2' scope="row">{label}</th>
-        <td className='p-2'>{value}</td>
+        <td className='text-end p-2'>{value}</td>
       </tr>
     ) : null;
-  };
+  }
 
   return (
     <div className='container mx-auto px-5 pb-5 2xl:px-52'>
 
-      <div className='lg:flex justify-between mt-5'>
+      <div className='lg:flex justify-between gap-5 my-5'>
         <div className='lg:w-1/2'>
-          <Card className='!shadow mb-5 border'>
-            <img src='/producto-sin-foto.jpg' class="mx-auto w-[535px] max-h-[430px]"></img>
-          </Card>
-          <Panel header="Código de barras" className='!shadow mb-5' collapsed='true' toggleable>
-           
-          </Panel>
+            <img src='/producto-sin-foto.jpg' class="shadow border w-full max-h-[473px]"></img>
         </div>
-        <div className='lg:w-1/2 lg:ml-5'>
-          <Card title={`${producto.descripcion}`} subTitle={`Código: ${producto.codigo}`} className='!shadow border mb-5'>
+        <div className='lg:w-1/2'>
+          <Card title={`${producto.descripcion}`} subTitle={`Código: ${producto.codigo}`} className='!shadow border'>
             <table class="min-w-full border text-sm mb-5">
               <thead class="bg-[#efefef] border-b">
                 <tr><th colSpan={2} class="text-start p-2">Lista de precios</th></tr>
@@ -83,7 +85,6 @@ export const ProductoDetalle = () => {
                 </tr>
               </tbody>
             </table>
-
             <table class="min-w-full border text-sm">
               <thead class="bg-[#efefef] border-b font-medium">
                 <tr><th colSpan={2} class="text-start p-2">Datos del producto</th></tr>
@@ -116,7 +117,24 @@ export const ProductoDetalle = () => {
               </tbody>
             </table>
           </Card>
-          <Panel header="Ficha Técnica" className='!shadow mb-5' collapsed='true' toggleable>
+        </div>
+      </div>
+
+      <div className="card">
+        <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
+        {activeIndex == 0 &&
+          <div className='bg-white p-5'>
+            <DataTable value={stocks} stripedRows emptyMessage='No se encontraron unidades' size='small'>
+              <Column field={(rowData) => (rowData.local.nombre) + " - " + (rowData.local.direccion)}
+                header='Sucursal' className='rounded-tl-md' style={{ width: '33%' }}></Column>
+              <Column field={(rowData) => (rowData.cantidad) + " unidades"} header='Cantidad' style={{ width: '33%' }}></Column>
+              <Column field={(rowData) => formatDateTime(rowData.ultActStock)}
+                header='Ult. Act' className='rounded-tr-md' style={{ width: '33%' }}></Column>
+            </DataTable>
+          </div>
+        }
+        {activeIndex == 1 &&
+          <div className='bg-white p-5'>
             <table className="table w-full">
               <tbody>
                 {[
@@ -143,16 +161,14 @@ export const ProductoDetalle = () => {
                 })}
               </tbody>
             </table>
-          </Panel>
-        </div>
+          </div>
+        }
+        {activeIndex == 2 &&
+          <div className='bg-white p-5'>
+
+          </div>
+        }
       </div>
-      <Card title='Stock disponible en sucursales' className='!shadow border'>
-        <DataTable value={stocks} stripedRows emptyMessage='No se encontraron unidades' size='small'>
-          <Column field={(rowData) => (rowData.local.nombre) + " - " + (rowData.local.direccion)} header='Sucursal' style={{ width: '33%' }}></Column>
-          <Column field={(rowData) => (rowData.cantidad) + " unidades"} header='Cantidad' style={{ width: '33%' }}></Column>
-          <Column field={(rowData) => formatDateTime(rowData.ultActStock)} header='Ult. Act' style={{ width: '33%' }}></Column>
-        </DataTable>
-      </Card>
     </div>
   )
 }

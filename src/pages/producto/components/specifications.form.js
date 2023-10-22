@@ -114,10 +114,10 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
         </div>
       </div>
       <hr className="my-3"></hr>
-      <div className="flex justify-between gap-4">
+      <div className="flex justify-between gap-5">
         <div className="w-full lg:w-1/2">
           <div className="mb-3">
-            <label className="block text-lg font-medium mb-2" htmlFor="colores">Colores</label>
+            <label className="block text-lg font-medium mb-2" htmlFor="colors">Colores</label>
             <InputText placeholder="Ejemplo: rojo, azul" className='p-inputtext-sm w-full'
               name="colors" value={specificationsFormState.colors} onChange={onSpecificationsInputChange} />
           </div>
@@ -127,12 +127,12 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
               name="material" value={specificationsFormState.material} onChange={onSpecificationsInputChange} />
           </div>
           <div className="mb-3">
-            <label className="block text-lg font-medium mb-2" htmlFor="garantia">Garantía</label>
+            <label className="block text-lg font-medium mb-2" htmlFor="warranty">Garantía</label>
             <InputText placeholder="Ejemplo: 6 meses, 1 año" className='p-inputtext-sm w-full'
               name="warranty" value={specificationsFormState.warranty} onChange={onSpecificationsInputChange} />
           </div>
         </div>
-        <div className="w-full lg:w-1/2 2xl:w-2/5">
+        <div className="w-full lg:w-1/2">
           <div className="mb-3">
             <label className="block text-lg font-medium mb-2">Luces</label>
             <div className="flex gap-3 mb-4 py-2">
@@ -157,19 +157,19 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
             <label className="block text-lg font-medium mb-2">Organizador</label>
             <div className="flex gap-3 mb-4 py-2">
               <div className="flex align-items-center">
-                <RadioButton inputId="organizador1" name="organizer" value="Si"
+                <RadioButton inputId="organizer1" name="organizer" value="Si"
                   onChange={onSpecificationsRadioChange} checked={organizer === 'Si'} />
-                <label htmlFor="organizador1" className="ml-2">Si</label>
+                <label htmlFor="organizer1" className="ml-2">Si</label>
               </div>
               <div className="flex align-items-center">
-                <RadioButton inputId="organizador2" name="organizer" value="No"
+                <RadioButton inputId="organizer2" name="organizer" value="No"
                   onChange={onSpecificationsRadioChange} checked={organizer === 'No'} />
-                <label htmlFor="organizador2" className="ml-2">No</label>
+                <label htmlFor="organizer2" className="ml-2">No</label>
               </div>
               <div className="flex align-items-center">
-                <RadioButton inputId="organizador3" name="organizer" value="No aplica"
+                <RadioButton inputId="organizer3" name="organizer" value="No aplica"
                   onChange={onSpecificationsRadioChange} checked={organizer === 'No aplica'} />
-                <label htmlFor="organizador3" className="ml-2">No aplica</label>
+                <label htmlFor="organizer3" className="ml-2">No aplica</label>
               </div>
             </div>
           </div>
@@ -177,28 +177,28 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
             <label className="block text-lg font-medium mb-2">P. Notebook</label>
             <div className="flex gap-3 mb-4 py-2">
               <div className="flex align-items-center">
-                <RadioButton inputId="luces1" name="notebook" value="Si"
+                <RadioButton inputId="notebook1" name="notebook" value="Si"
                   onChange={onSpecificationsRadioChange} checked={notebook === 'Si'} />
-                <label htmlFor="luces1" className="ml-2">Si</label>
+                <label htmlFor="notebook1" className="ml-2">Si</label>
               </div>
               <div className="flex align-items-center">
-                <RadioButton inputId="luces2" name="notebook" value="No"
+                <RadioButton inputId="notebook2" name="notebook" value="No"
                   onChange={onSpecificationsRadioChange} checked={notebook === 'No'} />
-                <label htmlFor="luces2" className="ml-2">No</label>
+                <label htmlFor="notebook2" className="ml-2">No</label>
               </div>
               <div className="flex align-items-center">
-                <RadioButton inputId="luces3" name="notebook" value="No aplica"
+                <RadioButton inputId="notebook3" name="notebook" value="No aplica"
                   onChange={onSpecificationsRadioChange} checked={notebook === 'No aplica'} />
-                <label htmlFor="luces3" className="ml-2">No aplica</label>
+                <label htmlFor="notebook3" className="ml-2">No aplica</label>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <hr className="my-3"></hr>
+      <hr className="my-2"></hr>
       <div>
-        <label className="text-lg font-medium" for="observaciones">Observaciones</label>
-        <InputTextarea rows={1} placeholder='Detalles adicionales del producto (opcional)' className="w-full !mt-3"
+        <label className="text-lg font-medium" htmlFor="observations">Observaciones</label>
+        <InputTextarea rows={2} placeholder='Detalles adicionales del producto (opcional)' className="w-full !mt-3"
           name='observations' value={specificationsFormState.observations} onChange={onSpecificationsInputChange} />
       </div>
     </Card>

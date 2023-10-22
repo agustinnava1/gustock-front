@@ -17,7 +17,7 @@ import removeCookie from '../hooks/remove.cookie'
 export const Home = () => {
   const location = useLocation()
 
-  const [ user, setUser ] = useContext(UserContext)
+  const [user, setUser] = useContext(UserContext)
   const [showSearch, setShowSearch] = useState(false)
 
   const productMenu = useRef(null);
@@ -57,16 +57,9 @@ export const Home = () => {
         <NavLink className="text-decoration-none" to={"/venta/historial"}>
           <SidebarItem icon={<ShoppingCart size={20} />} text="Ventas" active={location.pathname === '/ventas'} />
         </NavLink>
-
-        <Button className="text-start text-decoration-none" onClick={(e) => productMenu.current.toggle(e)} >
-          <SidebarItem icon={<Package size={20} />} text="Productos"
-            active={location.pathname === '/productos' ||
-                    location.pathname === '/producto/registrar' || 
-                    location.pathname === '/productos/modificacion/rapida' || 
-                    location.pathname === '/productos/modificacion/masiva'} />
-          <TieredMenu model={productItems} popup ref={productMenu} breakpoint="767px" className='m-0 p-0' />
-        </Button>
-
+        <NavLink className="text-decoration-none" to={"/productos"}>
+          <SidebarItem icon={<Package size={20} />} text="Productos" active={location.pathname === '/productos'} />
+        </NavLink>
         <NavLink className="text-decoration-none" to={"/reposicion"}>
           <SidebarItem icon={<Clipboard size={20} />} text="Reposición" active={location.pathname === '/reposicion'} />
         </NavLink>
@@ -84,8 +77,7 @@ export const Home = () => {
         <NavLink className="text-decoration-none" to={"/ajustes"}>
           <SidebarItem icon={<Settings size={20} />} text="Ajustes" active={location.pathname === '/ajustes'} />
         </NavLink>
-        
-        <NavLink className="text-decoration-none" onClick={logOut}> 
+        <NavLink className="text-decoration-none" onClick={logOut}>
           <SidebarItem icon={<LogOut size={20} />} text="Salir" />
         </NavLink>
       </Sidebar>

@@ -137,14 +137,14 @@ export const LocalPagina = () => {
                   <Button label='Nueva venta' className='hover:!bg-blue-600 !mb-5 w-full' size='small' />
                 </Link>
                 <Link to={`/local/${shop.nombre}/devolucion/registrar`}>
-                  <Button label='Devolución' className='hover:!bg-blue-600 w-full' size='small' />
+                  <Button label='Devolución'  severity="secondary" className='w-full' size='small' />
                 </Link>
               </div>
             </Card>
             <Card title="Turno" className='text-center !shadow border mt-5'>
               <div className='p-5'>
                 <Button label='Abrir turno' className='hover:!bg-blue-600 !mb-5 w-full' size='small' />
-                <Button label='Cerrar turno' className='hover:!bg-blue-600 w-full' size='small' />
+                <Button label='Cerrar turno'  severity="secondary" className='w-full' size='small' />
               </div>
             </Card>
           </div>
@@ -153,7 +153,7 @@ export const LocalPagina = () => {
 
       <div className='lg:w-5/6'>
         <Card title="Productos" className='!shadow border'>
-          <div className='flex flex-wrap mb-5'>
+          <div className='flex flex-wrap my-5'>
             <div className='flex-auto w-32 md:w-36 me-3 mb-3 lg:mb-0'>
               <label className='block font-medium text-lg mb-2'>Proveedor</label>
               <Dropdown options={listProviders} optionLabel='razonSocial' filter
@@ -200,8 +200,8 @@ export const LocalPagina = () => {
           </div>
 
           <DataTable value={listProducts} stripedRows size='small' emptyMessage='No se encontraron resultados'>
-            <Column field="product.code" header="Código" className='rounded-tl-md' style={{ width: '5%' }} />
-            <Column field="product.description" header="Descripción" style={{ width: '30%' }} />
+            <Column field="product.code" header="Código" className='rounded-tl-md' style={{ width: '10%' }} />
+            <Column field="product.description" header="Descripción" style={{ width: '25%' }} />
             <Column field={(rowData) => formatCurrency(rowData.product.priceEffective)} header="Efectivo" style={{ width: '10%' }} />
             <Column field={(rowData) => formatCurrency(rowData.product.priceDebit)} header="Débito" style={{ width: '10%' }} />
             <Column field={(rowData) => formatCurrency(rowData.product.priceCredit)} header="Crédito" style={{ width: '10%' }} />
@@ -213,12 +213,12 @@ export const LocalPagina = () => {
             <Column header="Acciones" alignHeader={'center'} className='rounded-tr-md' style={{ width: '10%' }}
               body={(rowData) => (
                 <div className='flex'>
-                  <Link to={`/producto/detalle/${rowData.product.idProduct}`} className='me-3'>
+                  <Link to={`/producto/detalle/${rowData.product.idProduct}`} target='_blank' className='me-3'>
                     <button className='bg-blue-500 rounded text-xl text-white px-2 py-1'>
                       <i className='bi bi-eye-fill'></i>
                     </button>
                   </Link>
-                  <Link to={`/producto/modificar/${rowData.product.idProduct}`} className='me-3'>
+                  <Link to={`/producto/modificar/${rowData.product.idProduct}`} target='_blank' className='me-3'>
                     <button className='bg-yellow-500 rounded text-xl text-white px-2 py-1'>
                       <i className='bi bi-pencil-fill'></i>
                     </button>

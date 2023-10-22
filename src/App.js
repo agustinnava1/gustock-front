@@ -21,14 +21,14 @@ function App() {
     }
   }, [])
 
+  function ConditionalRender({ user }) {
+    return user ? <Home /> : <Login />;
+  }
+
   console.log("user:" + user)
   return (
     <div>
-      {user ?
-        <Home />
-        :
-        <Login />
-      }
+      <ConditionalRender user={user} />
     </div>
   );
 }

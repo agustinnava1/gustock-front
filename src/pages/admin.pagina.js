@@ -28,7 +28,7 @@ export const AdminPagina = () => {
                 <i className='bi bi-shop text-white text-8xl'></i>
               </div>
               <div className='bg-white px-5 pt-5'>
-                <h5 className='mb-2 text-2xl font-bold text-blue-900'>{local.nombre}</h5>
+                <h3 className='mb-2 text-2xl font-bold'>{local.nombre}</h3>
                 <p className='mb-3 font-normal text-gray-700 dark:text-gray-400'>{local.direccion}</p>
                 <Link to={`/local/${local.nombre}`}>
                   <Button label='Ingresar' size='small' className='hover:!bg-blue-600 w-1/2' />
@@ -48,7 +48,7 @@ export const AdminPagina = () => {
                 <i className='bi bi-shop-window text-white text-8xl'></i>
               </div>
               <div className='bg-white px-5 pt-5'>
-                <h5 className='mb-2 text-2xl font-bold text-sky-900'>{deposito.nombre}</h5>
+                <h3 className='mb-2 text-2xl font-bold'>{deposito.nombre}</h3>
                 <p className='mb-3 font-normal text-gray-700 dark:text-gray-400'>{deposito.direccion}</p>
                 <Link to={`/deposito/${deposito.nombre}`}>
                   <Button label='Ingresar' size='small' className='!bg-sky-500 !border-sky-500 hover:!bg-sky-600 w-1/2' />
