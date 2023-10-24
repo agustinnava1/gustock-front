@@ -47,42 +47,44 @@ export const Login = () => {
   }
 
   return (
-    <div className="h-screen" >
-      <div className="md:flex bg-white">
+    <div class="bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: 'url("/local.jpg")' }}>
+      <div class="absolute bg-gradient-to-b from-blue-600 to-blue-200 opacity-75 inset-0 z-0"></div>
+      <div class="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
+        <div class="flex-col flex self-center p-10 sm:max-w-5xl xl:max-w-2xl z-10">
+          <div class="self-start hidden lg:flex flex-col text-white">
+            <h1 class="!text-white mb-3 font-bold text-5xl">Bienvenido a gustock </h1>
+            <p class="pr-3">¡Bienvenido al equipo! Nuestra aplicación te ayudará en la gestión de tú local.</p>
+          </div>
+        </div>
+        <div class="flex justify-center self-center z-10">
+          <div class="p-12 bg-white mx-auto rounded-2xl w-100">
+            <div class="mb-4">
+              <h3 class="font-semibold text-2xl !text-[#1764C6]">Iniciar sesión </h3>
+              <p class="text-gray-500">Por favor inicia sesión en tu cuenta.</p>
+            </div>
 
-        <div className="bg-[rgb(249, 249, 251)] md:w-1/2 flex justify-center items-center p-5 lg:p-0">
-          <div className="bg-white text-center p-32 shadow-2xl border rounded-md">
-            <h1 className="text-4xl !text-[#1764C6] font-semibold mb-5">GUSTOCK</h1>
-            <h2 className="text-2xl mb-5">Ingreso al sistema</h2>
-
-            <form onSubmit={handleLogin} className="text-center mb-5">
-              <div>
-                <label className="font-medium block mb-3">Usuario</label>
-                <InputText name="username" type="text"
-                  value={userDetail.username} onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md mb-3" />
-              </div>
-
-              <div className="mb-5">
-                <label className="font-medium block my-3">Contraseña</label>
-                <div className="card flex justify-content-center">
+            <form onSubmit={handleLogin}>
+              <div class="space-y-5">
+                <div class="space-y-2">
+                  <label class="block text-sm font-medium text-gray-700 tracking-wide">Usuario</label>
+                  <InputText name="username" type="text"
+                    value={userDetail.username} onChange={handleChange}
+                    className="w-full p-inputtext-sm" />
+                </div>
+                <div class="space-y-2">
+                  <label class="block text-sm font-medium text-gray-700 tracking-wide">Contraseña</label>
                   <Password name="password" type="password" feedback={false}
                     value={userDetail.password} onChange={handleChange} toggleMask
-                    className="w-full py-2 mb-3" />
+                    className="w-full" inputClassName="w-full p-inputtext-sm" />
+                </div>
+                <div>
+                  <Button className="w-full !rounded-full hover:!bg-blue-600" label="Iniciar sesión" type="submit" />
                 </div>
               </div>
-
-              <Button className="w-full hover:!bg-blue-600" label="Iniciar sesión" type="submit" />
-            </form >
-            {errorMessage && <Message severity="error" text={errorMessage} />}
+            </form>
+            {errorMessage && <Message className='!mt-5' severity="error" text={errorMessage} />}
           </div>
-        </div >
-
-        <div className="hidden md:block w-1/2">
-          <img className="h-screen max-w-full"
-            src='/local.jpg' />
         </div>
-
       </div>
     </div>
   )
