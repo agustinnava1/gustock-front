@@ -6,21 +6,18 @@ const SidebarContext = createContext()
 export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(false)
 
-  /*const usuario = JSON.parse(localStorage.getItem("loggedUser"));
-  const rol = usuario.rol.match(/\[ROLE_(.*?)\]/)[1];*/
-
   return (
-    <aside className="bg-[#1764C6] hidden lg:block min-h-screen">
-      <div className={`${expanded ? "w-[250px]" : "w-auto"}`}>
+    <aside className="bg-white hidden lg:block min-h-screen border-r">
+      <div className={`${expanded ? "w-[225px]" : "w-auto"}`}>
         <nav>
           <div className="p-4 pb-2 flex justify-between items-center">
             <span
-              className={`text-2xl font-bold text-white overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
-              Menú
+              className={`text-2xl font-bold text-blue-600 overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
+              Gustock
             </span>
             <button
               onClick={() => setExpanded((curr) => !curr)}
-              className="p-2.5 rounded-lg bg-white">
+              className="p-2.5 rounded-lg bg-blue-600 text-white">
               {expanded ? <ChevronFirst /> : <ChevronLast />}
             </button>
           </div>
@@ -44,8 +41,8 @@ export function SidebarItem({ icon, text, active, alert }) {
         font-medium rounded-md cursor-pointer
         transition-colors group
         ${active
-          ? "bg-white text-[#3B71CA]"
-          : "hover:bg-white hover:text-[#3B71CA] text-white"
+          ? "bg-blue-600 text-white"
+          : "hover:bg-blue-600 hover:text-white text-blue-600"
         }
     `}
     >
@@ -67,7 +64,7 @@ export function SidebarItem({ icon, text, active, alert }) {
         <div
           className={`
           absolute left-full rounded-md px-2 py-1 ml-6
-          bg-blue-100 text-blue-800 text-sm z-10
+          bg-blue-100 text-blue-600 text-sm z-10
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
       `}

@@ -104,7 +104,6 @@ export const ProductosPagina = () => {
   return (
     <div className='p-5'>
       <h2 className='text-3xl font-medium mb-2'>Mis productos</h2>
-      <span class='text-xl font-normal'>Vista general y control de todos los productos registrados en el sistema.</span>
       <Card className='!shadow border my-5'>
         <div className='flex flex-wrap gap-3'>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>

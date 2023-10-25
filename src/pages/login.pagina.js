@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useState } from 'react'
 
 import { Button } from 'primereact/button'
 import { Message } from 'primereact/message'
@@ -16,8 +16,8 @@ export const Login = () => {
   const [errorMessage, setErrorMessage] = useState();
 
   const [userDetail, setUserDetail] = useState({
-    username: "",
-    password: ""
+    username: '',
+    password: ''
   });
 
   const handleChange = (e) => {
@@ -30,7 +30,7 @@ export const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (userDetail.username === "" || userDetail.password === "") {
+    if (userDetail.username === '' || userDetail.password === '') {
       return;
     }
 
@@ -47,42 +47,41 @@ export const Login = () => {
   }
 
   return (
-    <div class="bg-no-repeat bg-cover bg-center relative" style={{ backgroundImage: 'url("/local.jpg")' }}>
-      <div class="absolute bg-gradient-to-b from-blue-600 to-blue-200 opacity-75 inset-0 z-0"></div>
-      <div class="min-h-screen sm:flex sm:flex-row mx-0 justify-center">
-        <div class="flex-col flex self-center p-10 sm:max-w-5xl xl:max-w-2xl z-10">
-          <div class="self-start hidden lg:flex flex-col text-white">
-            <h1 class="!text-white mb-3 font-bold text-5xl">Bienvenido a gustock </h1>
-            <p class="pr-3">¡Bienvenido al equipo! Nuestra aplicación te ayudará en la gestión de tú local.</p>
+    <div class='bg-no-repeat bg-cover bg-center relative' style={{ backgroundImage: 'url("/local.jpg")' }}>
+      <div class='absolute bg-gradient-to-b from-blue-600 to-blue-200 opacity-75 inset-0 z-0'></div>
+      <div class='min-h-screen sm:flex sm:flex-row mx-0 justify-center'>
+        <div class='flex-col flex self-center p-10 sm:max-w-5xl xl:max-w-2xl z-10'>
+          <div class='self-start hidden lg:flex flex-col text-white'>
+            <h1 class='!text-white mb-3 font-bold text-5xl'>Bienvenido a gustock </h1>
+            <p class='pr-3'>¡Bienvenido al equipo! Nuestra aplicación te ayudará en la gestión de tú local.</p>
           </div>
         </div>
-        <div class="flex justify-center self-center z-10">
-          <div class="p-12 bg-white mx-auto rounded-2xl w-100">
-            <div class="mb-4">
-              <h3 class="font-semibold text-2xl !text-[#1764C6]">Iniciar sesión </h3>
-              <p class="text-gray-500">Por favor inicia sesión en tu cuenta.</p>
+        <div class='flex justify-center self-center z-10'>
+          <div class='p-12 bg-white mx-auto rounded-2xl w-100'>
+            <div class='mb-4'>
+              <h3 class='font-semibold text-2xl !text-[#1764C6]'>Iniciar sesión </h3>
+              <p class='text-gray-500'>Por favor inicia sesión en tu cuenta.</p>
             </div>
-
             <form onSubmit={handleLogin}>
-              <div class="space-y-5">
-                <div class="space-y-2">
-                  <label class="block text-sm font-medium text-gray-700 tracking-wide">Usuario</label>
-                  <InputText name="username" type="text"
+              <div class='space-y-5'>
+                <div class='space-y-2'>
+                  <label class='block font-medium text-gray-700 tracking-wide'>Usuario</label>
+                  <InputText name='username' type='text'
                     value={userDetail.username} onChange={handleChange}
-                    className="w-full p-inputtext-sm" />
+                    className='w-full p-inputtext-sm' />
                 </div>
-                <div class="space-y-2">
-                  <label class="block text-sm font-medium text-gray-700 tracking-wide">Contraseña</label>
-                  <Password name="password" type="password" feedback={false}
+                <div class='space-y-2'>
+                  <label class='block font-medium text-gray-700 tracking-wide'>Contraseña</label>
+                  <Password name='password' type='password' feedback={false}
                     value={userDetail.password} onChange={handleChange} toggleMask
-                    className="w-full" inputClassName="w-full p-inputtext-sm" />
+                    className='w-full' inputClassName='w-full p-inputtext-sm' />
                 </div>
                 <div>
-                  <Button className="w-full !rounded-full hover:!bg-blue-600" label="Iniciar sesión" type="submit" />
+                  <Button className='w-full !rounded-full hover:!bg-blue-600' label='Iniciar sesión' type='submit' />
                 </div>
               </div>
             </form>
-            {errorMessage && <Message className='!mt-5' severity="error" text={errorMessage} />}
+            {errorMessage && <Message className='!mt-5' severity='error' text={errorMessage} />}
           </div>
         </div>
       </div>
