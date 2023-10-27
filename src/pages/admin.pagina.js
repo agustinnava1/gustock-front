@@ -20,7 +20,9 @@ export const AdminPagina = () => {
   return (
     <div className='p-5'>
       <div>
-        <h2 className='text-4xl font-medium mb-5'>Mis Locales</h2>
+        <div className='bg-white border rounded shadow p-3 mb-5'>
+          <h2 className='text-3xl font-medium'>Mis Locales</h2>
+        </div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
           {locales.map(local => (
             <Card className='!shadow border text-center' key={local.id}>
@@ -40,7 +42,9 @@ export const AdminPagina = () => {
       </div>
 
       <div>
-        <h2 className='text-4xl font-medium my-5'>Mis Depósitos</h2>
+        <div className='bg-white border rounded shadow p-3 my-5'>
+          <h2 className='text-3xl font-medium'>Mis Depósitos</h2>
+        </div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
           {depositos.map(deposito => (
             <Card className='!shadow border text-center' key={deposito.id}>

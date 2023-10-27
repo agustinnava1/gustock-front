@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL, config } from "../helper/AxionHelper";
+import { BASE_URL, config } from "../helper/AxionHelper"
 import { builderParams } from "../helper/builder.params"
 
 const baseUrl = BASE_URL + "/product";

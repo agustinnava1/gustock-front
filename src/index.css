@@ -63,3 +63,17 @@ h1, h2, label{
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
   background-color: #3B82F6!important;
 }
+
+.hidden-content {
+  position: absolute;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  max-width: 300px;
+  display: none;
+}
+
+.p-datatable-row:hover .hidden-content {
+  display: block;
+  position: relative;
+}

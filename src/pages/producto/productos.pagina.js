@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Card } from 'primereact/card'
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { Dropdown } from 'primereact/dropdown'
@@ -15,6 +15,7 @@ import Swal from 'sweetalert2'
 import ProductFilters from '../../helper/producto.filtros'
 import ProductService from '../../services/producto.servicio'
 import ListProductsExport from '../../components/export.products.component'
+import { TieredMenu } from 'primereact/tieredmenu'
 
 export const ProductosPagina = () => {
   const initialPagination = {
@@ -101,40 +102,67 @@ export const ProductosPagina = () => {
     })
   }
 
+  const productMenu = useRef(null);
+  const productItems = [
+    {
+      label: 'Modificación rápida',
+      url: '/productos/modificacion/rapida',
+    },
+    {
+      label: 'Modificación masiva',
+      url: '/productos/modificacion/masiva',
+    },
+  ]
+
   return (
     <div className='p-5'>
-      <h2 className='text-3xl font-medium mb-2'>Mis productos</h2>
+      <h2 className='text-3xl font-medium'>Mis productos</h2>
       <Card className='!shadow border my-5'>
         <div className='flex flex-wrap gap-3'>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
+            <label class='block font-medium mb-2'>Proveedor</label>
             <Dropdown options={listProviders} optionLabel='razonSocial' filter
               name='provider' value={provider} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
+            <label class='block font-medium mb-2'>Rubro</label>
             <Dropdown options={listCategories} optionLabel='descripcion' filter
               name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
+            <label class='block font-medium mb-2'>Marca</label>
             <Dropdown options={listBrands} optionLabel='descripcion' filter
               name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
+            <label class='block font-medium mb-2'>Cantidad</label>
             <Dropdown options={listQuantities}
               name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
               placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
           </div>
           <div>
+            <label class='block invisible font-medium mb-2'>Boton</label>
             <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
-          </div>
-          <div>
-            <ListProductsExport products={listProducts} />
           </div>
         </div>
       </Card>
       <Card className='!shadow border mt-5'>
+        <div className='flex justify-between mb-3'>
+          <div>
+            <Button label='Opciones' onClick={(e) => productMenu.current.toggle(e)} className='hover:!bg-blue-600' size='small' />
+            <TieredMenu model={productItems} popup ref={productMenu} breakpoint="767px" />
+          </div>
+          <div className='flex'>
+            <NavLink className="text-decoration-none" to={"/producto/registrar"}>
+              <Button label='Agregar' className='hover:!bg-blue-600 !me-3' size='small' />
+            </NavLink>
+            <ListProductsExport products={listProducts} />
+          </div>
+        </div>
+
         <DataTable value={listProducts} stripedRows emptyMessage='No se encontraron resultados' size='small'>
           <Column field='code' header='Código' className='rounded-tl-md' style={{ width: '10%' }}></Column>
           <Column field='description' header='Descripción' style={{ width: '30%' }}></Column>
@@ -147,16 +175,16 @@ export const ProductosPagina = () => {
             body={(product) => (
               <div className='flex justify-center'>
                 <Link to={`/producto/detalle/${product.idProduct}`} className='me-3'>
-                  <button className='text-blue-500 border border-blue-500 rounded px-2 py-1'>
+                  <button className='text-blue-500 rounded px-2 py-1'>
                     <i className='bi bi-eye-fill'></i>
                   </button>
                 </Link>
                 <Link to={`/producto/modificar/${product.idProduct}`} className='me-3'>
-                  <button className='text-sky-500 border border-sky-500 rounded px-2 py-1'>
+                  <button className='text-sky-500 rounded px-2 py-1'>
                     <i className='bi bi-pencil-fill'></i>
                   </button>
                 </Link>
-                <button className='text-cyan-500 border border-cyan-500 rounded px-2 py-1'
+                <button className='text-cyan-500 rounded px-2 py-1'
                   onClick={() => handleDelete(product.idProduct)} >
                   <i className='bi bi-trash-fill'></i>
                 </button>

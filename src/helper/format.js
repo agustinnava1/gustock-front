@@ -23,7 +23,7 @@ export function formatDate(fecha) {
 
 export function formatDateTime(fecha) {
   const dateObject = DateTime.fromISO(fecha, { zone: 'America/Argentina/Buenos_Aires' });
-  const formattedDate = dateObject.toFormat('dd/MM/yyyy HH:mm'); // Include 'HH:mm' for hour and minutes
+  const formattedDate = dateObject.toFormat('dd/MM/yyyy HH:mm')
   return formattedDate;
 }
 

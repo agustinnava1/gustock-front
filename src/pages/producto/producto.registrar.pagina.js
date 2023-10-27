@@ -180,12 +180,12 @@ export const ProductoRegistrar = () => {
             }
           </Card>
           <Card title='Código de barras' className='!shadow border'>
-            <InputNumber className='w-full p-inputtext-sm' useGrouping={false}
+            <InputNumber className='w-full p-inputtext-sm mb-3' useGrouping={false}
               value={barcodeValue} onChange={(e) => setBarcodeValue(e.target.value)} />
-            <div className='border border-1'>
+            <div className='border border-1 mb-3'>
               <svg id='barcode-svg' className='m-auto' width='234px' height='142px'></svg>
             </div>
-            <div className='flex mt-4'>
+            <div className='flex'>
               <Button label='Generar' onClick={generateBarcode} className='w-full !me-3 hover:!bg-blue-600' size='small' disabled={barcodeValue} />
               <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='secondary' size='small' disabled={!barcodeValue} />
             </div>
@@ -197,7 +197,7 @@ export const ProductoRegistrar = () => {
             <div className='mb-3'>
               <label htmlFor='description' className='block font-medium text-lg mb-2'>Código</label>
               <div className='flex'>
-                <InputText name='code' value={code} onChange={onInputChange} className='p-inputtext-sm w-full !me-3' />
+                <InputText name='code' value={code} onChange={(e) => setCode(e.target.value)} className='p-inputtext-sm w-full !me-3' />
                 <div>
                   <Button label='Generar' onClick={generateCode} size='small' className='w-full' />
                 </div>
@@ -250,7 +250,7 @@ export const ProductoRegistrar = () => {
             </div>
           </Card>
           <Card title='Distribución' className='!shadow border overscroll-auto'>
-            <div style={{ maxHeight: '248px', overflowY: 'auto' }}>
+            <div style={{ maxHeight: '257px', overflowY: 'auto' }}>
               <DataTable value={listShops} stripedRows size="small" emptyMessage="No se encontraron locales">
                 <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
                   body={(rowData) => (

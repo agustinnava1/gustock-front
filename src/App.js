@@ -25,7 +25,6 @@ function App() {
     return user ? <Home /> : <Login />;
   }
 
-  console.log("user:" + user)
   return (
     <div>
       <ConditionalRender user={user} />
