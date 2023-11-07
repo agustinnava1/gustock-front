@@ -120,10 +120,10 @@ export const ProductoDetalle = () => {
         </div>
       </div>
 
-      <div className="card">
-        <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} />
+      <Card className="!shadow border">
+        <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} className='mb-5' />
         {activeIndex == 0 &&
-          <div className='bg-white p-5'>
+          <div>
             <DataTable value={stocks} stripedRows emptyMessage='No se encontraron unidades' size='small'>
               <Column field={(rowData) => (rowData.local.nombre) + " - " + (rowData.local.direccion)}
                 header='Sucursal' className='rounded-tl-md' style={{ width: '33%' }}></Column>
@@ -134,7 +134,7 @@ export const ProductoDetalle = () => {
           </div>
         }
         {activeIndex == 1 &&
-          <div className='bg-white p-5'>
+          <div>
             <table className="table w-full">
               <tbody>
                 {[
@@ -164,11 +164,11 @@ export const ProductoDetalle = () => {
           </div>
         }
         {activeIndex == 2 &&
-          <div className='bg-white p-5'>
+          <div>
 
           </div>
         }
-      </div>
+      </Card>
     </div>
   )
 }

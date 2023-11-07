@@ -4,15 +4,19 @@
 
 body{
   color: #2A2B2A;
-  background-color: #eff3f8!important;
+  background-color: #F8F9FD!important;
 }
 
-h1, h2, label{
-  color:  rgb(65, 84, 132)!important;
+h1,h2{
+  color: #415484!important;
+}
+
+label{
+  color:  #415484!important;
 }
 
 .p-card .p-card-title{
-  color:   #1764C6!important;
+  color:   #1d64d8!important;
 }
 
 .p-card .p-card-content{
@@ -21,7 +25,16 @@ h1, h2, label{
 
 .p-datatable .p-datatable-thead > tr > th{
   color: white!important;
-  background-color: #2493D8!important;
+  background-color: #3b82f6!important;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border: none!important;
+  border-width: none!important;
+}
+
+.p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
+  background-color: #eff5ff!important;
 }
 
 .p-panel.p-panel-toggleable .p-panel-header {
@@ -62,18 +75,4 @@ h1, h2, label{
 
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
   background-color: #3B82F6!important;
-}
-
-.hidden-content {
-  position: absolute;
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 10px;
-  max-width: 300px;
-  display: none;
-}
-
-.p-datatable-row:hover .hidden-content {
-  display: block;
-  position: relative;
 }

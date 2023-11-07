@@ -17,13 +17,13 @@ export function formatTime(time) {
 
 export function formatDate(fecha) {
   const dateObject = DateTime.fromISO(fecha, { zone: 'America/Argentina/Buenos_Aires' });
-  const formattedDate = dateObject.toFormat('dd/MM/yyyy');
+  const formattedDate = dateObject.toFormat('dd/MM/yy');
   return formattedDate;
 };
 
 export function formatDateTime(fecha) {
   const dateObject = DateTime.fromISO(fecha, { zone: 'America/Argentina/Buenos_Aires' });
-  const formattedDate = dateObject.toFormat('dd/MM/yyyy HH:mm')
+  const formattedDate = dateObject.toFormat('dd/MM/yy HH:mm')
   return formattedDate;
 }
 

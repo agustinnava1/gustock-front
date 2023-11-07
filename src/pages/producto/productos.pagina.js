@@ -116,50 +116,47 @@ export const ProductosPagina = () => {
 
   return (
     <div className='p-5'>
-      <h2 className='text-3xl font-medium'>Mis productos</h2>
+      <h2 className='text-4xl font-medium'>Mis productos</h2>
       <Card className='!shadow border my-5'>
-        <div className='flex flex-wrap gap-3'>
+        <div className='flex justify-between'>
+          <div>
+            <NavLink className="text-decoration-none" to={"/producto/registrar"}>
+              <Button label='Agregar' className='hover:!bg-blue-600' size='small' />
+            </NavLink>
+          </div>
+          <div className='flex'>
+            <ListProductsExport products={listProducts} />
+            <Button label='Opciones' onClick={(e) => productMenu.current.toggle(e)} className='hover:!bg-blue-600 !ml-3' size='small' />
+            <TieredMenu model={productItems} popup ref={productMenu} breakpoint="767px" />
+          </div>
+        </div>
+      </Card>
+
+    
+      <Card className='!shadow border'>
+      <div className='flex flex-wrap gap-3 mb-5'>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
-            <label class='block font-medium mb-2'>Proveedor</label>
             <Dropdown options={listProviders} optionLabel='razonSocial' filter
               name='provider' value={provider} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
-            <label class='block font-medium mb-2'>Rubro</label>
             <Dropdown options={listCategories} optionLabel='descripcion' filter
               name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
-            <label class='block font-medium mb-2'>Marca</label>
             <Dropdown options={listBrands} optionLabel='descripcion' filter
               name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
               placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex-auto w-32 md:w-36 mb-3 lg:mb-0'>
-            <label class='block font-medium mb-2'>Cantidad</label>
             <Dropdown options={listQuantities}
               name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
               placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
           </div>
           <div>
-            <label class='block invisible font-medium mb-2'>Boton</label>
             <Button label='Filtrar' onClick={filter} className='hover:!bg-blue-600 me-3' size='small' />
-          </div>
-        </div>
-      </Card>
-      <Card className='!shadow border mt-5'>
-        <div className='flex justify-between mb-3'>
-          <div>
-            <Button label='Opciones' onClick={(e) => productMenu.current.toggle(e)} className='hover:!bg-blue-600' size='small' />
-            <TieredMenu model={productItems} popup ref={productMenu} breakpoint="767px" />
-          </div>
-          <div className='flex'>
-            <NavLink className="text-decoration-none" to={"/producto/registrar"}>
-              <Button label='Agregar' className='hover:!bg-blue-600 !me-3' size='small' />
-            </NavLink>
-            <ListProductsExport products={listProducts} />
           </div>
         </div>
 
@@ -174,18 +171,18 @@ export const ProductosPagina = () => {
           <Column header='Acciones' className='rounded-tr-md' alignHeader={'center'} style={{ width: '10%' }}
             body={(product) => (
               <div className='flex justify-center'>
-                <Link to={`/producto/detalle/${product.idProduct}`} className='me-3'>
-                  <button className='text-blue-500 rounded px-2 py-1'>
+                <Link to={`/producto/detalle/${product.id}`} className='me-3'>
+                  <button className='text-blue-500 border border-blue-500 rounded px-2 py-1'>
                     <i className='bi bi-eye-fill'></i>
                   </button>
                 </Link>
-                <Link to={`/producto/modificar/${product.idProduct}`} className='me-3'>
-                  <button className='text-sky-500 rounded px-2 py-1'>
+                <Link to={`/producto/modificar/${product.id}`} className='me-3'>
+                  <button className='text-yellow-500 border border-yellow-500 rounded px-2 py-1'>
                     <i className='bi bi-pencil-fill'></i>
                   </button>
                 </Link>
-                <button className='text-cyan-500 rounded px-2 py-1'
-                  onClick={() => handleDelete(product.idProduct)} >
+                <button className='text-red-500 border border-red-500 rounded px-2 py-1'
+                  onClick={() => handleDelete(product.id)} >
                   <i className='bi bi-trash-fill'></i>
                 </button>
               </div>

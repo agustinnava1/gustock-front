@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import LocalServicio from '../services/local.servicio';
+import ShopService from '../services/local.servicio';
 import CategoryService from '../services/rubro.servicio';
 
 function VentaFilters() {
@@ -9,7 +9,7 @@ function VentaFilters() {
   const [quantities, setQuantities] = useState([10, 20, 30, 40, 50, "TODOS"]);
 
   useEffect(() => {
-    const fetchLocales = LocalServicio.listarLocales().then((res) => {
+    const fetchLocales = ShopService.getAll().then((res) => {
       const all = [{ nombre: 'TODOS', valor: null }, ...res];
       setStores(all);
     });

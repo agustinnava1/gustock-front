@@ -166,7 +166,7 @@ export const ProductoRegistrar = () => {
       <h2 className='text-3xl font-medium mb-5'>Crear nuevo producto</h2>
       <div className='md:flex justify-between gap-5'>
         <div>
-          <Card title='Imagen' className='!shadow border mb-5'>
+          <Card title='Imagen' className='!shadow-lg border mb-5'>
             <input className='block w-full text-slate-500 file:rounded file:mr-4 file:py-2 file:px-4 file:border-0
                 file:text-lg file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
               type='file' accept='image/*' onChange={handleImageChange} />
@@ -179,7 +179,7 @@ export const ProductoRegistrar = () => {
               </div>
             }
           </Card>
-          <Card title='Código de barras' className='!shadow border'>
+          <Card title='Código de barras' className='!shadow-lg border'>
             <InputNumber className='w-full p-inputtext-sm mb-3' useGrouping={false}
               value={barcodeValue} onChange={(e) => setBarcodeValue(e.target.value)} />
             <div className='border border-1 mb-3'>

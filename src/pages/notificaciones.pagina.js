@@ -8,6 +8,8 @@ import { useContext, useEffect, useState } from 'react'
 
 import UserContext from '../user.context'
 import NotificationService from '../services/notification.service'
+import { Button } from 'primereact/button'
+import { MailOpen, Trash2 } from 'lucide-react'
 
 export const NotificacionesPagina = () => {
   const [user, setUser] = useContext(UserContext)
@@ -48,7 +50,7 @@ export const NotificacionesPagina = () => {
   }
 
   const renderMessage = (rowData, column) => {
-    const maxLength = 170
+    const maxLength = 150
     const message = rowData[column.field];
 
     if (message.length > maxLength) {
@@ -91,13 +93,19 @@ export const NotificacionesPagina = () => {
             <Column selectionMode='multiple' className='rounded-tl-lg' style={{ width: '1%' }} />
             <Column field='from' className='font-medium' style={{ width: '5%' }} />
             <Column field='subject' style={{ width: '10%' }} body={renderSubject} />
-            <Column field='message' style={{ width: '79%' }} body={renderMessage} />
+            <Column field='message' style={{ width: '74%' }} body={renderMessage} />
             <Column field='dateTime' className='font-medium' style={{ width: '5%' }} body={renderDate} />
-
-            <Column style={{ width: '0%' }}>
-              <div className="hidden-content">
-                This is the additional content you want to display on hover.
-              </div>
+            <Column className='rounded-tr-md' alignHeader={'center'} style={{ width: '5%' }}
+              body={(inbox) => (
+                <div className='flex justify-center'>
+                  <button className='text-blue-500 rounded px-2 py-1'>
+                    <i className='pi pi-envelope'></i>
+                  </button>
+                  <button className='text-red-500 rounded px-2 py-1'>
+                    <i className='pi pi-trash'></i>
+                  </button>
+                </div>
+              )}>
             </Column>
           </DataTable>
         </div>
