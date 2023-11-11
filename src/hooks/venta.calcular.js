@@ -1,43 +1,43 @@
 import { useState } from "react"
 import { formatCurrency } from "../helper/format";
 
-export const useCalculateTotal = (listaVentas) => {
+export const useCalculateTotal = (listSales) => {
 
-  const totalEfectivo = () => {
+  const totalCash = () => {
     let total = 0;
 
-    for (let venta of listaVentas) {
-      total += venta.pagoEfectivo;
+    for (let sale of listSales) {
+      total += sale.cashPayment;
     }
 
     return formatCurrency(total);
   };
 
-  const totalDebito = () => {
+  const totalDebit = () => {
     let total = 0;
 
-    for (let venta of listaVentas) {
-      total += venta.pagoDebito;
+    for (let sale of listSales) {
+      total += sale.debitPayment;
     }
 
     return formatCurrency(total);
   };
 
-  const totalCredito = () => {
+  const totalCredit = () => {
     let total = 0;
 
-    for (let venta of listaVentas) {
-      total += venta.pagoCredito;
+    for (let sale of listSales) {
+      total += sale.creditPayment;
     }
 
     return formatCurrency(total);
   };
 
-  const totalCodigoQr = () => {
+  const totalCodeQr = () => {
     let total = 0;
 
-    for (let venta of listaVentas) {
-      total += venta.pagoCodigoQr;
+    for (let sale of listSales) {
+      total += sale.qrCodePayment;
     }
 
     return formatCurrency(total);
@@ -46,18 +46,18 @@ export const useCalculateTotal = (listaVentas) => {
   const totalFinal = () => {
     let total = 0;
 
-    for (let venta of listaVentas) {
-      total += venta.total;
+    for (let sale of listSales) {
+      total += sale.total;
     }
 
     return formatCurrency(total);
   };
 
   return {
-    totalEfectivo,
-    totalDebito,
-    totalCredito,
-    totalCodigoQr,
+    totalCash,
+    totalDebit,
+    totalCredit,
+    totalCodeQr,
     totalFinal
   }
 

@@ -62,17 +62,21 @@ label{
 }
 
 .p-button-secondary{
-  color: #1764c6!important;
-  background-color: #c6ddf0!important;
-  border: 1px solid #c6ddf0!important;
+  color: #3B82F6!important;
+  background-color: #dbe8fe!important;
+  border: 2px solid #dbe8fe!important;
 }
 
 .p-button-secondary:hover{
-  color: #ffffff!important;
-  background-color: #2493D8!important;
-  border: 1px solid #2493D8!important;
+  background-color: #bfd7fe!important;
+  border: 2px solid #bfd7fe!important;
 }
 
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
   background-color: #3B82F6!important;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
+  color: #3B82F6!important;
+  background-color: white!important;
 }

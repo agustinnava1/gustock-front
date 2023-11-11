@@ -31,6 +31,7 @@ export const usePagination = (initialPagination = {}) => {
 
   return{
     paginationState,
+    setPaginationState,
     handleDate,
     onInputChange,
     onDropdownChange

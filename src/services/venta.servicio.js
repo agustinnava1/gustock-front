@@ -1,64 +1,32 @@
 import axios from "axios";
 import { BASE_URL, config } from "../helper/AxionHelper";
+import { builderParams } from "../helper/builder.params";
 
-const baseUrl = BASE_URL + "/venta";
+const baseUrl = BASE_URL + "/api/v1/sale";
 
-class VentaService {
+class SaleService {
 
     getById(id) { return axios.get(baseUrl + "/" + id, config).then(res => res.data) }
 
-    save(venta) { return axios.post(baseUrl + "/crear", venta, config).then(res => res.data) }
+    create(sale) { return axios.post(baseUrl + "/create", sale, config).then(res => res.data) }
 
-    update(venta) { return axios.put(baseUrl + "/modificar/" + venta.id, venta, config).then(res => res.data) }
+    delete(id) { return axios.delete(baseUrl + "/delete/" + id, config).then(res => res.data) }
 
-    delete(id) { return axios.delete(baseUrl + "/eliminar/" + id, config).then(res => res.data) }
-
-    exportToExcel(pagination) {
-        const params = Object.keys(pagination)
-            .filter(key => pagination[key] !== null)
-            .map(key => `${key}=${pagination[key]}`)
-            .join('&');
-
-        return axios.get(baseUrl + "/exportar/xlsx?" + params, { responseType: 'blob' })
-        .then((response) => {
-            const blobUrl = window.URL.createObjectURL(response.data);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = blobUrl;
-            a.download = 'historial-ventas.xlsx';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(blobUrl);
-        })
+    getAll(request) {
+        const params = builderParams(request)
+        return axios.get(baseUrl + "/list?" + params, config).then(res => res.data)
     }
 
-    getAll(pagination) {
-        const params = Object.keys(pagination)
-            .filter(key => pagination[key] !== null)
-            .map(key => `${key}=${pagination[key]}`)
-            .join('&');
-
-        return axios.get(baseUrl + "/listar?" + params, config).then(res => res.data)
+    getAllByCategory(request) {
+        const params = builderParams(request)
+        return axios.get(baseUrl + "/list/category?" + params, config).then(res => res.data)
     }
 
-    getAllByCategory(pagination) {
-        const params = Object.keys(pagination)
-            .filter(key => pagination[key] !== null)
-            .map(key => `${key}=${pagination[key]}`)
-            .join('&');
-
-        return axios.get(baseUrl + "/listar/rubro?" + params, config).then(res => res.data)
-    }
-
-    getAllByProduct(pagination) {
-        const params = Object.keys(pagination)
-            .filter(key => pagination[key] !== null)
-            .map(key => `${key}=${pagination[key]}`)
-            .join('&');
-
-        return axios.get(baseUrl + "/listar/producto?" + params, config).then(res => res.data)
+    getAllByProduct(request) {
+        const params = builderParams(request)
+        return axios.get(baseUrl + "/list/product?" + params, config).then(res => res.data)
     }
 
 }
 
-export default new VentaService();
+export default new SaleService();
