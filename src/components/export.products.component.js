@@ -3,6 +3,8 @@ import ExcelJS from 'exceljs';
 
 import { Button } from 'primereact/button';
 import { formatCurrency } from '../helper/format';
+import { FileDown } from 'lucide-react';
+import { Card } from 'primereact/card';
 
 const ListProductsExport = ({ products }) => {
   const handleExport = async () => {
@@ -55,8 +57,13 @@ const ListProductsExport = ({ products }) => {
   };
 
   return (
-    <div>
-      <Button label='Exportar a excel' onClick={handleExport} severity='secondary' size='small' />
+    <div onClick={handleExport} className='hover:cursor-pointer'>
+      <Card className='!shadow-none border mb-5'>
+        <div className='flex gap-3'>
+          <FileDown className='text-blue-500' />
+          <span className='font-medium'>Exportar a excel</span>
+        </div>
+      </Card>
     </div>
   );
 };

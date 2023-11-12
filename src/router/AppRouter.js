@@ -5,7 +5,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 import { AdminPagina } from '../pages/admin.pagina'
 
 import { LocalPagina } from '../pages/local/local.pagina'
-import { PanelPagina } from '../pages/panel.pagina'
+import { PanelPagina } from '../pages/panel/panel.pagina'
 import { AjustesPagina } from '../pages/ajustes.pagina'
 import { ReposicionPagina } from '../pages/reposicion.pagina'
 import { MensajeriaPagina } from '../pages/mensajeria.pagina'

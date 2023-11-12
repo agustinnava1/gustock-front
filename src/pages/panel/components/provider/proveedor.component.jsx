@@ -5,9 +5,10 @@ import { useState, useEffect } from "react"
 import { DataTable } from "primereact/datatable"
 
 import Swal from 'sweetalert2';
-import ProveedorService from "../../services/proveedor.servicio"
+import ProveedorService from "../../../../services/proveedor.servicio"
 
-import { CreateProveedorComponent } from "./create.component";
+import { Card } from "primereact/card";
+import { CreateProviderComponent } from "./create.provider.component";
 
 export const ProveedorComponent = () => {
   const [listProviders, setListProviders] = useState([])
@@ -44,12 +45,11 @@ export const ProveedorComponent = () => {
   }
 
   return (
-    <div>
-      <DataTable value={listProviders} emptyMessage="No se encontraron proveedores"
-        scrollHeight="350px" size="small" stripedRows scrollable >
-        <Column field="razonSocial" header="Razon social"></Column>
+    <Card className="!shadow-none border">
+      <DataTable value={listProviders} emptyMessage="No se encontraron proveedores" scrollHeight="650px" size="small" stripedRows scrollable >
+        <Column field="razonSocial" className="rounded-tl-md" header="Razon social"></Column>
         <Column field="ciudad" header="Ciudad"></Column>
-        <Column header="Acciones" style={{ width: '10%' }}
+        <Column header="Acciones" className="rounded-tr-md" style={{ width: '10%' }}
           body={(rowData) => (
             <div className='flex'>
               <button className='bg-yellow-500 rounded text-xl text-white px-2 py-1 me-3'>
@@ -63,9 +63,12 @@ export const ProveedorComponent = () => {
           )}>
         </Column>
       </DataTable>
-      <Button label="Agregar" className="hover:!bg-blue-600 !mt-5" size="small" onClick={() => setShowCreateProveedor(true)} />
 
-      <CreateProveedorComponent visible={showCreateProveedor} onHide={() => setShowCreateProveedor(false)} />
-    </div>
+      <div className="text-end">
+        <Button label="Agregar" className="!mt-5" size="small" onClick={() => setShowCreateProveedor(true)} />
+      </div>
+
+      <CreateProviderComponent visible={showCreateProveedor} onHide={() => setShowCreateProveedor(false)} />
+    </Card>
   )
 }

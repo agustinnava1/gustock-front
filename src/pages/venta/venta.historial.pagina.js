@@ -97,10 +97,10 @@ export const VentaHistorialPagina = () => {
         VentaService.delete(id)
           .then((data) => {
             filter()
-            Swal.fire('Eliminado', 'La venta #' + data + ' ha sido eliminada del sistema.', 'success');
+            Swal.fire('Eliminado', 'La venta ha sido eliminada del sistema.', 'success');
           })
           .catch((error) => {
-            Swal.fire('Error', 'Hubo un problema al eliminar la venta. Por favor, inténtalo de nuevo más tarde.', 'error');
+            Swal.fire('Error', 'Hubo un problema al intentar eliminar la venta. Por favor, inténtalo de nuevo más tarde.', 'error');
           });
       }
     })
