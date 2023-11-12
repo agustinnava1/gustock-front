@@ -3,19 +3,18 @@ import ShopService from '../services/local.servicio';
 import CategoryService from '../services/rubro.servicio';
 
 function VentaFilters() {
-  const [stores, setStores] = useState([]);
+  const [shops, setShops] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [paymentMethods, setPaymentMethods] = useState(["TODOS", "EFECTIVO", "DEBITO", "CREDITO", "CODIGOQR"]);
+  const [payments, setPayments] = useState(["EFECTIVO", "DEBITO", "CREDITO", "CODIGOQR"]);
   const [quantities, setQuantities] = useState([10, 20, 30, 40, 50, "TODOS"]);
 
   useEffect(() => {
-    const fetchLocales = ShopService.getAll().then((res) => {
-      const all = [{ nombre: 'TODOS', valor: null }, ...res];
-      setStores(all);
+    const fetchLocales = ShopService.getAll().then((data) => {
+      setShops(data);
     });
 
-    const fetchRubros = CategoryService.getAll().then((res) => {
-      setCategories(res);
+    const fetchRubros = CategoryService.getAll().then((data) => {
+      setCategories(data);
     });
 
     Promise.all([fetchLocales, fetchRubros])
@@ -25,9 +24,9 @@ function VentaFilters() {
   }, []);
 
   return {
-    stores,
+    shops,
+    payments,
     categories,
-    paymentMethods,
     quantities,
   };
 }

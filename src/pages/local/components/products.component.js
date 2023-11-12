@@ -10,7 +10,6 @@ import { Paginator } from 'primereact/paginator'
 import { Link } from 'react-router-dom'
 
 import { addLocale } from 'primereact/api'
-import { Eye, Pencil, Trash, Trash2 } from 'lucide-react'
 import { formatDate, formatCurrency } from '../../../helper/format'
 import { calendarioEspañol } from '../../../helper/configuracion.regional'
 
@@ -20,6 +19,7 @@ import Swal from 'sweetalert2'
 
 import StockService from '../../../services/stock.servicio'
 import ProductFilters from '../../../helper/producto.filtros'
+import ListStocksExport from '../../../components/export.stocks.component'
 
 const ProductsComponent = ({ shop }) => {
 
@@ -108,7 +108,7 @@ const ProductsComponent = ({ shop }) => {
         StockService.delete(id)
           .then((data) => {
             filter()
-            Swal.fire('Eliminado', 'El producto ha sido eliminado del local.', 'success')
+            Swal.fire('Eliminado', '"' + data + '"<br> ha sido eliminado del local.', 'success')
           })
           .catch((error) => {
             Swal.fire('Error', 'Hubo un problema al eliminar el producto. Por favor, inténtalo de nuevo más tarde.', 'error')
@@ -117,18 +117,18 @@ const ProductsComponent = ({ shop }) => {
     })
   }
 
-  const resetPagination = () => {
+  const resetFilters = () => {
     setPaginationState(initialPagination)
   }
 
   return (
     <div className='lg:flex lg:justify-between gap-5'>
       <div className='lg:w-1/6'>
-        <Card className='!bg-blue-500 mb-5'>
-          <span className='!text-white text-2xl font-medium'>Productos</span>
+        <Card className='!shadow-none !bg-blue-800 mb-5'>
+          <span className='!text-white text-2xl font-medium'>{totalElements} Productos</span>
         </Card>
 
-        <Card className='!shadow border mb-5'>
+        <Card className='!shadow-none border mb-5'>
           <div className='mb-3'>
             <label className='block font-medium text-lg mb-2'>Proveedor</label>
             <Dropdown value={provider} options={listProviders} onChange={onDropdownChange}
@@ -164,46 +164,39 @@ const ProductsComponent = ({ shop }) => {
               name='recordsQuantity' placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
           </div>
           <div className='flex gap-3'>
-            <Button label='Aplicar' onClick={filter} className='hover:!bg-blue-600 !rounded-full w-full' size='small' />
-            <Button label='Limpiar' onClick={resetPagination} className='hover:!bg-blue-600 !rounded-full w-full' size='small' />
+            <Button label='Aplicar' onClick={filter} className='w-full' size='small' />
+            <Button label='Limpiar' onClick={resetFilters} className='w-full' size='small' severity='secondary' />
           </div>
         </Card>
       </div>
 
       <div className='lg:w-5/6'>
-        <Card className='!shadow border mb-5'>
-          <div className='flex justify-between'>
-            <h2 className='text-xl font-medium inline'>{totalElements} Resultados</h2>
-            <button className='text-blue-500 font-medium hover:underline' size='small'>Exportar a excel</button>
-          </div>
-        </Card>
-
-        <Card className='!shadow border'>
+        <Card className='!shadow-none border'>
           <DataTable value={listProducts} stripedRows size='small' emptyMessage='No se encontraron resultados'>
-            <Column field='product.code' header='Código' className='rounded-tl-md' style={{ width: '10%' }} />
+            <Column field='product.code' header='Código' className='rounded-tl-md font-medium' style={{ width: '10%' }} />
             <Column field='product.description' header='Descripción' style={{ width: '30%' }} />
             <Column field={(rowData) => formatCurrency(rowData.product.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
             <Column field={(rowData) => formatCurrency(rowData.product.priceDebit)} header='Débito' style={{ width: '10%' }} />
             <Column field={(rowData) => formatCurrency(rowData.product.priceCredit)} header='Crédito' style={{ width: '10%' }} />
             <Column field={(rowData) => formatDate(rowData.product.lastPrice)} header='Ult. Precio' style={{ width: '10%' }} />
             <Column field={(rowData) => formatDate(rowData.lastUpdate)} header='Ult. Stock' style={{ width: '10%' }} />
-            <Column field='quantity' header='Unidades' style={{ width: '5%' }} />
+            <Column field='quantity' header='Unidades' className='font-medium' style={{ width: '5%' }} />
             <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
               body={(rowData) => (
-                <div className='flex'>
-                  <Link to={`/producto/detalle/${rowData.product.id}`} target='_blank' className='me-3'>
-                    <button className='text-blue-500 rounded p-1'>
-                      <i className='bi bi-eye-fill'></i>
+                <div className='flex gap-2'>
+                  <Link to={`/producto/detalle/${rowData.product.id}`} target='_blank'>
+                    <button className=' rounded px-2 py-1 bg-blue-500 text-white'>
+                      <i className='pi pi-eye'></i>
                     </button>
                   </Link>
-                  <Link to={`/producto/modificar/${rowData.product.id}`} target='_blank' className='me-3'>
-                    <button className='text-yellow-500 rounded p-1'>
-                      <i className='bi bi-pencil-fill'></i>
+                  <Link to={`/producto/modificar/${rowData.product.id}`} target='_blank'>
+                    <button className='rounded px-2 py-1 bg-yellow-500 text-white'>
+                      <i className='pi pi-pencil'></i>
                     </button>
                   </Link>
-                  <button className='text-red-500 rounded p-1'
+                  <button className=' rounded px-2 py-1 bg-red-500 text-white'
                     onClick={() => handleDelete(rowData.idStock)} >
-                    <i className='bi bi-trash-fill'></i>
+                    <i className='pi pi-trash'></i>
                   </button>
                 </div>
               )}>
@@ -212,6 +205,9 @@ const ProductsComponent = ({ shop }) => {
           <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
             onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
         </Card>
+        <div className='text-end mt-5'>
+          <ListStocksExport stocks={listProducts} />
+        </div>
       </div>
     </div>
   )

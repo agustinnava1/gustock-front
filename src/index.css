@@ -4,7 +4,7 @@
 
 body{
   color: #2A2B2A;
-  background-color: #F8F9FD!important;
+  background-color: #eff5ff!important;
 }
 
 h1,h2{
@@ -13,6 +13,10 @@ h1,h2{
 
 label{
   color:  #415484!important;
+}
+
+.border {
+  border: 1px solid #dad9da!important;
 }
 
 .p-card .p-card-title{
@@ -65,11 +69,6 @@ label{
   color: #3B82F6!important;
   background-color: #dbe8fe!important;
   border: 2px solid #dbe8fe!important;
-}
-
-.p-button-secondary:hover{
-  background-color: #bfd7fe!important;
-  border: 2px solid #bfd7fe!important;
 }
 
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {

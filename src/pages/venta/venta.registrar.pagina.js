@@ -26,7 +26,6 @@ export const RegistrarVentaPagina = () => {
   const [total, setTotal] = useState(0)
   const [subtotal, setSubtotal] = useState(0)
   const [discount, setDiscount] = useState(0)
-  const [recharge, setRecharge] = useState(0)
 
   const [cashPayment, setCashPayment] = useState(0)
   const [debitPayment, setDebitPayment] = useState(0)
@@ -58,6 +57,10 @@ export const RegistrarVentaPagina = () => {
   useEffect(() => {
     calculateDiscount()
   }, [subtotal, discountPct])
+
+  useEffect(() => {
+    calculatePayment()
+  }, [cashPayment, debitPayment, qrCodePayment, additionalPct])
 
   const { requestState, onDropdownChange, onInputChange } = useRequest(initialRequest)
   const { code, typePrice } = requestState
@@ -96,6 +99,18 @@ export const RegistrarVentaPagina = () => {
     const discountAmount = subtotal * (discountPct / 100);
     setDiscount(discountAmount)
     setTotal(subtotal - discountAmount)
+  }
+
+  const calculatePayment = () => {
+    const rest = cashPayment + debitPayment + qrCodePayment
+    const newValue = total - rest
+
+    if(additionalPct > 0) {
+      const additional =  (newValue * additionalPct) / 100
+      setCreditPayment(newValue + additional)
+    } else {
+      setCreditPayment(newValue)
+    }
   }
 
   const onPriceChange = (rowData) => (e) => {
@@ -153,7 +168,7 @@ export const RegistrarVentaPagina = () => {
       <div className='lg:flex gap-5'>
 
         <div className='lg:w-3/4'>
-          <Card className="!shadow-lg border-l-4 border-blue-600 mb-5">
+          <Card className="!shadow-none border border-l-4 border-l-blue-600 mb-5">
             <h3 className='text-2xl text-blue-600 font-bold mb-5'>Productos</h3>
             <form onSubmit={handleSearchProduct} className="mb-5">
               <div className='flex gap-5'>
@@ -204,7 +219,7 @@ export const RegistrarVentaPagina = () => {
             </DataTable>
           </Card>
 
-          <Card className='!shadow-lg border-l-4 border-blue-800'>
+          <Card className='!shadow-none border border-l-4 border-l-blue-800'>
             <h3 className='text-2xl text-blue-800 font-bold mb-5'>Resumen de cuenta</h3>
             <div className='flex gap-5'>
               <div className='flex-1'>
@@ -242,32 +257,32 @@ export const RegistrarVentaPagina = () => {
             <div className='mb-5'>
               <div class='flex items-center justify-between mb-3'>
                 <span className='text-lg font-semibold'>Contado</span>
-                <InputNumber value={cashPayment} onValueChange={(e) => setCashPayment(e.value)}
+                <InputNumber value={cashPayment} onChange={(e) => setCashPayment(e.value)}
                   mode='currency' currency='ARS' locale='es-AR' className='p-inputtext-sm'
                   minFractionDigits={0} maxFractionDigits={0} size={10} />
               </div>
               <div class='flex items-center justify-between mb-3'>
                 <span className='text-lg font-semibold'>Débito</span>
-                <InputNumber value={debitPayment} onValueChange={(e) => setDebitPayment(e.value)}
+                <InputNumber value={debitPayment} onChange={(e) => setDebitPayment(e.value)}
                   mode='currency' currency='ARS' locale='es-AR' className='p-inputtext-sm'
                   minFractionDigits={0} maxFractionDigits={0} size={10} />
               </div>
               <div class='flex items-center justify-between'>
                 <span className='text-lg font-semibold'>Código QR</span>
-                <InputNumber value={qrCodePayment} onValueChange={(e) => setQrCodePayment(e.value)}
+                <InputNumber value={qrCodePayment} onChange={(e) => setQrCodePayment(e.value)}
                   mode='currency' currency='ARS' locale='es-AR' className='p-inputtext-sm'
                   minFractionDigits={0} maxFractionDigits={0} size={10} />
               </div>
               <Divider className='border border-gray-400' />
               <div class='flex items-center justify-between mb-3'>
                 <span className='text-lg font-semibold'>Recargo</span>
-                <InputNumber value={recharge} onValueChange={(e) => setRecharge(e.value)}
+                <InputNumber value={additionalPct} onChange={(e) => setAdditionalPct(e.value)}
                   suffix='%' className='p-inputtext-sm'
                   minFractionDigits={0} maxFractionDigits={0} size={1} />
               </div>
               <div class='flex items-center justify-between'>
                 <span className='text-lg font-semibold'>Crédito</span>
-                <InputNumber value={creditPayment} onValueChange={(e) => setCreditPayment(e.value)}
+                <InputNumber value={creditPayment} onChange={(e) => setCreditPayment(e.value)}
                   mode='currency' currency='ARS' locale='es-AR' className='p-inputtext-sm'
                   minFractionDigits={0} maxFractionDigits={0} size={10} />
               </div>

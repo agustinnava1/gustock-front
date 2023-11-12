@@ -61,7 +61,7 @@ export const VentaDetalle = () => {
           </div>
           <div className="lg:flex">
             <div className="w-1/4 me-5">
-              <div className="bg-white shadow-md rounded border p-4">
+              <Card className="!shadow-none border">
                 <div className="bg-blue-500 p-4 rounded-t">
                   <h3 className="text-white font-medium text-xl mb-0">Detalle de pago</h3>
                 </div>
@@ -87,12 +87,13 @@ export const VentaDetalle = () => {
                     <p className='text-lg'>{formatCurrency(venta.pagoCodigoQr)}</p>
                   </div>
                 </div>
-                <hr className="mb-4"></hr>
+                <hr className="my-4"></hr>
                 <div className="text-end pe-4">
                   <span className="text-xl font-medium text-blue-500 mb-0">Total pagado: {formatCurrency(venta.total)}</span>
                 </div>
-              </div>
-              <div className="bg-white shadow-md rounded border p-4 mt-5">
+              </Card>
+
+              <Card className="!shadow-none border mt-5">
                 <div className="bg-blue-500 p-4 rounded-t">
                   <h3 className="text-white font-medium text-xl mb-0">Información adicional</h3>
                 </div>
@@ -116,7 +117,7 @@ export const VentaDetalle = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
 
             <div className="w-3/4">

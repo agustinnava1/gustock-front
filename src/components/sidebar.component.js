@@ -15,7 +15,7 @@ export default function Sidebar({ children }) {
   return (
     <aside className="hidden lg:block">
       <div className={`h-screen ${expanded ? "w-[225px]" : "w-auto"}`}>
-        <nav className="h-full flex flex-col bg-[#282C36] border-r shadow-sm">
+        <nav className="h-full flex flex-col bg-[#282C36]">
           <div className="p-4 pb-2 flex justify-between items-center">
             <span
               className={`text-2xl font-bold text-gray-400 overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>

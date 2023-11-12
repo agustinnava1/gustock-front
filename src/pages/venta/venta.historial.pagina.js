@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react'
 
-import { useRef } from 'react'
-import { Link } from 'react-router-dom'
-
-import { Row } from 'primereact/row'
 import { Card } from 'primereact/card'
+import { Link } from 'react-router-dom'
 import { Column } from 'primereact/column'
 import { Button } from 'primereact/button'
 import { addLocale } from 'primereact/api'
+import { ClipboardList } from 'lucide-react'
 import { Dropdown } from 'primereact/dropdown'
 import { Calendar } from 'primereact/calendar'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
-import { TieredMenu } from 'primereact/tieredmenu'
-import { ColumnGroup } from 'primereact/columngroup'
 
 import { usePagination } from '../../hooks/use.paginacion'
 import { useCalculateTotal } from '../../hooks/venta.calcular'
@@ -22,18 +18,19 @@ import { calendarioEspañol } from '../../helper/configuracion.regional'
 import { formatCurrency, formatDate, formatTime } from '../../helper/format'
 
 import Swal from 'sweetalert2'
-import VentaService from '../../services/venta.servicio'
 import VentaFilters from '../../helper/venta.filtros'
-import { Eye, Trash, Trash2 } from 'lucide-react'
+import VentaService from '../../services/venta.servicio'
+import ListSalesExport from '../../components/export.sales.component'
 
 export const VentaHistorialPagina = () => {
+
   const initialPagination = {
-    local: null,
-    pagina: 0,
-    cantidad: 10,
-    fechaDesde: null,
-    fechaHasta: null,
-    metodoPago: null
+    shop: null,
+    page: 0,
+    recordsQuantity: 10,
+    dateFrom: null,
+    dateUntil: null,
+    payment: null
   }
 
   const [rows, setRows] = useState(10)
@@ -41,11 +38,11 @@ export const VentaHistorialPagina = () => {
   const [listItems, setListItems] = useState([])
   const [totalElements, setTotalElements] = useState(null)
 
-  const { stores, paymentMethods, quantities } = VentaFilters()
+  const { shops, payments, quantities } = VentaFilters()
   const { paginationState, onDropdownChange, handleDate } = usePagination(initialPagination)
   const { totalCash, totalDebit, totalCredit, totalCodeQr, totalFinal } = useCalculateTotal(listItems)
 
-  const { local, metodoPago, cantidad } = paginationState
+  const { shop, payment, recordsQuantity } = paginationState
 
   useEffect(() => {
     VentaService.getAll(paginationState).then(data => {
@@ -55,18 +52,18 @@ export const VentaHistorialPagina = () => {
   }, [])
 
   const generateRequest = (paginationState, page) => {
-    const request = { ...paginationState, pagina: page || 0 };
-
-    if (local !== null) {
-      request.local = local.nombre;
-    }
+    const request = {
+      ...paginationState,
+      page: page || 0,
+      shop: shop?.nombre
+    };
 
     return request;
   }
 
   const filter = () => {
     setFirst(0)
-    setRows(cantidad)
+    setRows(recordsQuantity)
 
     const request = generateRequest(paginationState)
 
@@ -90,18 +87,16 @@ export const VentaHistorialPagina = () => {
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "Se eliminará el registro de venta del sistema y cada producto será reintegrado al stock del local",
+      text: "Se eliminará el registro de venta del sistema y los productos seran reintregrados al stock del local",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
       confirmButtonText: 'Si, eliminar',
       cancelButtonText: 'Cancelar'
     }).then(async (result) => {
       if (result.isConfirmed) {
         VentaService.delete(id)
           .then((data) => {
-            setListItems(listItems.filter((item) => item.id !== id));
+            filter()
             Swal.fire('Eliminado', 'La venta #' + data + ' ha sido eliminada del sistema.', 'success');
           })
           .catch((error) => {
@@ -111,92 +106,91 @@ export const VentaHistorialPagina = () => {
     })
   }
 
-  const exportToExcel = () => {
-    const request = generateRequest(paginationState)
-    VentaService.exportToExcel(request)
-  }
-
   addLocale('es', calendarioEspañol)
-
-  const menu = useRef(null)
-
-  const items = [
-    {
-      label: 'Historial por rubro',
-      url: '/venta/historial/rubro',
-    },
-    {
-      label: 'Historial por producto',
-      url: '/venta/historial/producto',
-    }
-  ]
 
   return (
     <div className='p-5'>
-      <h2 className='text-4xl font-medium mb-3'>Historial de ventas</h2>
-
-      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 my-5'>
-        <Card className='!shadow border-l-4 border-blue-400'>
-          <p className='text-blue-400 font-medium mb-2'>Total efectivo</p>
-          <span className='text-2xl'>{totalCash()}</span>
-        </Card>
-        <Card className='!shadow border-l-4 border-blue-500'>
-          <p className='text-blue-500 font-medium mb-2'>Total débito</p>
-          <span className='text-2xl'>{totalDebit()}</span>
-        </Card>
-        <Card className='!shadow border-l-4 border-blue-600'>
-          <p className='text-blue-600 font-medium mb-2'>Total código Qr</p>
-          <span className='text-2xl'>{totalCodeQr()}</span>
-        </Card>
-        <Card className='!shadow border-l-4 border-blue-700'>
-          <p className='text-blue-700 font-medium mb-2'>Total crédito</p>
-          <span className='text-2xl'>{totalCredit()}</span>
-        </Card>
-        <Card className='!shadow border-l-4 border-blue-800'>
-          <p className='text-blue-800 font-medium mb-2'>Total de ventas</p>
-          <span className='text-2xl'>{totalFinal()}</span>
-        </Card>
-      </div>
-
+      <h2 className='text-4xl font-medium mb-5'>Historial de ventas</h2>
       <div className='lg:flex gap-5'>
-        <div className='lg:w-1/5'>
-          <Card className='!shadow border'>
+        <div className='lg:w-1/6'>
+          <Card className='!shadow-none border mb-5'>
             <div className='mb-3'>
               <label className='block font-medium text-lg mb-2'>Fecha desde</label>
               <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione una fecha'
-                name='fechaDesde' onChange={handleDate} className='p-inputtext-sm w-full' />
+                name='dateFrom' onChange={handleDate} className='p-inputtext-sm w-full' />
             </div>
             <div className='mb-3'>
               <label className='block font-medium text-lg mb-2'>Fecha hasta</label>
               <Calendar dateFormat='dd/mm/yy' locale='es' placeholder='Seleccione una fecha'
-                name='fechaHasta' onChange={handleDate} className='p-inputtext-sm w-full' />
+                name='dateUntil' onChange={handleDate} className='p-inputtext-sm w-full' />
             </div>
             <div className='mb-3'>
               <label className='block font-medium text-lg mb-2'>Local</label>
-              <Dropdown options={stores} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un local'
-                name='local' value={local} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
+              <Dropdown options={shops} optionLabel='nombre' emptyMessage='Sin registros' placeholder='Selecciona un local'
+                name='shop' value={shop} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
             </div>
             <div className='mb-3'>
               <label className='block font-medium text-lg mb-2'>Tipo de pago</label>
-              <Dropdown options={paymentMethods} emptyMessage='Sin registros' placeholder='Selecciona un método de pago'
-                name='metodoPago' value={metodoPago} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
+              <Dropdown options={payments} emptyMessage='Sin registros' placeholder='Selecciona un método de pago'
+                name='payment' value={payment} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
             </div>
             <div className='mb-5'>
               <label className='block font-medium text-lg mb-2'>Cantidad</label>
               <Dropdown options={quantities} emptyMessage='Sin registros' placeholder='Selecciona la cantidad'
-                name='cantidad' value={cantidad} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
+                name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} className='p-inputtext-sm w-full' />
             </div>
-            <div className='flex gap-5'>
-              <Button label="Filtrar" onClick={filter} className='hover:!bg-blue-600 w-full' size='small' />
-              <Button label='Opciones' iconPos='right' icon='pi pi-caret-down' className='hover:!bg-blue-600 w-full'
-                onClick={(e) => menu.current.toggle(e)} size='small' />
-              <TieredMenu model={items} popup ref={menu} breakpoint="767px" className='m-0 p-0' />
+            <div className='flex gap-3'>
+              <Button label="Aplicar" onClick={filter} className='w-full' size='small' />
+              <Button label="Limpiar" onClick={filter} className='w-full' size='small' severity='secondary' />
             </div>
           </Card>
+
+          <ListSalesExport sales={listItems} />
+
+          <Link to={`/venta/historial/rubro`}>
+            <Card className='!shadow-none border mb-5'>
+              <div className='flex gap-3'>
+                <ClipboardList className='text-blue-500' />
+                <span className='font-medium'>Historial por rubro</span>
+              </div>
+            </Card>
+          </Link>
+
+          <Link to={`/venta/historial/producto`}>
+            <Card className='!shadow-none border'>
+              <div className='flex gap-3'>
+                <ClipboardList className='text-blue-500' />
+                <span className='font-medium'>Historial por producto</span>
+              </div>
+            </Card>
+          </Link>
         </div>
 
         <div className='lg:w-5/6'>
-          <Card className='!shadow border'>
+          <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-5'>
+            <Card className='!shadow-none border'>
+              <p className='text-lg text-blue-400 font-medium mb-2'>Total efectivo</p>
+              <span className='text-xl'>{totalCash()}</span>
+            </Card>
+            <Card className='!shadow-none border'>
+              <p className='text-lg text-blue-500 font-medium mb-2'>Total débito</p>
+              <span className='text-xl'>{totalDebit()}</span>
+            </Card>
+            <Card className='!shadow-none border'>
+              <p className='text-lg text-blue-600 font-medium mb-2'>Total código Qr</p>
+              <span className='text-xl'>{totalCodeQr()}</span>
+            </Card>
+            <Card className='!shadow-none border'>
+              <p className='text-lg text-blue-700 font-medium mb-2'>Total crédito</p>
+              <span className='text-xl'>{totalCredit()}</span>
+            </Card>
+            <Card className='!shadow-none border'>
+              <p className='text-lg text-blue-800 font-medium mb-2'>Total de ventas</p>
+              <span className='text-xl'>{totalFinal()}</span>
+            </Card>
+          </div>
+
+          <Card className='!shadow-none border'>
             <DataTable value={listItems} stripedRows emptyMessage='Sin registro de ventas' size='small'>
               <Column field='id' header='Código' className='font-medium rounded-tl-md' style={{ width: '5%' }}></Column>
               <Column field='shop' header='Local' style={{ width: '10%' }}></Column>
@@ -210,21 +204,21 @@ export const VentaHistorialPagina = () => {
               <Column field={(rowData) => formatCurrency(rowData.total)} header='Total' className='font-medium' style={{ width: '10%' }}></Column>
               <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
                 body={(rowData) => (
-                  <div className='flex justify-center gap-1'>
+                  <div className='flex justify-center gap-2'>
                     <Link to={`/venta/detalle/${rowData.id}`} target='_blank'>
-                      <button className='text-blue-500 rounded p-2 hover:text-white hover:bg-blue-500'>
-                        <Eye size={20} />
+                      <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                        <i className='bi bi-eye-fill'></i>
                       </button>
                     </Link>
-                    <button className='text-red-500 rounded p-2 hover:text-white hover:bg-red-500'
+                    <button className='bg-red-500 text-white rounded px-2 py-1'
                       onClick={() => handleDelete(rowData.id)} >
-                      <Trash2 size={20} />
+                      <i className='bi bi-trash-fill'></i>
                     </button>
                   </div>
                 )}>
               </Column>
             </DataTable>
-            <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
+            <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalElements}
               onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
           </Card>
         </div>

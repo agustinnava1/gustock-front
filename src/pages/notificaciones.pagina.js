@@ -51,7 +51,7 @@ export const NotificacionesPagina = () => {
 
   const renderMessage = (rowData, column) => {
     const maxLength = 150
-    const message = rowData[column.field];
+    const message = rowData[column.field].replace(/<a[\s\S]*/, '');
 
     if (message.length > maxLength) {
       return message.substring(0, maxLength) + '...'

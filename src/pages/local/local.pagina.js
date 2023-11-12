@@ -26,7 +26,7 @@ export const LocalPagina = () => {
 
   return (
     <div className='p-5'>
-      <Card className='!shadow border mb-5'>
+      <Card className='!shadow-none border mb-5'>
         <div className='flex justify-between'>
           <div className='flex items-center gap-3'>
             <h2 className="text-2xl font-bold">LOCAL {shop.nombre}</h2>
@@ -35,13 +35,13 @@ export const LocalPagina = () => {
           <div className='flex items-center gap-3'>
             <div>
               <Button label='Productos' icon={<Package size={20} className='mr-3' />} iconPos='left' size='small'
-                className={`!rounded-full w-full ${selectedButton === 'Products' ? 'bg-blue-500' : '!bg-white !text-blue-500'}`}
+                className={`w-full ${selectedButton === 'Products' ? 'bg-blue-500' : '!bg-white !text-blue-500'}`}
                 onClick={() => handleButtonClick('Products')} />
             </div>
             {shop.tipo === 'LOCAL' &&
               <div>
                 <Button label='Ventas' icon={<ShoppingCart size={20} className='mr-3' />} iconPos='left' size='small'
-                  className={`!rounded-full w-full ${selectedButton === 'Sales' ? '!bg-blue-500' : '!bg-white !text-blue-500'}`}
+                  className={`w-full ${selectedButton === 'Sales' ? '!bg-blue-500' : '!bg-white !text-blue-500'}`}
                   onClick={() => handleButtonClick('Sales')} />
               </div>
             }

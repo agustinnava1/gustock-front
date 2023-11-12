@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ExcelJS from 'exceljs';
 
 import { Button } from 'primereact/button';
 import { formatCurrency } from '../helper/format';
 
-const ListProductsExport = ({ stocks }) => {
+const ListStocksExport = ({ stocks }) => {
+
   const handleExport = async () => {
     // Create a new Excel workbook
     const workbook = new ExcelJS.Workbook();
@@ -12,19 +13,22 @@ const ListProductsExport = ({ stocks }) => {
 
     // Format the prices in a new array
     const formattedProducts = stocks.map(stock => ({
-      ...product,
-      priceEffective: formatCurrency(product.priceEffective),
-      priceDebit: formatCurrency(product.priceDebit),
-      priceCredit: formatCurrency(product.priceCredit),
+      ...stock,
+      code: stock.product.code,
+      description: stock.product.description,
+      priceEffective: formatCurrency(stock.product.priceEffective),
+      priceDebit: formatCurrency(stock.product.priceDebit),
+      priceCredit: formatCurrency(stock.product.priceCredit),
     }))
 
     // Define the columns
     worksheet.columns = [
       { header: 'Código', key: 'code', width: 13 },
-      { header: 'Descripción', key: 'description', width: 45 },
+      { header: 'Descripción', key: 'description', width: 35 },
       { header: 'Efectivo', key: 'priceEffective', width: 10 },
       { header: 'Débito', key: 'priceDebit', width: 10 },
       { header: 'Crédito', key: 'priceCredit', width: 10 },
+      { header: 'Stock', key: 'quantity', width: 10 },
     ];
 
     // Add data to the worksheet
@@ -55,10 +59,9 @@ const ListProductsExport = ({ stocks }) => {
   };
 
   return (
-    <div>
-      <Button label='Exportar a excel' onClick={handleExport} severity='secondary' size='small' />
-    </div>
-  );
-};
+    <Button label='Exportar a excel' onClick={handleExport} size='small' />
+  )
 
-export default ListProductsExport;
+}
+
+export default ListStocksExport;
