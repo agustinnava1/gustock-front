@@ -66,7 +66,7 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
   }, [specificationsFormState, onSpecificationsChange])
 
   return (
-    <Card title="Especificaciones" className='!shadow border mb-5'>
+    <Card title="Especificaciones" className='!shadow-none border mb-5'>
       <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
         <div className='mb-3'>
           <label className='block text-lg font-medium mb-2'>Altura</label>

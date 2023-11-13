@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ExcelJS from 'exceljs';
 
-import { Button } from 'primereact/button';
+import { Card } from 'primereact/card';
+import { FileDown } from 'lucide-react';
 import { formatCurrency } from '../helper/format';
 
 const ListStocksExport = ({ stocks }) => {
@@ -59,7 +60,14 @@ const ListStocksExport = ({ stocks }) => {
   };
 
   return (
-    <Button label='Exportar a excel' onClick={handleExport} size='small' />
+    <div onClick={handleExport} className='hover:cursor-pointer'>
+      <Card className='!shadow-none border mb-5'>
+        <div className='flex gap-3'>
+          <FileDown className='text-blue-500' />
+          <span className='font-medium'>Exportar a excel</span>
+        </div>
+      </Card>
+    </div>
   )
 
 }

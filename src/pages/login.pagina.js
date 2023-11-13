@@ -49,37 +49,37 @@ export const Login = () => {
   }
 
   return (
-    <div class='bg-no-repeat bg-cover bg-center relative' style={{ backgroundImage: 'url("/local.jpg")' }}>
-      <div class='absolute bg-gradient-to-b from-blue-600 to-blue-200 opacity-75 inset-0 z-0'></div>
-      <div class='min-h-screen sm:flex sm:flex-row mx-0 justify-center'>
-        <div class='flex-col flex self-center p-10 sm:max-w-5xl xl:max-w-2xl z-10'>
-          <div class='self-start hidden lg:flex flex-col text-white'>
-            <h1 class='!text-white mb-3 font-bold text-5xl'>Bienvenido a gustock </h1>
-            <p class='pr-3'>¡Bienvenido al equipo! Nuestra aplicación te ayudará en la gestión de tú local.</p>
+    <div className='bg-no-repeat bg-cover bg-center relative' style={{ backgroundImage: 'url("/local.jpg")' }}>
+      <div className='absolute md:bg-gradient-to-b from-blue-600 to-blue-200 opacity-75 inset-0 z-0'></div>
+      <div className='min-h-screen sm:flex sm:flex-row mx-0 justify-center'>
+        <div className='flex-col flex self-center p-10 sm:max-w-5xl xl:max-w-2xl z-10'>
+          <div className='self-start hidden lg:flex flex-col text-white'>
+            <h1 className='!text-white mb-3 font-bold text-5xl'>Bienvenido a gustock </h1>
+            <p className='pr-3'>¡Bienvenido al equipo! Nuestra aplicación te ayudará en la gestión de el local.</p>
           </div>
         </div>
-        <div class='flex justify-center self-center z-10'>
-          <div class='p-12 bg-white mx-auto rounded-2xl w-100'>
-            <div class='mb-4'>
-              <h3 class='font-semibold text-2xl !text-[#1764C6]'>Iniciar sesión </h3>
-              <p class='text-gray-500'>Por favor inicia sesión en tu cuenta.</p>
+        <div className='flex justify-center self-center z-10'>
+          <div className='p-12 bg-white mx-auto rounded-2xl w-100'>
+            <div className='mb-4'>
+              <h3 className='font-semibold text-2xl !text-[#1764C6]'>Inicia sesión </h3>
+              <p className='text-gray-500'>Ingresá tus credenciales.</p>
             </div>
             <form onSubmit={handleLogin}>
-              <div class='space-y-5'>
-                <div class='space-y-2'>
-                  <label class='block font-medium text-gray-700 tracking-wide'>Usuario</label>
+              <div className='space-y-5'>
+                <div className='space-y-2'>
+                  <label className='block font-medium text-gray-700 tracking-wide'>Usuario</label>
                   <InputText name='username' type='text'
                     value={userDetail.username} onChange={handleChange}
                     className='w-full p-inputtext-sm' />
                 </div>
-                <div class='space-y-2'>
-                  <label class='block font-medium text-gray-700 tracking-wide'>Contraseña</label>
+                <div className='space-y-2'>
+                  <label className='block font-medium text-gray-700 tracking-wide'>Contraseña</label>
                   <Password name='password' type='password' feedback={false}
                     value={userDetail.password} onChange={handleChange} toggleMask
                     className='w-full' inputClassName='w-full p-inputtext-sm' />
                 </div>
                 <div>
-                  <Button className='w-full !rounded-full hover:!bg-blue-600' label='Iniciar sesión' type='submit' />
+                  <Button className='w-full' label='Iniciar sesión' type='submit' />
                 </div>
               </div>
             </form>

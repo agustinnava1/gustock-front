@@ -18,7 +18,7 @@ export default function Sidebar({ children }) {
         <nav className="h-full flex flex-col bg-[#282C36]">
           <div className="p-4 pb-2 flex justify-between items-center">
             <span
-              className={`text-2xl font-bold text-gray-400 overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
+              className={`text-2xl font-bold text-white overflow-hidden transition-all ${expanded ? "w-42" : "w-0"}`}>
               Gustock
             </span>
             <button
@@ -43,7 +43,7 @@ export default function Sidebar({ children }) {
           `}
             >
               <div className="leading-4">
-                <h4 className="text-gray-300 font-medium mb-1">{username}</h4>
+                <h4 className="text-white font-medium mb-1">{username}</h4>
                 <span className="text-xs text-gray-400">{rolname}</span>
               </div>
             </div>
@@ -64,8 +64,8 @@ export function SidebarItem({ icon, text, active }) {
         font-medium rounded-full cursor-pointer
         transition-colors group
         ${active
-          ? "bg-gray-500 text-white"
-          : "hover:bg-gray-500 text-white"
+          ? "text-white"
+          : "hover:text-white text-gray-400"
         }
     `}
     >

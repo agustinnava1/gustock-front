@@ -124,10 +124,6 @@ const ProductsComponent = ({ shop }) => {
   return (
     <div className='lg:flex lg:justify-between gap-5'>
       <div className='lg:w-1/6'>
-        <Card className='!shadow-none !bg-blue-800 mb-5'>
-          <span className='!text-white text-2xl font-medium'>{totalElements} Productos</span>
-        </Card>
-
         <Card className='!shadow-none border mb-5'>
           <div className='mb-3'>
             <label className='block font-medium text-lg mb-2'>Proveedor</label>
@@ -168,9 +164,17 @@ const ProductsComponent = ({ shop }) => {
             <Button label='Limpiar' onClick={resetFilters} className='w-full' size='small' severity='secondary' />
           </div>
         </Card>
+
+        <ListStocksExport stocks={listProducts} />
       </div>
 
       <div className='lg:w-5/6'>
+        <Card className='!shadow-none border mb-5'>
+          <div className='flex justify-between'>
+            <span className='text-2xl font-medium'>Productos encontrados</span>
+            <span className='text-2xl font-medium'>{totalElements}</span>
+          </div>
+        </Card>
         <Card className='!shadow-none border'>
           <DataTable value={listProducts} stripedRows size='small' emptyMessage='No se encontraron resultados'>
             <Column field='product.code' header='Código' className='rounded-tl-md font-medium' style={{ width: '10%' }} />
@@ -205,9 +209,6 @@ const ProductsComponent = ({ shop }) => {
           <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
             onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
         </Card>
-        <div className='text-end mt-5'>
-          <ListStocksExport stocks={listProducts} />
-        </div>
       </div>
     </div>
   )

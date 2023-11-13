@@ -8,7 +8,7 @@ const SalesComponent = ({ shop }) => {
     <div className='lg:flex lg:justify-between gap-5'>
       <div className='lg:w-1/6'>
         <Card className='!shadow-none !bg-blue-800 mb-5'>
-          <span className='!text-white text-2xl font-medium'>Ventas</span>
+          <span className='!text-white text-2xl font-medium'>Ventas realizadas</span>
         </Card>
         <Card className='!shadow-none border border-l-4 border-l-blue-400 mb-5'>
           <p className='text-blue-400 font-medium mb-2'>Total efectivo</p>

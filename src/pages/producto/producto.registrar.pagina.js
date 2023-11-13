@@ -163,23 +163,24 @@ export const ProductoRegistrar = () => {
 
   return (
     <div className='p-5'>
-      <h2 className='text-3xl font-medium mb-5'>Crear nuevo producto</h2>
-      <div className='md:flex justify-between gap-5'>
+      <h2 className='text-3xl font-medium mb-5'>Registrar nuevo producto</h2>
+      <div className='md:flex gap-5'>
         <div>
-          <Card title='Imagen' className='!shadow-lg border mb-5'>
+          <Card className='!shadow-none border mb-5'>
             <input className='block w-full text-slate-500 file:rounded file:mr-4 file:py-2 file:px-4 file:border-0
                 file:text-lg file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
               type='file' accept='image/*' onChange={handleImageChange} />
             {selectedImage ?
-              <div className='h-[300px] w-[350px] mt-3'>
+              <div className='h-[250px] w-[350px] mt-3'>
                 <img id='imgPreview' src={imgPreviewSrc} alt='Preview' className='w-full h-full object-cover rounded' />
               </div> :
-              <div className='h-[300px] w-[350px] mt-3'>
+              <div className='h-[250px] w-[350px] mt-3'>
                 <img src='/producto-sin-foto.jpg' className='w-full h-full object-cover rounded'></img>
               </div>
             }
           </Card>
-          <Card title='Código de barras' className='!shadow-lg border'>
+
+          <Card title='Código de barras' className='!shadow-none border mb-5'>
             <InputNumber className='w-full p-inputtext-sm mb-3' useGrouping={false}
               value={barcodeValue} onChange={(e) => setBarcodeValue(e.target.value)} />
             <div className='border border-1 mb-3'>
@@ -190,10 +191,18 @@ export const ProductoRegistrar = () => {
               <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='secondary' size='small' disabled={!barcodeValue} />
             </div>
           </Card>
+
+          <Card className='!shadow-none border'>
+            <div className='flex gap-3'>
+              <Button label='Confirmar' className='w-full' size='small'
+                onClick={handleCreateProduct} />
+              <Button label='Cancelar' severity='secondary' className='w-full' size='small' />
+            </div>
+          </Card>
         </div>
 
         <div className='w-1/2'>
-          <Card title='Características' className='!shadow border mb-5'>
+          <Card title='Características' className='!shadow-none border mb-5'>
             <div className='mb-3'>
               <label htmlFor='description' className='block font-medium text-lg mb-2'>Código</label>
               <div className='flex'>
@@ -249,7 +258,7 @@ export const ProductoRegistrar = () => {
               </div>
             </div>
           </Card>
-          <Card title='Distribución' className='!shadow border overscroll-auto'>
+          <Card title='Distribución' className='!shadow-none border overscroll-auto'>
             <div style={{ maxHeight: '257px', overflowY: 'auto' }}>
               <DataTable value={listShops} stripedRows size="small" emptyMessage="No se encontraron locales">
                 <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
@@ -261,7 +270,7 @@ export const ProductoRegistrar = () => {
                   )}>
                 </Column>
                 <Column header='Cantidad' className='rounded-tr-md' style={{ width: '20%' }}
-                   body={(rowData) => (
+                  body={(rowData) => (
                     <InputNumber value={"0"}
                       placeholder="0"
                       inputClassName="p-inputtext-sm w-full"
@@ -275,11 +284,6 @@ export const ProductoRegistrar = () => {
 
         <div className='w-2/5'>
           <SpecificationsForm initialSpecifications={initialSpecifications} onSpecificationsChange={handleSpecificationsChange} />
-          <div className='flex text-center'>
-            <Button label='Confirmar' className='w-full hover:!bg-blue-600 !mr-3' size='small'
-              onClick={handleCreateProduct} />
-            <Button label='Cancelar' severity='secondary' className='w-full' size='small' />
-          </div>
         </div>
       </div>
     </div>

@@ -19,11 +19,15 @@ export const AdminPagina = () => {
 
   return (
     <div className='p-5'>
+      <Card className='!shadow-none border mb-5'>
+        <h2>Bienvenido</h2>
+      </Card>
+
       <div className='mb-5'>
         <h2 className='text-4xl font-medium mb-5'>Mis Locales</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
           {shops.map(shop => (
-            <Card className='!shadow border text-center'>
+            <Card className='!shadow-none border text-center'>
               <div className='bg-blue-500 rounded-t py-5'>
                 <i className='bi bi-shop text-white text-8xl'></i>
               </div>
@@ -43,7 +47,7 @@ export const AdminPagina = () => {
         <h2 className='text-4xl font-medium mb-5'>Mis Depósitos</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
           {depositos.map(deposito => (
-            <Card className='!shadow border text-center' key={deposito.id}>
+            <Card className='!shadow-none border text-center' key={deposito.id}>
               <div className='bg-sky-500 rounded-t py-5'>
                 <i className='bi bi-shop-window text-white text-8xl'></i>
               </div>

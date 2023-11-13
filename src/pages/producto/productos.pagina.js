@@ -103,18 +103,6 @@ export const ProductosPagina = () => {
     })
   }
 
-  const productMenu = useRef(null);
-  const productItems = [
-    {
-      label: 'Modificación rápida',
-      url: '/productos/modificacion/rapida',
-    },
-    {
-      label: 'Modificación masiva',
-      url: '/productos/modificacion/masiva',
-    },
-  ]
-
   return (
     <div className='p-5'>
       <h2 className='text-4xl font-medium mb-5'>Mis productos</h2>
@@ -192,15 +180,15 @@ export const ProductosPagina = () => {
               <Column field={(product) => formatCurrency(product.priceCredit)} header='Crédito' style={{ width: '10%' }} />
               <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '10%' }}
                 body={(product) => product.lastPrice ? formatDate(product.lastPrice) : '-'}></Column>
-              <Column header='Acciones' className='rounded-tr-md' alignHeader={'center'} style={{ width: '10%' }}
+              <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
                 body={(product) => (
-                  <div className='flex justify-center'>
-                    <Link to={`/producto/detalle/${product.id}`} className='me-3'>
+                  <div className='flex gap-2'>
+                    <Link to={`/producto/detalle/${product.id}`}>
                       <button className='bg-sky-500 text-white rounded px-2 py-1'>
                         <i className='bi bi-eye-fill'></i>
                       </button>
                     </Link>
-                    <Link to={`/producto/modificar/${product.id}`} className='me-3'>
+                    <Link to={`/producto/modificar/${product.id}`}>
                       <button className='bg-yellow-500 text-white rounded px-2 py-1'>
                         <i className='bi bi-pencil-fill'></i>
                       </button>
