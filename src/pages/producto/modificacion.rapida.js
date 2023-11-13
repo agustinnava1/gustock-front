@@ -117,7 +117,7 @@ export const ProductosModificacionRapida = () => {
       filter()
       Swal.fire('Actualizado', 'Se han actualizado ' + data + ' productos con éxito.', 'success')
     }).catch((error) => {
-      Swal.fire('Error', 'Hubo un problema al intentar actualizar los productos. Por favor, inténtalo de nuevo más tarde.', 'error')
+      Swal.fire('Error', 'Hubo un problema al intentar actualizar los productos. Por favor, inténtelo de nuevo más tarde.', 'error')
     })
   }
 

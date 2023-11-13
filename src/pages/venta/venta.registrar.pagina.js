@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { Trash2 } from 'lucide-react'
 import { Card } from 'primereact/card'
@@ -18,9 +18,11 @@ import { formatCurrency } from '../../helper/format'
 
 import SaleService from '../../services/venta.servicio'
 import ProductService from '../../services/producto.servicio'
+import UserContext from '../../user.context'
 
 export const RegistrarVentaPagina = () => {
   const { name } = useParams()
+  const [user, setUser] = useContext(UserContext)
 
   const [note, setNote] = useState('')
   const [total, setTotal] = useState(0)
@@ -143,6 +145,7 @@ export const RegistrarVentaPagina = () => {
     }
 
     const sale = {
+      user: user.sub,
       shop: name,
       note: note,
       total: total,
@@ -179,7 +182,7 @@ export const RegistrarVentaPagina = () => {
                     className='p-inputtext-sm w-full' placeholder='Seleccione tipo de precio' />
                 </div>
                 <div>
-                  <Button label='Agregar' type='submit' size='small' className='hover:!bg-blue-600 !rounded-full'></Button>
+                  <Button label='Agregar' type='submit' size='small'></Button>
                 </div>
               </div>
             </form>
@@ -290,10 +293,10 @@ export const RegistrarVentaPagina = () => {
             <div className='flex gap-5'>
               <div className='flex-1'>
                 <Button onClick={handleCreateSale} label='Confirmar' size='small'
-                  className='w-full !rounded-full hover:!bg-blue-600' />
+                  className='w-full' />
               </div>
               <div className='flex-1'>
-                <Button label='Cancelar' severity='secondary' size='small' className='w-full !rounded-full' />
+                <Button label='Cancelar' severity='secondary' size='small' className='w-full' />
               </div>
             </div>
           </Card>

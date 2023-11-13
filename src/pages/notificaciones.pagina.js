@@ -1,19 +1,17 @@
 import { DateTime } from 'luxon'
 import { Tag } from 'primereact/tag'
 import { Card } from 'primereact/card'
+import { Link } from 'react-router-dom'
+import { Toast } from 'primereact/toast'
 import { Column } from 'primereact/column'
+import { Dropdown } from 'primereact/dropdown'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
+import { Eye, MailOpen, Send, Trash2 } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
 
 import UserContext from '../user.context'
 import NotificationService from '../services/notification.service'
-import { Button } from 'primereact/button'
-import { Eye, Mail, MailOpen, Send, Trash, Trash2 } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import notificationService from '../services/notification.service'
-import { Toast } from 'primereact/toast';
-import { Dropdown } from 'primereact/dropdown'
 
 export const NotificacionesPagina = () => {
 
@@ -22,7 +20,7 @@ export const NotificacionesPagina = () => {
 
   const params = {
     page: 0,
-    shop: null,
+    shop: '',
     user: user.sub,
     recordsQuantity: 50
   }
@@ -114,14 +112,14 @@ export const NotificacionesPagina = () => {
 
         <Dropdown placeholder='Selecciona un local' />
 
-        <Card className='!shadow-none border cursor-pointer w-fit'>
+        <Card className='!shadow-none border cursor-pointer'>
           <div className='flex gap-3'>
             <Send className='text-blue-500' />
             <span className='font-medium'>Crear notificación</span>
           </div>
         </Card>
 
-        <Card className='!shadow-none border'>
+        <Card className='!shadow-none border cursor-pointer'>
           <div className='flex gap-3'>
             <MailOpen className='text-blue-500' />
             <span className='font-medium'>Notificaciones leídas</span>

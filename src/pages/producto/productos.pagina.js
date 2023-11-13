@@ -32,7 +32,7 @@ export const ProductosPagina = () => {
   const [listProducts, setListProducts] = useState([])
   const [totalElements, setTotalElements] = useState(null)
 
-  const { paginationState, onDropdownChange } = usePagination(initialPagination)
+  const { paginationState, onDropdownChange, setPaginationState } = usePagination(initialPagination)
   const { provider, category, brand, recordsQuantity } = paginationState
 
   const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters()
@@ -103,6 +103,10 @@ export const ProductosPagina = () => {
     })
   }
 
+  const resetFilters = () => {
+    setPaginationState(initialPagination)
+  }
+  
   return (
     <div className='p-5'>
       <h2 className='text-4xl font-medium mb-5'>Mis productos</h2>
@@ -113,30 +117,29 @@ export const ProductosPagina = () => {
             <div className='mb-3'>
               <label className='block font-medium text-lg mb-2'>Proveedor</label>
               <Dropdown value={provider} options={listProviders} onChange={onDropdownChange}
-                name='provider' optionLabel='razonSocial' emptyFilterMessage='Sin resultados' filter
+                name='provider' optionLabel='razonSocial' filter emptyFilterMessage='Sin resultados'
                 placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
             </div>
             <div className='mb-3'>
               <label className='block font-medium text-lg mb-2'>Rubro</label>
-              <Dropdown options={listCategories} optionLabel='descripcion' filter
-                name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
+              <Dropdown value={category} options={listCategories} onChange={onDropdownChange} 
+                name='category' optionLabel='descripcion' filter emptyFilterMessage='Sin registros'
                 placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
             </div>
             <div className='mb-3'>
               <label className='block font-medium text-lg mb-2'>Marca</label>
-              <Dropdown options={listBrands} optionLabel='descripcion' filter
-                name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
+              <Dropdown value={brand} options={listBrands} onChange={onDropdownChange}
+                name='brand' optionLabel='descripcion' filter emptyFilterMessage='Sin registros'
                 placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
             </div>
             <div className='mb-5'>
               <label className='block font-medium text-lg mb-2'>Cantidad</label>
-              <Dropdown options={listQuantities}
-                name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
-                placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
+              <Dropdown value={recordsQuantity} options={listQuantities} onChange={onDropdownChange}
+                name='recordsQuantity' placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
             </div>
             <div className='flex gap-3'>
               <Button label='Filtrar' onClick={filter} className='w-full' size='small' />
-              <Button label='Limpiar' className='w-full' size='small' />
+              <Button label='Limpiar' onClick={resetFilters} severity='secondary' className='w-full' size='small' />
             </div>
           </Card>
 
@@ -201,7 +204,7 @@ export const ProductosPagina = () => {
                 )}>
               </Column>
             </DataTable>
-            <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
+            <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalElements}
               onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
           </Card>
         </div>

@@ -10,7 +10,6 @@ import jwtDecode from 'jwt-decode'
 import UserContext from '../user.context'
 import setCookie from '../hooks/set.cookie'
 import AuthService from '../services/auth.service'
-import { setToken } from '../helper/AxionHelper'
 
 export const Login = () => {
   const [user, setUser] = useContext(UserContext);
@@ -38,7 +37,6 @@ export const Login = () => {
     AuthService.login(userDetail).then((resp) => {
       const decoded = jwtDecode(resp.token)
       setCookie('jwt_authorization', resp.token)
-      setToken(resp.token)
       setUser(decoded)
     }).catch((error) => {
       setErrorMessage('Usuario o contraseña incorrecto')

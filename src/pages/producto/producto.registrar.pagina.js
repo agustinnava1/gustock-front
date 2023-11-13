@@ -104,6 +104,9 @@ export const ProductoRegistrar = () => {
     document.getElementById("barcode-svg").innerHTML = ""
   }
 
+  /* Procesamiento de distribución */
+  const [distribution, setDistribution] = useState([])
+
   /* Procesamiento de ficha tecnica */
   const initialSpecifications = {
     height: null, depth: null, width: null, length: null, capacity: null, weight: null,
@@ -144,9 +147,9 @@ export const ProductoRegistrar = () => {
       ...formState,
       code: code,
       barcode: barcodeValue,
-      idBrand: brand?.id,
-      idCategory: category?.id,
-      idProvider: provider?.id,
+      brand: brand?.descripcion,
+      category: category?.descripcion,
+      provider: provider?.razonSocial,
       base64Image: base64Image,
       base64barcode: base64Barcode,
       specifications: specifications

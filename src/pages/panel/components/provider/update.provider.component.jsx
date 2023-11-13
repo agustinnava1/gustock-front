@@ -7,7 +7,7 @@ import { InputText } from "primereact/inputtext";
 import Swal from 'sweetalert2';
 import ProveedorService from "../../../../services/proveedor.servicio"
 
-export const CreateProviderComponent = ({ visible, onHide, loadProviders }) => {
+export const UpdateProviderComponent = ({ visible, onHide, loadProviders }) => {
 
   const [error, setError] = useState(null)
   const [proveedor, setProveedor] = useState({
@@ -30,7 +30,6 @@ export const CreateProviderComponent = ({ visible, onHide, loadProviders }) => {
     }
 
     ProveedorService.save(proveedor).then((resp) => {
-      loadProviders()
       Swal.fire(resp.razonSocial, 'Se ha registrado con exito en el sistema.', 'success')
       onHide();
     }).catch((error) => {
@@ -39,7 +38,7 @@ export const CreateProviderComponent = ({ visible, onHide, loadProviders }) => {
   }
 
   return (
-    <Dialog visible={visible} onHide={onHide} style={{ width: '20em' }}>
+    <Dialog visible={visible} style={{ width: '20em' }}>
       <form onSubmit={handleCreateProveedor} className="pt-5">
         <div className='mb-3'>
           <label htmlFor='razonSocial' className='font-medium block mb-2'>Razon social</label>
@@ -51,7 +50,7 @@ export const CreateProviderComponent = ({ visible, onHide, loadProviders }) => {
         </div>
         {error}
         <div className="flex gap-3">
-          <button className="!w-full text-blue-500 font-medium" size="small">Cancelar</button>
+          <button className="!w-full text-blue-500 font-medium" size="small" onClick={onHide}>Cancelar</button>
           <Button label='Confirmar' className="!w-full" type="submit" size="small"></Button>
         </div>
       </form>

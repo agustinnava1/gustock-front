@@ -13,7 +13,7 @@ export const getConfig = () => {
 };
 
 export const setToken = (newToken) =>{
-  token = newToken
+  token = 'Bearer ' + newToken
 }
 
 

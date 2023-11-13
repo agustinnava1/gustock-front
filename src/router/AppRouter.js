@@ -24,23 +24,34 @@ import { VentaHistorialPagina } from '../pages/venta/venta.historial.pagina'
 import { VentaHistorialProductoPagina } from '../pages/venta/venta.historial.producto.pagina'
 import { VentaHistorialRubroPagina } from '../pages/venta/venta.historial.rubro.pagina'
 import { RegistrarDevolucionPagina } from '../pages/venta/devolucion.registrar.pagina'
+import RequireAuth from '../utils/RequireAuth'
+import { UsuarioPagina } from '../pages/usuario.pagina'
 
 export const AppRouter = () => {
-  const [ user, setUser ] = useContext(UserContext)
+  const [user, setUser] = useContext(UserContext)
 
   return (
-      <Routes>
-        <Route exact path="/inicio" element={<AdminPagina />} />
-        <Route exact path="/panel" element={<PanelPagina />} />
-        <Route exact path="/reposicion" element={<ReposicionPagina />} />
+    <Routes>
+      <Route exact path="/inicio" element={<AdminPagina />} />
+
+      <Route element={<RequireAuth allowedRoles={['ROLE_USUARIO', 'ROLE_ADMINISTRADOR']} />}>
         <Route exact path="/mensajeria" element={<MensajeriaPagina />} />
         <Route exact path="/notificaciones" element={<NotificacionesPagina />} />
-        <Route exact path="/ajustes" element={<AjustesPagina />} />
 
-        <Route exact path="/deposito/:name" element={<LocalPagina />} />
-        <Route exact path="/local/:name" element={<LocalPagina />} />
+        <Route exact path="/producto/detalle/:id" element={<ProductoDetalle />} />
+        <Route exact path="/producto/buscar/:criterio" element={<ProductoBusqueda />} />
+
         <Route exact path="/local/:name/venta/registrar" element={<RegistrarVentaPagina />} />
         <Route exact path="/local/:name/devolucion/registrar" element={<RegistrarDevolucionPagina />} />
+      </Route>
+
+      <Route element={<RequireAuth allowedRoles={['ROLE_ADMINISTRADOR']} />}>
+        <Route exact path="/panel" element={<PanelPagina />} />
+        <Route exact path="/reposicion" element={<ReposicionPagina />} />
+        <Route exact path="/ajustes" element={<AjustesPagina />} />
+
+        <Route exact path="/local/:name" element={<LocalPagina />} />
+        <Route exact path="/deposito/:name" element={<LocalPagina />} />
 
         <Route exact path="/venta/detalle/:id" element={<VentaDetalle />} />
         <Route exact path="/devolucion/detalle/:id" element={<VentaDetalle />} />
@@ -49,13 +60,12 @@ export const AppRouter = () => {
         <Route exact path="/venta/historial/producto" element={<VentaHistorialProductoPagina />} />
 
         <Route exact path="/productos" element={<ProductosPagina />} />
+        <Route exact path="/producto/registrar" element={<ProductoRegistrar />} />
+        <Route exact path="/producto/modificar/:id" element={<ProductoDetalle />} />
         <Route exact path="/productos/modificacion/rapida" element={<ProductosModificacionRapida />} />
         <Route exact path="/productos/modificacion/masiva" element={<ProductosModificacionMasiva />} />
-
-        <Route exact path="/producto/registrar" element={<ProductoRegistrar />} />
-        <Route exact path="/producto/detalle/:id" element={<ProductoDetalle />} />
-        <Route exact path="/producto/modificar/:id" element={<ProductoDetalle />} />
-        <Route exact path="/producto/buscar/:criterio" element={<ProductoBusqueda />} />
-      </Routes>
+      </Route>
+      
+    </Routes>
   )
 } 
