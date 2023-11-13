@@ -79,3 +79,14 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
   color: #3B82F6!important;
   background-color: white!important;
 }
+
+.p-dialog .p-dialog-content:last-of-type {
+  border-radius: 6px!important;
+  -webkit-border-radius: 6px!important;
+  -moz-border-radius: 6px!important;
+  -ms-border-radius: 6px!important;
+  -o-border-radius: 6px!important;
+}
+.p-dialog .p-dialog-content {
+  padding: 2rem 1.5rem 2rem 1.5rem!important;
+}

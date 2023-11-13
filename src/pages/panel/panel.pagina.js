@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Card } from 'primereact/card'
 
 import { Bookmark, Briefcase, Store, Tag, User } from 'lucide-react'
-import { ProveedorComponent } from './components/provider/provider.component'
+import { ProveedorComponent } from './components/provider.component'
 
 export const PanelPagina = () => {
   const [component, setComponent] = useState('Proveedores')
