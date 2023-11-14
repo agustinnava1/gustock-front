@@ -12,7 +12,7 @@ function ProductFilters() {
   useEffect(() => {
     const fetchProveedores = ProveedorServicio.getAll().then((res) => setListProviders(res));
     const fetchRubros = RubroService.getAll().then((res) => setListCategories(res));
-    const fetchMarcas = MarcaServicio.listar().then((res) => setListBrands(res));
+    const fetchMarcas = MarcaServicio.getAll().then((res) => setListBrands(res));
 
     Promise.all([fetchProveedores, fetchRubros, fetchMarcas])
       .catch((error) => {

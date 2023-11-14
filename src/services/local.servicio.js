@@ -1,21 +1,23 @@
 import axios from "axios";
 import { BASE_URL, config } from "../helper/AxionHelper";
 
-const baseUrl = BASE_URL + "/api/shop";
+const baseUrl = BASE_URL + "/api/v1/shop";
 
 class ShopService{
 
-    getByName(name){return axios.get(baseUrl + "/" + name, config).then(res => res.data)}
+    getById(id){return axios.get(baseUrl + "/" + id, config).then(res => res.data)}
 
-    create(local){return axios.post(baseUrl + "/", local, config).then(res => res.data)}
+    getByName(name){return axios.get(baseUrl + "/getByName/" + name, config).then(res => res.data)}
 
-    update(local){return axios.put(baseUrl + "/" + local.id, local, config).then(res => res.data)}
+    create(shop){return axios.post(baseUrl + "/createShop", shop, config).then(res => res.data)}
 
-    delete(id){return axios.delete(baseUrl + "/" + id, config).then(res => res.data)}
+    update(shop){return axios.put(baseUrl + "/updateShop", shop, config).then(res => res.data)}
 
-    getAll(){return axios.get(baseUrl + "/list", config).then(res => res.data)}
+    delete(id){return axios.delete(baseUrl + "/deleteShop/" + id, config).then(res => res.data)}
 
-    getAllByTypeShop(){return axios.get(baseUrl + "/list/shops", config).then(res => res.data)}
+    getAll(){return axios.get(baseUrl + "/getAllShops", config).then(res => res.data)}
+
+    getAllByTypeShop(){return axios.get(baseUrl + "/getAllShopsByTypeLocal", config).then(res => res.data)}
         
 }
 

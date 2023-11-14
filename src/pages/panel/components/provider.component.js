@@ -1,25 +1,26 @@
 import { useState, useEffect } from 'react'
 
+import { Plus } from 'lucide-react'
 import { Card } from 'primereact/card'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { Dialog } from 'primereact/dialog'
+import { Message } from 'primereact/message'
 import { DataTable } from 'primereact/datatable'
 import { InputText } from 'primereact/inputtext'
 
 import Swal from 'sweetalert2'
-import ProveedorService from '../../../services/proveedor.servicio'
+import ProviderService from '../../../services/proveedor.servicio'
 
-export const ProveedorComponent = () => {
-
+export const ProviderComponent = () => {
   const initialProvider = {
     ciudad: '',
     razonSocial: '',
   }
 
-  const [error, setError] = useState(null)
   const [titleForm, setTitleForm] = useState('')
   const [showForm, setShowForm] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
   const [listProviders, setListProviders] = useState([])
   const [provider, setProvider] = useState(initialProvider)
 
@@ -28,47 +29,59 @@ export const ProveedorComponent = () => {
   }, []);
 
   const loadProviders = () => {
-    ProveedorService.getAll().then(data => {
+    ProviderService.getAll().then(data => {
       setListProviders(data)
     })
   }
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setProvider({
       ...provider,
       [name]: value
-    });
-  };
-
-  const handleCreateProveedor = async (e) => {
-    e.preventDefault();
-    if (provider.razonSocial === "" || provider.ciudad === "") {
-      return;
-    }
-
-    ProveedorService.save(provider).then((resp) => {
-      Swal.fire(resp.razonSocial, 'Se ha registrado con exito en el sistema.', 'success')
-
-    }).catch((error) => {
-      setError(error.message)
     })
   }
 
-  const handleUpdateProveedor = async (e) => {
-    e.preventDefault();
-    if (provider.razonSocial === "" || provider.ciudad === "") {
-      return;
+  const handleErrorMessage = (msg) => {
+    setErrorMessage(msg)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
+  const handleCreateProveedor = (e) => {
+    e.preventDefault()
+    if (provider.razonSocial === "") {
+      handleErrorMessage('El campo razon social es obligatorio')
+      return
     }
 
-    ProveedorService.save(provider).then((resp) => {
-      Swal.fire(resp.razonSocial, 'Se ha registrado con exito en el sistema.', 'success')
+    ProviderService.create(provider).then((resp) => {
+      loadProviders()
+      setShowForm(false)
+      Swal.fire('Registrado', 'El proveedor se ha registrado con éxito.', 'success')
     }).catch((error) => {
-      setError(error.message)
+      handleErrorMessage(error.response.data)
     })
   }
 
-  const handleDelete = async (id) => {
+  const handleUpdateProveedor = (e) => {
+    e.preventDefault()
+    if (provider.razonSocial === "") {
+      handleErrorMessage('El campo razon social es obligatorio')
+      return
+    }
+
+    ProviderService.update(provider).then((resp) => {
+      loadProviders()
+      setShowForm(false)
+      Swal.fire('Actualizado', 'Se ha actualizado al proveedor con éxito.', 'success')
+    }).catch((error) => {
+      handleErrorMessage(error.response.data)
+    })
+  }
+
+  const handleDelete = (id) => {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "Se eliminará al proveedor del sistema",
@@ -78,78 +91,87 @@ export const ProveedorComponent = () => {
       cancelButtonText: 'Cancelar',
     }).then(async (result) => {
       if (result.isConfirmed) {
-        ProveedorService.delete(id)
+        ProviderService.delete(id)
           .then((data) => {
             loadProviders()
-            Swal.fire('Eliminado', 'El proveedor ' + data + ' ha sido eliminado del sistema.', 'success')
+            Swal.fire('Eliminado', 'El proveedor ha sido eliminado con éxito.', 'success')
           })
           .catch(() => {
-            Swal.fire('Error', 'Hubo un problema al eliminar el proveedor. Por favor, inténtalo de nuevo más tarde.', 'error')
+            Swal.fire('Error', 'Hubo un problema al intentar eliminar el proveedor.<br> Por favor, inténtelo de nuevo más tarde.', 'error')
           });
       }
     })
   }
 
-  const showFormUpdate = async (id) => {
-    ProveedorService.getById(id).then((data) => {
+  const showFormUpdate = (id) => {
+    ProviderService.getById(id).then((data) => {
       setTitleForm('Editar proveedor')
       setProvider(data)
       setShowForm(true)
     })
   }
 
-  const showFormCreate = async (id) => {
+  const showFormCreate = () => {
     setTitleForm('Nuevo proveedor')
     setProvider(initialProvider)
     setShowForm(true)
   }
 
   return (
-    <Card className="!shadow-none border">
-      <h2 className="text-2xl font-medium mb-5">Proveedores</h2>
-      <DataTable value={listProviders} emptyMessage="No se encontraron proveedores" scrollHeight="650px" size="small" stripedRows scrollable >
-        <Column field="razonSocial" className="rounded-tl-md" header="Razon social"></Column>
-        <Column field="ciudad" header="Ciudad"></Column>
-        <Column header="Acciones" className="rounded-tr-md" style={{ width: '10%' }}
-          body={(rowData) => (
-            <div className='flex'>
-              <button className='bg-yellow-500 rounded text-xl text-white px-2 py-1 me-3'
-                onClick={() => showFormUpdate(rowData.id)}>
-                <i className='bi bi-pencil-fill'></i>
-              </button>
-              <button className='bg-red-500 rounded text-xl text-white px-2 py-1'
-                onClick={() => handleDelete(rowData.id)}>
-                <i className='bi bi-trash-fill'></i>
-              </button>
-            </div>
-          )}>
-        </Column>
-      </DataTable>
+    <div>
+      <Card className="!shadow-none border mb-5">
+        <DataTable value={listProviders} emptyMessage="No se encontraron resultados" scrollHeight="650px" size="small" stripedRows scrollable >
+          <Column field="razonSocial" className="rounded-tl-md" header="Razón social"></Column>
+          <Column field="ciudad" header="Ciudad"></Column>
+          <Column header="Acciones" className="rounded-tr-md" style={{ width: '5%' }}
+            body={(rowData) => (
+              <div className='flex'>
+                <button className='bg-yellow-500 rounded text-white px-2 py-1 me-3'
+                  onClick={() => showFormUpdate(rowData.id)}>
+                  <i className='bi bi-pencil-fill'></i>
+                </button>
+                <button className='bg-red-500 rounded text-white px-2 py-1'
+                  onClick={() => handleDelete(rowData.id)}>
+                  <i className='bi bi-trash-fill'></i>
+                </button>
+              </div>
+            )}>
+          </Column>
+        </DataTable>
+      </Card>
 
-      <div className="text-end">
-        <Button label="Agregar" className="!mt-5" size="small" onClick={() => showFormCreate(true)} />
+      <div className="flex justify-end">
+        <Card className='!shadow-none border w-fit cursor-pointer'
+          onClick={() => showFormCreate(true)}>
+          <div className='flex gap-3'>
+            <Plus className='text-blue-500' />
+            <span className='font-medium'>Agregar proveedor</span>
+          </div>
+        </Card>
       </div>
 
-      <Dialog visible={showForm} showHeader={false} style={{ width: '20em' }}>
-        <h3>{titleForm}</h3>
+      <Dialog visible={showForm} showHeader={false} style={{ width: '22em' }}>
+        <h3 className='text-2xl text-blue-500 font-bold mb-5'>{titleForm}</h3>
 
         <div className='mb-3'>
-          <label htmlFor='razonSocial' className='font-medium block mb-2'>Razon social</label>
-          <InputText value={provider.razonSocial} onChange={handleChange} name='razonSocial' className='p-inputtext-sm w-full' required />
+          <label htmlFor='razonSocial' className='font-medium block mb-2'>Razón social</label>
+          <InputText value={provider.razonSocial} onChange={handleChange} name='razonSocial' className='p-inputtext-sm w-full' />
         </div>
-        <div className='mb-8'>
+        <div className='mb-5'>
           <label htmlFor='ciudad' className='font-medium block mb-2'>Ciudad</label>
-          <InputText value={provider.ciudad} onChange={handleChange} name='ciudad' className='p-inputtext-sm w-full' required />
+          <InputText value={provider.ciudad} onChange={handleChange} name='ciudad' className='p-inputtext-sm w-full' />
         </div>
 
-        <div className="flex gap-3">
-          <button className='w-full text-blue-500 font-medium' onClick={() => setShowForm(false)}>cerrar</button>
+        {errorMessage && <Message className='!mx-auto !mb-5' severity='error' text={errorMessage} />}
+
+        <div className='flex gap-3'>
+          <button className='w-full text-blue-500 font-medium' onClick={() => setShowForm(false)}>Cancelar</button>
           {titleForm === 'Nuevo proveedor'
-            ? <Button label='Confirmar' className="!w-full" type="submit" size="small" onClick={handleCreateProveedor}></Button>
-            : <Button label='Confirmar' className="!w-full" type="submit" size="small" onClick={handleUpdateProveedor}></Button>
+            ? <Button label='Confirmar' className='!w-full' type='submit' size='small' onClick={handleCreateProveedor}></Button>
+            : <Button label='Confirmar' className='!w-full' type='submit' size='small' onClick={handleUpdateProveedor}></Button>
           }
         </div>
       </Dialog>
-    </Card>
+    </div>
   )
 }
