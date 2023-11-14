@@ -8,7 +8,7 @@ import { InputTextarea } from 'primereact/inputtextarea'
 
 const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) => {
   const [specificationsFormState, setSpecificationsFormState] = useState(initialSpecifications)
-  
+
   const [height, setHeight] = useState(specificationsFormState.height)
   const [depth, setDepth] = useState(specificationsFormState.depth)
   const [width, setWidth] = useState(specificationsFormState.width)
@@ -19,16 +19,28 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
   const [organizer, setOrganizer] = useState(specificationsFormState.organizer)
   const [notebook, setNotebook] = useState(specificationsFormState.notebook)
 
+  useEffect(() => {
+    if (height && depth && width) {
+      calculateLength()
+      calculateLiters()
+    }
+
+  }, [height, depth, width])
+
   const onSpecificationsInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
+
     setSpecificationsFormState({
       ...specificationsFormState,
       [name]: value,
     })
 
-    if (name === 'height' || 'depth' || 'width' ) {
-      calculateLiters()
-      calculateTotalLength()
+    if (name === 'height') {
+      setHeight(value);
+    } else if (name === 'depth') {
+      setDepth(value);
+    } else if (name === 'width') {
+      setWidth(value);
     }
 
     onSpecificationsChange({ ...specificationsFormState, [name]: value })
@@ -51,15 +63,15 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
     })
   }
 
-  const calculateTotalLength = () => {
+  const calculateLength = () => {
     const result = height + depth + width
     setLength(result)
-  };
+  }
 
   const calculateLiters = () => {
     const result = (height * depth * width) / 1000
     setLiters(isNaN(result) ? 0 : result.toFixed(1))
-  };
+  }
 
   useEffect(() => {
     onSpecificationsChange(specificationsFormState)
@@ -71,8 +83,7 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
         <div className='mb-3'>
           <label className='block text-lg font-medium mb-2'>Altura</label>
           <InputNumber placeholder='0' suffix=' CM' inputClassName='p-inputtext-sm w-full'
-            name='height' value={height} 
-            onValueChange={onSpecificationsInputChange} />
+            name='height' value={height} onValueChange={onSpecificationsInputChange} />
         </div>
         <div className='mb-3'>
           <label className='block text-lg font-medium mb-2'>Profundidad</label>
@@ -94,17 +105,17 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
       <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
         <div className='mb-3'>
           <label className='block text-lg font-medium mb-2' htmlFor='capacidad'>Capacidad</label>
-          <InputNumber placeholder='0,0' suffix=' kg' inputClassName='p-inputtext-sm w-full'
+          <InputNumber placeholder='0,0' suffix=' kg' inputClassName='p-inputtext-sm w-full' minFractionDigits={1}
             name='capacity' value={specificationsFormState.capacity} onValueChange={onSpecificationsInputChange} />
         </div>
         <div className="mb-3">
           <label className="block text-lg font-medium mb-2" htmlFor="peso">Peso</label>
-          <InputNumber placeholder='0,0' suffix=' kg' inputClassName='p-inputtext-sm w-full'
+          <InputNumber placeholder='0,0' suffix=' kg' inputClassName='p-inputtext-sm w-full' minFractionDigits={1}
             name='weight' value={specificationsFormState.weight} onValueChange={onSpecificationsInputChange} />
         </div>
         <div className="mb-3">
           <label className="block text-lg font-medium mb-2" htmlFor="litros">Litros</label>
-          <InputNumber placeholder='0.0' suffix=' L' inputClassName='p-inputtext-sm w-full'
+          <InputNumber placeholder='0.0' suffix=' L' inputClassName='p-inputtext-sm w-full' minFractionDigits={1}
             name='liters' value={liters} onValueChange={onSpecificationsInputChange} />
         </div>
         <div className="mb-3">

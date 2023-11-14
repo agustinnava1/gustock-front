@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Card } from 'primereact/card'
 import { Column } from 'primereact/column'
@@ -26,33 +26,104 @@ const initialProduct = {
   provider: null,
   priceDebit: 0,
   priceCredit: 0,
-  priceEffective: 0,
+  priceEffective: 0
+}
+
+const initialSpecifications = {
+  height: null, depth: null, width: null, length: null, capacity: null, weight: null,
+  liters: null, wheels: null, colors: null, material: null, warranty: null,
+  lights: 'No aplica', notebook: 'No aplica', organizer: 'No aplica', observations: null,
 }
 
 export const ProductoRegistrar = () => {
-  const [code, setCode] = useState('')
-  const [listShops, setListShops] = useState([])
+  const canvasRef = useRef(null)
 
-  const { formState, onInputChange, onDropdownChange } = useForm(initialProduct);
+  const [code, setCode] = useState('')
+  const [barcode, setBarcode] = useState(null)
+  const [listStocks, setListStocks] = useState([])
+
+  const [base64Image, setBase64Image] = useState(null)
+  const [base64Barcode, setBase64Barcode] = useState(null)
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [imgPreviewSrc, setImgPreviewSrc] = useState(null)
+
+  const [specifications, setSpecifications] = useState(initialSpecifications)
+
+  const { formState, onInputChange, onDropdownChange } = useForm(initialProduct)
   const { listProviders, listCategories, listBrands } = ProductFilters()
   const { description, brand, category, provider, priceDebit, priceCredit, priceEffective } = formState
 
   useEffect(() => {
     ShopService.getAll().then(data => {
-      setListShops(data)
+      setListStocks(data.map(shop => ({
+        shop: shop.nombre,
+        direction: shop.direccion,
+        quantity: 0
+      })))
     })
   }, []);
+
+  useEffect(() => {
+    generateBarcodeImg();
+  }, [barcode]);
 
   const generateCode = () => {
     const randomNumber = Math.floor(Math.random() * 90000000) + 10000000
     setCode(randomNumber.toString())
-  };
+  }
 
-  /* Procesamiento de imagen */
-  const [selectedImage, setSelectedImage] = useState(null)
-  const [imgPreviewSrc, setImgPreviewSrc] = useState(null)
-  const [base64Image, setBase64Image] = useState(null)
+  const generateBarcode = () => {
+    // svg barcode
+    if (barcode === null) {
+      const randomBarcode = Math.floor(Math.random() * 1000000000000)
+      JsBarcode("#barcode-svg", randomBarcode, { format: "ean13" })
+    } else {
+      JsBarcode("#barcode-svg", barcode, { format: "ean13" })
+    }
 
+    // number value
+    const svgTextElements = document.querySelectorAll('svg text')
+    let concatenatedText = ""
+
+    svgTextElements.forEach((element) => {
+      const textContent = element.textContent
+      if (textContent.length > 0) {
+        concatenatedText += textContent
+      }
+    })
+
+    setBarcode(parseInt(concatenatedText, 10))
+  }
+
+  const deleteBarcode = () => {
+    setBarcode(null)
+    document.getElementById("barcode-svg").innerHTML = ""
+  }
+
+  // Convert barcode to base64
+  const generateBarcodeImg = () => {
+    const canvas = canvasRef.current;
+    const svgElement = document.getElementById('barcode-svg');
+    
+    if (!canvas || !svgElement) return;
+
+    canvas.width = svgElement.clientWidth;
+    canvas.height = svgElement.clientHeight;
+    const context = canvas.getContext('2d');
+    const svgString = new XMLSerializer().serializeToString(svgElement);
+    const svgImage = new Image();
+
+    svgImage.src = 'data:image/svg+xml;base64,' + btoa(svgString);
+    svgImage.onload = function () {
+      context.drawImage(svgImage, 0, 0);
+      const png = canvas.toDataURL('image/png');
+      const base64barcode = png.split(',')[1];
+
+      setBase64Barcode(base64barcode)
+    }
+  }
+
+  // Display selected image
   const handleImageChange = (e) => {
     const file = e.target.files[0]
 
@@ -69,69 +140,22 @@ export const ProductoRegistrar = () => {
     }
   }
 
-  /* Procesamiento de barcode */
-  const [barcodeValue, setBarcodeValue] = useState(null)
-  const [base64Barcode, setBase64Barcode] = useState(null)
-
-  const generateBarcode = () => {
-    /* svg barcode */
-    if (barcodeValue === null) {
-      const randomBarcode = Math.floor(Math.random() * 1000000000000)
-      JsBarcode("#barcode-svg", randomBarcode, { format: "ean13" })
-    } else {
-      JsBarcode("#barcode-svg", barcodeValue, { format: "ean13" })
-    }
-
-    /* number value */
-    const svgTextElements = document.querySelectorAll('svg text')
-    let concatenatedText = ""
-
-    svgTextElements.forEach((element) => {
-      const textContent = element.textContent
-      if (textContent.length > 0) {
-        concatenatedText += textContent
+  // Handle stock 
+  const handleQuantityChange = (rowData, newValue) => {
+    const updatedList = listStocks.map(item => {
+      if (item.shop === rowData.shop) {
+        return { ...item, quantity: newValue }
       }
+      return item
     })
 
-    setBarcodeValue(parseInt(concatenatedText, 10))
-
-    /* create png */
-
+    setListStocks(updatedList)
   }
-
-  const deleteBarcode = () => {
-    setBarcodeValue(null)
-    document.getElementById("barcode-svg").innerHTML = ""
-  }
-
-  /* Procesamiento de distribución */
-  const [distribution, setDistribution] = useState([])
-
-  /* Procesamiento de ficha tecnica */
-  const initialSpecifications = {
-    height: null, depth: null, width: null, length: null, capacity: null, weight: null,
-    liters: null, wheels: null, colors: null, material: null, warranty: null,
-    lights: null, notebook: null, organizer: null, observations: null,
-  }
-
-  const [specifications, setSpecifications] = useState(initialSpecifications);
 
   const handleSpecificationsChange = (newSpecifications) => {
     setSpecifications(newSpecifications);
   }
 
-  const handleQuantityChange = (shopId, newValue) => {
-    const updatedListShops = listShops.map(shop => {
-      if (shop.id === shopId) {
-        return { ...shop, quantity: newValue }
-      }
-      return shop
-    })
-
-    setListShops(updatedListShops)
-  }
-
-  /* Procesamiento de formulario */
   const handleCreateProduct = () => {
     if (code === '') {
       Swal.fire('Error', 'El código del producto es obligatorio.', 'error');
@@ -146,20 +170,20 @@ export const ProductoRegistrar = () => {
     const product = {
       ...formState,
       code: code,
-      barcode: barcodeValue,
+      barcode: barcode,
       brand: brand?.descripcion,
       category: category?.descripcion,
       provider: provider?.razonSocial,
+      stocks: listStocks,
       base64Image: base64Image,
       base64barcode: base64Barcode,
       specifications: specifications
     }
 
     ProductoService.create(product).then(data => {
+      console.log(product)
       Swal.fire('Registrado', 'Se ha registrado el producto: "' + data.description + '" con éxito.', 'success')
     }).catch((error) => {
-      console.log(product)
-      console.log(specifications)
       Swal.fire('Error', 'Hubo un problema al intentar registrar el producto. Por favor, inténtalo de nuevo más tarde.', 'error')
     })
   }
@@ -169,7 +193,7 @@ export const ProductoRegistrar = () => {
       <h2 className='text-3xl font-medium mb-5'>Registrar nuevo producto</h2>
       <div className='md:flex gap-5'>
         <div>
-          <Card className='!shadow-none border mb-5'>
+          <Card title='Imagen' className='!shadow-none border mb-5'>
             <input className='block w-full text-slate-500 file:rounded file:mr-4 file:py-2 file:px-4 file:border-0
                 file:text-lg file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
               type='file' accept='image/*' onChange={handleImageChange} />
@@ -185,23 +209,20 @@ export const ProductoRegistrar = () => {
 
           <Card title='Código de barras' className='!shadow-none border mb-5'>
             <InputNumber className='w-full p-inputtext-sm mb-3' useGrouping={false}
-              value={barcodeValue} onChange={(e) => setBarcodeValue(e.target.value)} />
+              value={barcode} onChange={(e) => setBarcode(e.target.value)} />
             <div className='border border-1 mb-3'>
               <svg id='barcode-svg' className='m-auto' width='234px' height='142px'></svg>
+              <canvas ref={canvasRef} style={{ display: 'none' }} />
             </div>
             <div className='flex'>
-              <Button label='Generar' onClick={generateBarcode} className='w-full !me-3 hover:!bg-blue-600' size='small' disabled={barcodeValue} />
-              <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='secondary' size='small' disabled={!barcodeValue} />
+              <Button label='Generar' onClick={generateBarcode} className='w-full !me-3 hover:!bg-blue-600' size='small' disabled={barcode} />
+              <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='secondary' size='small' disabled={!barcode} />
             </div>
           </Card>
 
-          <Card className='!shadow-none border'>
-            <div className='flex gap-3'>
-              <Button label='Confirmar' className='w-full' size='small'
-                onClick={handleCreateProduct} />
-              <Button label='Cancelar' severity='secondary' className='w-full' size='small' />
-            </div>
-          </Card>
+          <Button label='Confirmar' className='w-full' size='small'
+            onClick={handleCreateProduct} />
+
         </div>
 
         <div className='w-1/2'>
@@ -263,21 +284,19 @@ export const ProductoRegistrar = () => {
           </Card>
           <Card title='Distribución' className='!shadow-none border overscroll-auto'>
             <div style={{ maxHeight: '257px', overflowY: 'auto' }}>
-              <DataTable value={listShops} stripedRows size="small" emptyMessage="No se encontraron locales">
+              <DataTable value={listStocks} stripedRows size="small" emptyMessage="No se encontraron locales">
                 <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
                   body={(rowData) => (
                     <div className='flex'>
-                      <p className='font-medium'>{rowData.nombre}</p>
-                      <p> - {rowData.direccion}</p>
+                      <p className='font-medium'>{rowData.shop}</p>
+                      <p> - {rowData.direction}</p>
                     </div>
                   )}>
                 </Column>
                 <Column header='Cantidad' className='rounded-tr-md' style={{ width: '20%' }}
                   body={(rowData) => (
-                    <InputNumber value={"0"}
-                      placeholder="0"
-                      inputClassName="p-inputtext-sm w-full"
-                    />
+                    <InputNumber inputClassName="p-inputtext-sm w-full"
+                      value={rowData.quantity} onChange={(e) => handleQuantityChange(rowData, e.value)} min={0} />
                   )}>
                 </Column>
               </DataTable>

@@ -6,7 +6,7 @@ const baseUrl = BASE_URL + "/product";
 
 class ProductService {
 
-    create(product) { return axios.post(baseUrl + "/", product, config).then(res => res.data) }
+    create(product, stocks) { return axios.post(baseUrl + "/", product, stocks, config).then(res => res.data) }
 
     update(product) { return axios.put(baseUrl + "/" + product.id, product, config).then(res => res.data) }
 

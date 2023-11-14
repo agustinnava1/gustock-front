@@ -169,12 +169,13 @@ const ProductsComponent = ({ shop }) => {
       </div>
 
       <div className='lg:w-5/6'>
-        <Card className='!shadow-none border mb-5'>
-          <div className='flex justify-between'>
-            <span className='text-2xl font-medium'>Productos encontrados</span>
-            <span className='text-2xl font-medium'>{totalElements}</span>
+        <Card className='!shadow-none border mb-5 w-fit'>
+          <div className='flex gap-3'>
+            <span className='text-lg font-medium'>Productos encontrados</span>
+            <span className='text-lg font-medium'>{totalElements}</span>
           </div>
         </Card>
+
         <Card className='!shadow-none border'>
           <DataTable value={listProducts} stripedRows size='small' emptyMessage='No se encontraron resultados'>
             <Column field='product.code' header='Código' className='rounded-tl-md font-medium' style={{ width: '10%' }} />
@@ -189,18 +190,18 @@ const ProductsComponent = ({ shop }) => {
               body={(rowData) => (
                 <div className='flex gap-2'>
                   <Link to={`/producto/detalle/${rowData.product.id}`} target='_blank'>
-                    <button className=' rounded px-2 py-1 bg-blue-500 text-white'>
-                      <i className='pi pi-eye'></i>
+                    <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                      <i className='bi bi-eye-fill'></i>
                     </button>
                   </Link>
                   <Link to={`/producto/modificar/${rowData.product.id}`} target='_blank'>
-                    <button className='rounded px-2 py-1 bg-yellow-500 text-white'>
-                      <i className='pi pi-pencil'></i>
+                    <button className='bg-yellow-500 text-white rounded px-2 py-1'>
+                      <i className='bi bi-pencil-fill'></i>
                     </button>
                   </Link>
-                  <button className=' rounded px-2 py-1 bg-red-500 text-white'
+                  <button className='bg-red-500 text-white rounded px-2 py-1'
                     onClick={() => handleDelete(rowData.idStock)} >
-                    <i className='pi pi-trash'></i>
+                    <i className='bi bi-trash-fill'></i>
                   </button>
                 </div>
               )}>

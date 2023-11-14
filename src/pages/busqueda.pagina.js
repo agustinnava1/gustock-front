@@ -40,29 +40,26 @@ export const ProductoBusqueda = () => {
       <h2 class="text-4xl font-medium mb-5">Resultados de busqueda: "{criterio}"</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-5">
         {listProducts.map((product) => (
-          <div class="group bg-white shadow rounded border hover:shadow-2xl">
-            <div class="border-b">
-              <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg"
-                class="h-full w-full object-cover object-center rounded-t-lg"></img>
-            </div>
-            <div class="p-5">
-              <span className='text-sm text-gray-400'>{product.codigo}</span>
-              <h3 className='text-xl text-gray-600 font-medium mb-3'>{product.descripcion}</h3>
-              <div className='flex justify-between'>
-                <p className='font-medium text-gray-500'>Efectivo</p>
-                <p class="mt-1">{formatCurrency(product.precioEfectivo)}</p>
+          <Link to={`/producto/detalle/${product.id}`}>
+            <div class="group bg-white shadow rounded border hover:shadow-2xl cursor-pointer">
+              <div class="border-b">
+                <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg"
+                  class="h-[550px] w-full object-cover object-center rounded-t-lg"></img>
               </div>
-              <div className='flex justify-between mb-3'>
-                <p className='font-medium text-gray-500'>Crédito</p>
-                <p class="mt-1">{formatCurrency(product.precioCredito)}</p>
-              </div>
-              <div className='text-end'>
-                <Link to={`/producto/detalle/${product.id}`}>
-                  <Button label='Ver producto' size='small' className='hover:!bg-blue-600' />
-                </Link>
+              <div class="h-[200px] p-5">
+                <span className='text-sm text-gray-400'>{product.codigo}</span>
+                <h3 className='text-xl text-gray-600 font-medium mb-3'>{product.descripcion}</h3>
+                <div className='flex justify-between'>
+                  <p className='font-medium text-gray-500'>Efectivo</p>
+                  <p class="mt-1">{formatCurrency(product.precioEfectivo)}</p>
+                </div>
+                <div className='flex justify-between mb-3'>
+                  <p className='font-medium text-gray-500'>Crédito</p>
+                  <p class="mt-1">{formatCurrency(product.precioCredito)}</p>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
       <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalElements}

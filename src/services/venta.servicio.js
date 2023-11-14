@@ -27,6 +27,10 @@ class SaleService {
         return axios.get(baseUrl + "/list/product?" + params, config).then(res => res.data)
     }
 
+    getAllCurrentByShop(shopName) {
+        return axios.get(baseUrl + "/getAllCurrentSalesByShop/" + shopName, config).then(res => res.data)
+    }
+
 }
 
 export default new SaleService();

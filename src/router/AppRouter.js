@@ -1,8 +1,11 @@
 import React, { useContext } from 'react'
-import UserContext from '../user.context'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
+import UserContext from '../user.context'
+import RequireAuth from '../utils/RequireAuth'
+
 import { AdminPagina } from '../pages/admin.pagina'
+import { UsuarioPagina } from '../pages/usuario.pagina'
 
 import { LocalPagina } from '../pages/local/local.pagina'
 import { PanelPagina } from '../pages/panel/panel.pagina'
@@ -24,8 +27,6 @@ import { VentaHistorialPagina } from '../pages/venta/venta.historial.pagina'
 import { VentaHistorialProductoPagina } from '../pages/venta/venta.historial.producto.pagina'
 import { VentaHistorialRubroPagina } from '../pages/venta/venta.historial.rubro.pagina'
 import { RegistrarDevolucionPagina } from '../pages/venta/devolucion.registrar.pagina'
-import RequireAuth from '../utils/RequireAuth'
-import { UsuarioPagina } from '../pages/usuario.pagina'
 
 export const AppRouter = () => {
   const [user, setUser] = useContext(UserContext)
@@ -65,7 +66,7 @@ export const AppRouter = () => {
         <Route exact path="/productos/modificacion/rapida" element={<ProductosModificacionRapida />} />
         <Route exact path="/productos/modificacion/masiva" element={<ProductosModificacionMasiva />} />
       </Route>
-      
+
     </Routes>
   )
 } 

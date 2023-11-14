@@ -8,6 +8,7 @@ import { DataTable } from 'primereact/datatable'
 import { formatCurrency, formatDateTime } from '../../helper/format'
 
 import StockService from '../../services/stock.servicio'
+import FileService from '../../services/file.service'
 import ProductService from '../../services/producto.servicio'
 
 export const ProductoDetalle = () => {
@@ -20,10 +21,10 @@ export const ProductoDetalle = () => {
   ]
 
   const [stocks, setStocks] = useState([])
-  const [imagen, setImagen] = useState([])
   const [barcode, setBarcode] = useState([])
-  const [producto, setProducto] = useState([])
-  const [fichaTecnica, setFichaTecnica] = useState([])
+  const [product, setProduct] = useState([])
+  const [base64Image, SetBase64Image] = useState('')
+  const [specifications, setSpecifications] = useState([])
   const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
@@ -32,13 +33,17 @@ export const ProductoDetalle = () => {
 
   const load = () => {
     ProductService.getById(id).then(data => {
-      setProducto(data);
-      setFichaTecnica(data.fichaTecnica);
+      setProduct(data)
+      setSpecifications(data.specifications)
     })
 
     StockService.getAllByProductId(id).then(data => {
-      setStocks(data);
+      setStocks(data)
       console.log(data)
+    })
+
+    FileService.getProductImage(id).then(data => {
+      SetBase64Image(data)
     })
   }
 
@@ -52,14 +57,14 @@ export const ProductoDetalle = () => {
   }
 
   return (
-    <div className='container mx-auto px-5 pb-5 2xl:px-52'>
+    <div className='container mx-auto px-5 pb-5 2xl:px-72'>
 
       <div className='lg:flex justify-between gap-5 my-5'>
         <div className='lg:w-1/2'>
-            <img src='/producto-sin-foto.jpg' class="shadow border w-full max-h-[473px]"></img>
+          <img src={base64Image} class="shadow-none border rounded w-full max-h-[473px]"></img>
         </div>
         <div className='lg:w-1/2'>
-          <Card title={`${producto.descripcion}`} subTitle={`Código: ${producto.codigo}`} className='!shadow border'>
+          <Card title={`${product.description}`} subTitle={`Código: ${product.code}`} className='!shadow-none border'>
             <table class="min-w-full border text-sm mb-5">
               <thead class="bg-[#efefef] border-b">
                 <tr><th colSpan={2} class="text-start p-2">Lista de precios</th></tr>
@@ -68,19 +73,19 @@ export const ProductoDetalle = () => {
                 <tr className='text-start'>
                   <th className='text-start p-2 border w-[250px]' scope='row'>Precio efectivo</th>
                   <td class="border-b p-2">
-                    {formatCurrency(producto.precioEfectivo)}
+                    {formatCurrency(product.cashPrice)}
                   </td>
                 </tr>
                 <tr className='text-start'>
                   <th className='text-start p-2 border' scope='row'>Precio débito</th>
                   <td class="border-b p-2">
-                    {formatCurrency(producto.precioDebito)}
+                    {formatCurrency(product.debitPrice)}
                   </td>
                 </tr>
                 <tr className='text-start'>
                   <th className='text-start p-2 border' scope='row'>Precio crédito</th>
                   <td class="border-b p-2">
-                    {formatCurrency(producto.precioCredito)}
+                    {formatCurrency(product.creditPrice)}
                   </td>
                 </tr>
               </tbody>
@@ -93,25 +98,25 @@ export const ProductoDetalle = () => {
                 <tr className='text-start'>
                   <th className='text-start p-2 border w-[250px]'>Proveedor</th>
                   <td class="border-b p-2">
-                    {producto.proveedor?.razonSocial || 'Sin proveedor'}
+                    {product.proveedor || 'Sin proveedor'}
                   </td>
                 </tr>
                 <tr className='text-start'>
                   <th className='text-start p-2 border'>Rubro</th>
                   <td class="border-b p-2">
-                    {producto.rubro?.descripcion || 'Sin rubro'}
+                    {product.rubro || 'Sin rubro'}
                   </td>
                 </tr>
                 <tr className='text-start'>
                   <th className='text-start p-2 border'>Marca</th>
                   <td class="border-b p-2">
-                    {producto.marca?.descripcion || 'Sin marca'}
+                    {product.marca || 'Sin marca'}
                   </td>
                 </tr>
                 <tr className='text-start'>
                   <th className='text-start p-2 border'>Última actualización de precio</th>
                   <td class="border-b p-2">
-                    {producto.ultActPrecio ? formatDateTime(producto.ultActPrecio) : 'Sin registros'}
+                    {product.lastPrice ? formatDateTime(product.lastPrice) : 'Sin registros'}
                   </td>
                 </tr>
               </tbody>
@@ -120,16 +125,16 @@ export const ProductoDetalle = () => {
         </div>
       </div>
 
-      <Card className="!shadow border">
+      <Card className="!shadow-none border">
         <TabMenu model={items} activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)} className='mb-5' />
         {activeIndex == 0 &&
           <div>
             <DataTable value={stocks} stripedRows emptyMessage='No se encontraron unidades' size='small'>
-              <Column field={(rowData) => (rowData.local.nombre) + " - " + (rowData.local.direccion)}
-                header='Sucursal' className='rounded-tl-md' style={{ width: '33%' }}></Column>
-              <Column field={(rowData) => (rowData.cantidad) + " unidades"} header='Cantidad' style={{ width: '33%' }}></Column>
-              <Column field={(rowData) => formatDateTime(rowData.ultActStock)}
-                header='Ult. Act' className='rounded-tr-md' style={{ width: '33%' }}></Column>
+              <Column field={(rowData) => (rowData.shop) + " - " + (rowData.direction)}
+                header='Sucursal' className='rounded-tl-md' style={{ width: '40%' }}></Column>
+              <Column field={(rowData) => (rowData.quantity) + " unidades"} header='Cantidad' style={{ width: '40%' }}></Column>
+              <Column field={(rowData) => formatDateTime(rowData.lastUpdate)}
+                header='Ult. Act' className='rounded-tr-md' style={{ width: '20%' }}></Column>
             </DataTable>
           </div>
         }
@@ -138,21 +143,21 @@ export const ProductoDetalle = () => {
             <table className="table w-full">
               <tbody>
                 {[
-                  ['Altura', fichaTecnica.altura !== null ? fichaTecnica.altura + ' cm' : null],
-                  ['Profundidad', fichaTecnica.profundidad !== null ? + fichaTecnica.profundidad + ' cm' : null],
-                  ['Ancho', fichaTecnica.ancho !== null ? fichaTecnica.ancho + ' cm' : null],
-                  ['Cm lineal', fichaTecnica.cmLineal !== null ? fichaTecnica.cmLineal + ' cm' : null],
-                  ['Capacidad', fichaTecnica.capacidad !== null ? fichaTecnica.capacidad + ' kg' : null],
-                  ['Peso', fichaTecnica.peso !== null ? fichaTecnica.peso + ' kg' : null],
-                  ['Litros', fichaTecnica.litros !== null ? fichaTecnica.litros + ' L' : null],
-                  ['Ruedas', fichaTecnica.ruedas],
-                  ['Colores', fichaTecnica.colores],
-                  ['Material', fichaTecnica.material],
-                  ['Garantía', fichaTecnica.garantia],
-                  ['Luces', fichaTecnica.luces],
-                  ['Organizador', fichaTecnica.organizador],
-                  ['P. Notebook', fichaTecnica.portanotebook],
-                  ['Observaciones', fichaTecnica.observaciones],
+                  ['Altura', specifications.height !== null ? specifications.height + ' cm' : null],
+                  ['Profundidad', specifications.depth !== null ? + specifications.depth + ' cm' : null],
+                  ['Ancho', specifications.width !== null ? specifications.width + ' cm' : null],
+                  ['Cm lineal', specifications.length !== null ? specifications.length + ' cm' : null],
+                  ['Capacidad', specifications.capacity !== null ? specifications.capacity + ' kg' : null],
+                  ['Peso', specifications.weight !== null ? specifications.weight + ' kg' : null],
+                  ['Litros', specifications.liters !== null ? specifications.liters + ' L' : null],
+                  ['Ruedas', specifications.wheels],
+                  ['Colores', specifications.colors],
+                  ['Material', specifications.material],
+                  ['Garantía', specifications.warranty],
+                  ['Luces', specifications.lights],
+                  ['Organizador', specifications.organizer],
+                  ['P. Notebook', specifications.notebook],
+                  ['Observaciones', specifications.observations],
                 ].map(([label, value]) => {
                   if (value !== null) {
                     return generateTableRow(label, value);
