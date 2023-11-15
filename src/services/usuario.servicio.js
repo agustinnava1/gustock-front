@@ -7,6 +7,8 @@ class UserService {
 
   getById(id) { return axios.get(this.baseUrl + "/" + id, config).then(res => res.data) }
 
+  getByName(name) { return axios.get(this.baseUrl + "/getByName/" + name, config).then(res => res.data) }
+
   create(user) { return axios.post(this.baseUrl + "/createUser" , user, config).then(res => res.data) }
 
   update(user) { return axios.put(this.baseUrl + "/updateUser", user, config).then(res => res.data) }

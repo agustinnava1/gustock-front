@@ -43,19 +43,23 @@ export const ProductoBusqueda = () => {
           <Link to={`/producto/detalle/${product.id}`}>
             <div class="group bg-white shadow rounded border hover:shadow-2xl cursor-pointer">
               <div class="border-b">
-                <img src="https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg"
+                <img src={product.base64Image || '/producto-sin-foto.jpg'}
                   class="h-[550px] w-full object-cover object-center rounded-t-lg"></img>
               </div>
-              <div class="h-[200px] p-5">
-                <span className='text-sm text-gray-400'>{product.codigo}</span>
-                <h3 className='text-xl text-gray-600 font-medium mb-3'>{product.descripcion}</h3>
+              <div class="h-[210px] p-5">
+                <span className='text-sm text-gray-400'>{product.code}</span>
+                <h3 className='text-xl text-gray-600 font-medium mb-3'>{product.description}</h3>
                 <div className='flex justify-between'>
                   <p className='font-medium text-gray-500'>Efectivo</p>
-                  <p class="mt-1">{formatCurrency(product.precioEfectivo)}</p>
+                  <p class="mt-1">{formatCurrency(product.cashPrice)}</p>
                 </div>
-                <div className='flex justify-between mb-3'>
+                <div className='flex justify-between'>
+                  <p className='font-medium text-gray-500'>Débito</p>
+                  <p class="mt-1">{formatCurrency(product.debitPrice)}</p>
+                </div>
+                <div className='flex justify-between'>
                   <p className='font-medium text-gray-500'>Crédito</p>
-                  <p class="mt-1">{formatCurrency(product.precioCredito)}</p>
+                  <p class="mt-1">{formatCurrency(product.creditPrice)}</p>
                 </div>
               </div>
             </div>

@@ -8,17 +8,21 @@ class NotificationService {
 
   getAllByUserAndShop(request) {
     const params = builderParams(request)
-    return axios.get(this.baseUrl + "/list?" + params, config).then(res => res.data) 
+    return axios.get(this.baseUrl + "/getAllNotifications?" + params, config).then(res => res.data) 
   }
 
   getAllReadByUserAndShop(request) {
     const params = builderParams(request)
-    return axios.get(this.baseUrl + "/list/read?" + params, config).then(res => res.data) 
+    return axios.get(this.baseUrl + "/getAllReadNotifications?" + params, config).then(res => res.data) 
   }
 
-  markAsRead(id) {return axios.post(this.baseUrl + "/markasread/" + id).then(res => res.data) }
+  markAsRead(id) {return axios.put(this.baseUrl + "/markasread/" + id).then(res => res.data) }
 
-  delete(id) {return axios.delete(this.baseUrl + "/delete/" + id).then(res => res.data) }
+  delete(id) {return axios.delete(this.baseUrl + "/deleteNotification/" + id).then(res => res.data) }
+
+  markSelectedAsRead(notifications) {return axios.put(this.baseUrl + "/markNotificationsAsRead", notifications).then(res => res.data) }
+
+  deleteSelected(notifications) {return axios.put(this.baseUrl + "/deleteNotifications", notifications).then(res => res.data) }
 
 }
 

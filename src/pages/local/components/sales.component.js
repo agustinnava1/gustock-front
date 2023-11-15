@@ -24,51 +24,51 @@ const SalesComponent = ({ shop }) => {
   return (
     <div className='lg:flex lg:justify-between gap-5'>
       <div className='lg:w-1/6'>
-        <Card className='!shadow-none border border-l-4 border-l-blue-400 mb-5'>
-          <p className='text-lg text-blue-400 font-medium mb-2'>Total efectivo</p>
-          <span className='text-xl'>$ 0</span>
+        <Card className='!shadow-none border mb-5'>
+          <span className='font-medium'>Ventas realizadas</span>
         </Card>
-        <Card className='!shadow-none border border-l-4 border-l-blue-500 mb-5'>
-          <p className='text-lg text-blue-500 font-medium mb-2'>Total débito</p>
-          <span className='text-xl'>$ 0</span>
-        </Card>
-        <Card className='!shadow-none border border-l-4 border-l-blue-600 mb-5'>
-          <p className='text-lg text-blue-600 font-medium mb-2'>Total código Qr</p>
-          <span className='text-xl'>$ 0</span>
-        </Card>
-        <Card className='!shadow-none border border-l-4 border-l-blue-700 mb-5'>
-          <p className='text-lg text-blue-700 font-medium mb-2'>Total crédito</p>
-          <span className='text-xl'>$ 0</span>
-        </Card>
-        <Card className='!shadow-none border border-l-4 border-l-blue-800'>
-          <p className='text-lg text-blue-800 font-medium mb-2'>Total de ventas</p>
-          <span className='text-xl'>$ 0</span>
-        </Card>
+
+        <Link to={`/local/${shop}/venta/registrar`}>
+          <Card className='!shadow-none border mb-5'>
+            <div className='flex gap-3'>
+              <Plus className='text-blue-500' />
+              <span className='font-medium'>Nueva venta</span>
+            </div>
+          </Card>
+        </Link>
+
+        <Link to={`/local/${shop}/devolucion/registrar`}>
+          <Card className='!shadow-none border mb-5'>
+            <div className='flex gap-3'>
+              <RotateCcw className='text-blue-500' />
+              <span className='font-medium'>Devolución</span>
+            </div>
+          </Card>
+        </Link>
       </div>
 
       <div className='lg:w-5/6'>
-        <div className='flex gap-5 mb-5'>
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-5'>
           <Card className='!shadow-none border'>
-            <span className='font-medium'>Ventas realizadas</span>
+            <p className='text-lg text-blue-400 font-medium mb-2'>Total efectivo</p>
+            <span className='text-xl'>$ 0</span>
           </Card>
-
-          <Link to={`/local/${shop}/venta/registrar`}>
-            <Card className='!shadow-none border'>
-              <div className='flex gap-3'>
-                <Plus className='text-blue-500' />
-                <span className='font-medium'>Nueva venta</span>
-              </div>
-            </Card>
-          </Link>
-
-          <Link to={`/local/${shop}/devolucion/registrar`}>
-            <Card className='!shadow-none border'>
-              <div className='flex gap-3'>
-                <RotateCcw className='text-blue-500' />
-                <span className='font-medium'>Devolución</span>
-              </div>
-            </Card>
-          </Link>
+          <Card className='!shadow-none border'>
+            <p className='text-lg text-blue-500 font-medium mb-2'>Total débito</p>
+            <span className='text-xl'>$ 0</span>
+          </Card>
+          <Card className='!shadow-none border'>
+            <p className='text-lg text-blue-600 font-medium mb-2'>Total código Qr</p>
+            <span className='text-xl'>$ 0</span>
+          </Card>
+          <Card className='!shadow-none border'>
+            <p className='text-lg text-blue-700 font-medium mb-2'>Total crédito</p>
+            <span className='text-xl'>$ 0</span>
+          </Card>
+          <Card className='!shadow-none border'>
+            <p className='text-lg text-blue-800 font-medium mb-2'>Total de ventas</p>
+            <span className='text-xl'>$ 0</span>
+          </Card>
         </div>
 
         <Card className='!shadow-none border'>

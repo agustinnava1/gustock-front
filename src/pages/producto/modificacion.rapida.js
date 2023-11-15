@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
 import { Card } from 'primereact/card'
+import { Link } from 'react-router-dom'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { Dropdown } from 'primereact/dropdown'
@@ -16,8 +18,6 @@ import { formatCurrency, formatDate } from '../../helper/format'
 import Swal from 'sweetalert2'
 import ProductFilters from '../../helper/producto.filtros'
 import ProductService from '../../services/producto.servicio'
-import { ArrowLeft } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 export const ProductosModificacionRapida = () => {
   const initialPagination = {
@@ -34,16 +34,16 @@ export const ProductosModificacionRapida = () => {
   const [totalElements, setTotalElements] = useState(null)
   const [selectedProducts, setSelectedProducts] = useState([])
 
-  const { paginationState, onDropdownChange } = usePagination(initialPagination)
+  const { paginationState, onDropdownChange, setPaginationState } = usePagination(initialPagination)
   const { provider, category, brand, recordsQuantity } = paginationState
 
   const { listProviders, listCategories, listBrands, listQuantities } = ProductFilters();
 
   /* Params request to update prices */
   const [option, setOption] = useState(null)
+  const [pctCash, setPctCash] = useState(null)
   const [pctDebit, setPctDebit] = useState(null)
   const [pctCredit, setPctCredit] = useState(null)
-  const [pctEffective, setPctEffective] = useState(null)
 
   useEffect(() => {
     ProductService.getAllByFilters(paginationState).then(data => {
@@ -88,9 +88,9 @@ export const ProductosModificacionRapida = () => {
   }
 
   const handleUpdatePrices = () => {
-    const selectedProductIds = selectedProducts.map(product => product.idProduct)
+    const selectedProductIds = selectedProducts.map(product => product.id)
 
-    if (pctDebit === null && pctCredit === null && pctEffective === null) {
+    if (pctDebit === null && pctCredit === null && pctCash === null) {
       Swal.fire('Error', 'Debe ingresar al menos un valor de porcentaje (Efectivo, Débito, Crédito).', 'error');
       return;
     }
@@ -107,9 +107,9 @@ export const ProductosModificacionRapida = () => {
 
     const request = {
       action: option,
+      pctCash: pctCash,
       pctDebit: pctDebit,
       pctCredit: pctCredit,
-      pctEffective: pctEffective,
       productsIds: selectedProductIds
     }
 
@@ -119,6 +119,10 @@ export const ProductosModificacionRapida = () => {
     }).catch((error) => {
       Swal.fire('Error', 'Hubo un problema al intentar actualizar los productos. Por favor, inténtelo de nuevo más tarde.', 'error')
     })
+  }
+
+  const resetFilters = () => {
+    setPaginationState(initialPagination)
   }
 
   return (
@@ -154,7 +158,7 @@ export const ProductosModificacionRapida = () => {
             </div>
             <div className='flex gap-3'>
               <Button label='Filtrar' onClick={filter} className='w-full' size='small' />
-              <Button label='Limpiar' className='w-full' size='small' severity='secondary' />
+              <Button label='Limpiar' onClick={resetFilters} className='w-full' size='small' severity='secondary' />
             </div>
           </Card>
 
@@ -162,7 +166,7 @@ export const ProductosModificacionRapida = () => {
             <div className='flex justify-between mb-3'>
               <label className='my-auto font-medium'>Efectivo</label>
               <InputNumber name='pctEffective' className='p-inputtext-sm' suffix="%"
-                value={pctEffective} onChange={(e) => setPctEffective(e.value)} size={10} />
+                value={pctCash} onChange={(e) => setPctCash(e.value)} size={10} />
             </div>
             <div className='flex justify-between mb-3'>
               <label className='my-auto font-medium'>Débito</label>
@@ -205,18 +209,20 @@ export const ProductosModificacionRapida = () => {
               <Column field="id" header="ID" style={{ width: '10%' }} />
               <Column field='code' header='Código' style={{ width: '10%' }} />
               <Column field='description' header='Descripción' style={{ width: '35%' }} />
-              <Column field={(rowData) => formatCurrency(rowData.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
-              <Column field={(rowData) => formatCurrency(rowData.priceDebit)} header='Débito' style={{ width: '10%' }} />
-              <Column field={(rowData) => formatCurrency(rowData.priceCredit)} header='Crédito' style={{ width: '10%' }} />
+              <Column field={(rowData) => formatCurrency(rowData.cashPrice)} header='Efectivo' style={{ width: '10%' }} />
+              <Column field={(rowData) => formatCurrency(rowData.debitPrice)} header='Débito' style={{ width: '10%' }} />
+              <Column field={(rowData) => formatCurrency(rowData.creditPrice)} header='Crédito' style={{ width: '10%' }} />
               <Column field='lastPrice' header='Ult. Precio' style={{ width: '15%' }}
                 body={(rowData) => rowData.lastPrice ? formatDate(rowData.lastPrice) : ''} />
               <Column className='rounded-tr-md' alignHeader={'center'} style={{ width: '10%' }}
-                body={(product) => (
-                  <div className='flex justify-center'>
-                    <button className='bg-sky-500 text-white rounded px-2 py-1'>
-                      <i className='bi bi-eye-fill'></i>
-                    </button>
-                  </div>
+                body={(rowData) => (
+                  <Link to={`/producto/detalle/${rowData.id}`}>
+                    <div className='flex justify-center'>
+                      <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                        <i className='bi bi-eye-fill'></i>
+                      </button>
+                    </div>
+                  </Link>
                 )}>
               </Column>
             </DataTable>

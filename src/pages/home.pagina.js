@@ -69,15 +69,14 @@ export const Home = () => {
         <hr className="mt-3"></hr>
 
         {userRole === 'ROLE_ADMINISTRADOR' && (
-          <div>
-            <NavLink className="text-decoration-none" to={"/ajustes"}>
-              <SidebarItem icon={<Settings size={20} />} text="Ajustes" active={location.pathname === '/ajustes'} />
-            </NavLink>
-            <NavLink className="text-decoration-none" onClick={logOut}>
-              <SidebarItem icon={<LogOut size={20} />} text="Salir" />
-            </NavLink>
-          </div>
+          <NavLink className="text-decoration-none" to={"/ajustes"}>
+            <SidebarItem icon={<Settings size={20} />} text="Ajustes" active={location.pathname === '/ajustes'} />
+          </NavLink>
         )}
+
+        <NavLink className="text-decoration-none" onClick={logOut}>
+          <SidebarItem icon={<LogOut size={20} />} text="Salir" />
+        </NavLink>
       </Sidebar>
       <div className="w-full h-screen max-h-screen overflow-hidden grow">
         <div className="overflow-y-auto h-full">

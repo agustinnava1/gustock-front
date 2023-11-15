@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { Card } from 'primereact/card'
+import { Link } from 'react-router-dom'
+import { Panel } from 'primereact/panel'
 import { Column } from 'primereact/column'
 import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
+import { ArrowLeft, Save } from 'lucide-react'
 import { InputText } from 'primereact/inputtext'
 import { DataTable } from 'primereact/datatable'
 import { InputNumber } from 'primereact/inputnumber'
@@ -104,7 +107,7 @@ export const ProductoRegistrar = () => {
   const generateBarcodeImg = () => {
     const canvas = canvasRef.current;
     const svgElement = document.getElementById('barcode-svg');
-    
+
     if (!canvas || !svgElement) return;
 
     canvas.width = svgElement.clientWidth;
@@ -184,7 +187,7 @@ export const ProductoRegistrar = () => {
       console.log(product)
       Swal.fire('Registrado', 'Se ha registrado el producto: "' + data.description + '" con éxito.', 'success')
     }).catch((error) => {
-      Swal.fire('Error', 'Hubo un problema al intentar registrar el producto. Por favor, inténtalo de nuevo más tarde.', 'error')
+      Swal.fire('Error', error.response.data, 'error')
     })
   }
 
@@ -192,25 +195,25 @@ export const ProductoRegistrar = () => {
     <div className='p-5'>
       <h2 className='text-3xl font-medium mb-5'>Registrar nuevo producto</h2>
       <div className='md:flex gap-5'>
-        <div>
+        <div className='w-1/5'>
           <Card title='Imagen' className='!shadow-none border mb-5'>
             <input className='block w-full text-slate-500 file:rounded file:mr-4 file:py-2 file:px-4 file:border-0
                 file:text-lg file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
               type='file' accept='image/*' onChange={handleImageChange} />
             {selectedImage ?
-              <div className='h-[250px] w-[350px] mt-3'>
+              <div className='h-[300px] w-full mt-3'>
                 <img id='imgPreview' src={imgPreviewSrc} alt='Preview' className='w-full h-full object-cover rounded' />
               </div> :
-              <div className='h-[250px] w-[350px] mt-3'>
+              <div className='h-[300px] w-full mt-3'>
                 <img src='/producto-sin-foto.jpg' className='w-full h-full object-cover rounded'></img>
               </div>
             }
           </Card>
 
           <Card title='Código de barras' className='!shadow-none border mb-5'>
-            <InputNumber className='w-full p-inputtext-sm mb-3' useGrouping={false}
+            <InputNumber className='w-full p-inputtext-sm mb-5' useGrouping={false}
               value={barcode} onChange={(e) => setBarcode(e.target.value)} />
-            <div className='border border-1 mb-3'>
+            <div className='border border-1 mb-5'>
               <svg id='barcode-svg' className='m-auto' width='234px' height='142px'></svg>
               <canvas ref={canvasRef} style={{ display: 'none' }} />
             </div>
@@ -219,13 +222,9 @@ export const ProductoRegistrar = () => {
               <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='secondary' size='small' disabled={!barcode} />
             </div>
           </Card>
-
-          <Button label='Confirmar' className='w-full' size='small'
-            onClick={handleCreateProduct} />
-
         </div>
 
-        <div className='w-1/2'>
+        <div className='flex-1'>
           <Card title='Características' className='!shadow-none border mb-5'>
             <div className='mb-3'>
               <label htmlFor='description' className='block font-medium text-lg mb-2'>Código</label>
@@ -282,30 +281,48 @@ export const ProductoRegistrar = () => {
               </div>
             </div>
           </Card>
-          <Card title='Distribución' className='!shadow-none border overscroll-auto'>
-            <div style={{ maxHeight: '257px', overflowY: 'auto' }}>
-              <DataTable value={listStocks} stripedRows size="small" emptyMessage="No se encontraron locales">
-                <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
-                  body={(rowData) => (
-                    <div className='flex'>
-                      <p className='font-medium'>{rowData.shop}</p>
-                      <p> - {rowData.direction}</p>
-                    </div>
-                  )}>
-                </Column>
-                <Column header='Cantidad' className='rounded-tr-md' style={{ width: '20%' }}
-                  body={(rowData) => (
-                    <InputNumber inputClassName="p-inputtext-sm w-full"
-                      value={rowData.quantity} onChange={(e) => handleQuantityChange(rowData, e.value)} min={0} />
-                  )}>
-                </Column>
-              </DataTable>
-            </div>
+
+          <Card title="Distribución" className='!shadow-none border'>
+            <DataTable value={listStocks} stripedRows size="small" emptyMessage="No se encontraron locales">
+              <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
+                body={(rowData) => (
+                  <div className='flex'>
+                    <p className='font-medium'>{rowData.shop}</p>
+                    <p> - {rowData.direction}</p>
+                  </div>
+                )}>
+              </Column>
+              <Column header='Cantidad' className='rounded-tr-md' style={{ width: '20%' }}
+                body={(rowData) => (
+                  <InputNumber inputClassName="p-inputtext-sm w-full"
+                    value={rowData.quantity} onChange={(e) => handleQuantityChange(rowData, e.value)} min={0} />
+                )}>
+              </Column>
+            </DataTable>
           </Card>
         </div>
 
-        <div className='w-2/5'>
+        <div className='flex-1'>
           <SpecificationsForm initialSpecifications={initialSpecifications} onSpecificationsChange={handleSpecificationsChange} />
+
+          <div className='flex gap-5'>
+            <Card className='!shadow-none border mb-5 cursor-pointer'
+              onClick={handleCreateProduct}>
+              <div className='flex gap-3'>
+                <Save className='text-blue-500' />
+                <span className='font-medium'>Registrar producto</span>
+              </div>
+            </Card>
+
+            <Link to={`/productos`}>
+              <Card className='!shadow-none border'>
+                <div className='flex gap-3'>
+                  <ArrowLeft className='text-blue-500' />
+                  <span className='font-medium'>Volver a productos</span>
+                </div>
+              </Card>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

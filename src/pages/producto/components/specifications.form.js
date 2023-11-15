@@ -209,7 +209,7 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
       <hr className="my-2"></hr>
       <div>
         <label className="text-lg font-medium" htmlFor="observations">Observaciones</label>
-        <InputTextarea rows={5} placeholder='Detalles adicionales del producto (opcional)' className="w-full !mt-3"
+        <InputTextarea rows={2} placeholder='Detalles adicionales del producto (opcional)' className="w-full !mt-3"
           name='observations' value={specificationsFormState.observations} onChange={onSpecificationsInputChange} />
       </div>
     </Card>

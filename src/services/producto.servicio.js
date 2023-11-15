@@ -6,13 +6,17 @@ const baseUrl = BASE_URL + "/product";
 
 class ProductService {
 
-    create(product, stocks) { return axios.post(baseUrl + "/", product, stocks, config).then(res => res.data) }
-
-    update(product) { return axios.put(baseUrl + "/" + product.id, product, config).then(res => res.data) }
-
-    delete(id) { return axios.delete(baseUrl + "/" + id, config).then(res => res.data) }
-
     getById(id) { return axios.get(baseUrl + "/" + id, config).then(res => res.data) }
+
+    create(product, stocks) { return axios.post(baseUrl + "/createProduct", product, stocks, config).then(res => res.data) }
+
+    update(product) { return axios.put(baseUrl + "/updateProduct", product, config).then(res => res.data) }
+
+    delete(id) { return axios.delete(baseUrl + "/deleteProduct/" + id, config).then(res => res.data) }
+
+    updatePrices(request) { return axios.put(baseUrl + "/updatePrices", request, config).then(res => res.data) }
+
+    updateProducts(products) { return axios.put(baseUrl + "/updateProducts", products, config).then(res => res.data) }
 
     getByCodeOrBarcode(request) { 
         const params = builderParams(request)
@@ -21,7 +25,7 @@ class ProductService {
 
     getAllByFilters(request) {
         const params = builderParams(request)
-        return axios.get(baseUrl + "/list?" + params, config).then(res => res.data)
+        return axios.get(baseUrl + "/getAllProducts?" + params, config).then(res => res.data)
     }
 
     getAllWithStock(request) {
@@ -31,10 +35,8 @@ class ProductService {
 
     getAllByCriteria(request) {
         const params = builderParams(request)
-        return axios.get(baseUrl + "/search?" + params, config).then(res => res.data)
+        return axios.get(baseUrl + "/getAllProductsByCriteria?" + params, config).then(res => res.data)
     }
-
-    updatePrices(request) { return axios.put(baseUrl + "/update/prices", request, config).then(res => res.data) }
 
 }
 

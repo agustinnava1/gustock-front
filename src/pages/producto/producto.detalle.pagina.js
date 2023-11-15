@@ -21,10 +21,9 @@ export const ProductoDetalle = () => {
   ]
 
   const [stocks, setStocks] = useState([])
-  const [barcode, setBarcode] = useState([])
   const [product, setProduct] = useState([])
-  const [base64Image, SetBase64Image] = useState('')
   const [specifications, setSpecifications] = useState([])
+
   const [activeIndex, setActiveIndex] = useState(0)
 
   useEffect(() => {
@@ -40,10 +39,6 @@ export const ProductoDetalle = () => {
     StockService.getAllByProductId(id).then(data => {
       setStocks(data)
       console.log(data)
-    })
-
-    FileService.getProductImage(id).then(data => {
-      SetBase64Image(data)
     })
   }
 
@@ -61,7 +56,7 @@ export const ProductoDetalle = () => {
 
       <div className='lg:flex justify-between gap-5 my-5'>
         <div className='lg:w-1/2'>
-          <img src={base64Image} class="shadow-none border rounded w-full max-h-[473px]"></img>
+          <img src={product.base64Image || '/producto-sin-foto.jpg'} class="shadow-none border rounded w-full min-h-full max-h-[473px]" />
         </div>
         <div className='lg:w-1/2'>
           <Card title={`${product.description}`} subTitle={`Código: ${product.code}`} className='!shadow-none border'>
@@ -170,7 +165,7 @@ export const ProductoDetalle = () => {
         }
         {activeIndex == 2 &&
           <div>
-
+            <img src={product.base64barcode} class="m-auto border rounded"></img>
           </div>
         }
       </Card>

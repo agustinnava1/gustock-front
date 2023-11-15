@@ -169,23 +169,16 @@ const ProductsComponent = ({ shop }) => {
       </div>
 
       <div className='lg:w-5/6'>
-        <Card className='!shadow-none border mb-5 w-fit'>
-          <div className='flex gap-3'>
-            <span className='text-lg font-medium'>Productos encontrados</span>
-            <span className='text-lg font-medium'>{totalElements}</span>
-          </div>
-        </Card>
-
         <Card className='!shadow-none border'>
           <DataTable value={listProducts} stripedRows size='small' emptyMessage='No se encontraron resultados'>
-            <Column field='product.code' header='Código' className='rounded-tl-md font-medium' style={{ width: '10%' }} />
+            <Column field='product.code' header='Código' className='rounded-tl-md' style={{ width: '10%' }} />
             <Column field='product.description' header='Descripción' style={{ width: '30%' }} />
-            <Column field={(rowData) => formatCurrency(rowData.product.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
-            <Column field={(rowData) => formatCurrency(rowData.product.priceDebit)} header='Débito' style={{ width: '10%' }} />
-            <Column field={(rowData) => formatCurrency(rowData.product.priceCredit)} header='Crédito' style={{ width: '10%' }} />
+            <Column field={(rowData) => formatCurrency(rowData.product.cashPrice)} header='Efectivo' style={{ width: '10%' }} />
+            <Column field={(rowData) => formatCurrency(rowData.product.debitPrice)} header='Débito' style={{ width: '10%' }} />
+            <Column field={(rowData) => formatCurrency(rowData.product.creditPrice)} header='Crédito' style={{ width: '10%' }} />
             <Column field={(rowData) => formatDate(rowData.product.lastPrice)} header='Ult. Precio' style={{ width: '10%' }} />
             <Column field={(rowData) => formatDate(rowData.lastUpdate)} header='Ult. Stock' style={{ width: '10%' }} />
-            <Column field='quantity' header='Unidades' className='font-medium' style={{ width: '5%' }} />
+            <Column field='quantity' header='Unidades' style={{ width: '5%' }} />
             <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
               body={(rowData) => (
                 <div className='flex gap-2'>

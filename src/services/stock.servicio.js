@@ -16,7 +16,7 @@ class StockService{
     getAllByProductId(id){return axios.get(baseUrl + "/getAllStocksByProduct/" + id, config).then(res => res.data)}
         
     async getTotalStockByProduct(id){
-        const res = await axios.get(baseUrl + "/product/" + id + "/total", config);
+        const res = await axios.get(baseUrl + "/getTotalStockByProduct/" + id, config);
         return res.data;
     }
 

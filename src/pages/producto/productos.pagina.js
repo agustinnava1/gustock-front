@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { Card } from 'primereact/card'
-import { Link, NavLink } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
 import { Dropdown } from 'primereact/dropdown'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
+import { ClipboardEdit, PackagePlus } from 'lucide-react'
 import { usePagination } from '../../hooks/use.paginacion'
 
 import { formatDate, formatCurrency } from "../../helper/format"
@@ -15,8 +16,6 @@ import Swal from 'sweetalert2'
 import ProductFilters from '../../helper/producto.filtros'
 import ProductService from '../../services/producto.servicio'
 import ListProductsExport from '../../components/export.products.component'
-import { TieredMenu } from 'primereact/tieredmenu'
-import { ClipboardEdit, PackagePlus } from 'lucide-react'
 
 export const ProductosPagina = () => {
   const initialPagination = {
@@ -24,10 +23,10 @@ export const ProductosPagina = () => {
     brand: null,
     category: null,
     provider: null,
-    recordsQuantity: 10
+    recordsQuantity: 20
   }
 
-  const [rows, setRows] = useState(10)
+  const [rows, setRows] = useState(20)
   const [first, setFirst] = useState(0)
   const [listProducts, setListProducts] = useState([])
   const [totalElements, setTotalElements] = useState(null)
@@ -82,7 +81,7 @@ export const ProductosPagina = () => {
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "Se eliminará el producto del sistema de manera permanente, esto no afectará a las ventas registradas.",
+      text: 'Se eliminará el producto del sistema de manera permanente, esto no afectará a las ventas registradas.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3B82F6',
@@ -106,7 +105,7 @@ export const ProductosPagina = () => {
   const resetFilters = () => {
     setPaginationState(initialPagination)
   }
-  
+
   return (
     <div className='p-5'>
       <h2 className='text-4xl font-medium mb-5'>Mis productos</h2>
@@ -122,7 +121,7 @@ export const ProductosPagina = () => {
             </div>
             <div className='mb-3'>
               <label className='block font-medium text-lg mb-2'>Rubro</label>
-              <Dropdown value={category} options={listCategories} onChange={onDropdownChange} 
+              <Dropdown value={category} options={listCategories} onChange={onDropdownChange}
                 name='category' optionLabel='descripcion' filter emptyFilterMessage='Sin registros'
                 placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
             </div>
@@ -144,7 +143,7 @@ export const ProductosPagina = () => {
           </Card>
 
           <ListProductsExport products={listProducts} />
-          
+
           <Link to={`/producto/registrar`}>
             <Card className='!shadow-none border mb-5'>
               <div className='flex gap-3'>
@@ -176,28 +175,28 @@ export const ProductosPagina = () => {
         <div className='lg:w-5/6'>
           <Card className='!shadow-none border'>
             <DataTable value={listProducts} stripedRows emptyMessage='No se encontraron resultados' size='small'>
-              <Column field='code' header='Código' className='rounded-tl-md font-medium' style={{ width: '10%' }}></Column>
-              <Column field='description' header='Descripción' style={{ width: '30%' }}></Column>
-              <Column field={(product) => formatCurrency(product.priceEffective)} header='Efectivo' style={{ width: '10%' }} />
-              <Column field={(product) => formatCurrency(product.priceDebit)} header='Débito' style={{ width: '10%' }} />
-              <Column field={(product) => formatCurrency(product.priceCredit)} header='Crédito' style={{ width: '10%' }} />
-              <Column field='ultActPrecio' header='Ult. Precio' style={{ width: '10%' }}
-                body={(product) => product.lastPrice ? formatDate(product.lastPrice) : '-'}></Column>
+              <Column field='code' header='Código' className='rounded-tl-md' style={{ width: '10%' }}></Column>
+              <Column field='description' header='Descripción' style={{ width: '45%' }}></Column>
+              <Column field={(rowData) => formatCurrency(rowData.cashPrice)} header='Efectivo' style={{ width: '10%' }} />
+              <Column field={(rowData) => formatCurrency(rowData.debitPrice)} header='Débito' style={{ width: '10%' }} />
+              <Column field={(rowData) => formatCurrency(rowData.creditPrice)} header='Crédito' style={{ width: '10%' }} />
+              <Column field='lastPrice' header='Ult. Precio' style={{ width: '10%' }}
+                body={(rowData) => rowData.lastPrice ? formatDate(rowData.lastPrice) : '-'}></Column>
               <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
-                body={(product) => (
+                body={(rowData) => (
                   <div className='flex gap-2'>
-                    <Link to={`/producto/detalle/${product.id}`}>
+                    <Link to={`/producto/detalle/${rowData.id}`}>
                       <button className='bg-sky-500 text-white rounded px-2 py-1'>
                         <i className='bi bi-eye-fill'></i>
                       </button>
                     </Link>
-                    <Link to={`/producto/modificar/${product.id}`}>
+                    <Link to={`/producto/modificar/${rowData.id}`}>
                       <button className='bg-yellow-500 text-white rounded px-2 py-1'>
                         <i className='bi bi-pencil-fill'></i>
                       </button>
                     </Link>
                     <button className='bg-red-500 text-white rounded px-2 py-1'
-                      onClick={() => handleDelete(product.id)} >
+                      onClick={() => handleDelete(rowData.id)} >
                       <i className='bi bi-trash-fill'></i>
                     </button>
                   </div>

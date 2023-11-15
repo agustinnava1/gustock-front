@@ -11,6 +11,7 @@ import { Eye, MailOpen, Send, Trash2 } from 'lucide-react'
 import { useContext, useEffect, useRef, useState } from 'react'
 
 import UserContext from '../user.context'
+import ShopService from '../services/local.servicio'
 import NotificationService from '../services/notification.service'
 
 export const NotificacionesPagina = () => {
@@ -29,15 +30,32 @@ export const NotificacionesPagina = () => {
   const [first, setFirst] = useState(0)
   const [totalElements, setTotalElements] = useState(null)
 
+  const [listShops, setListShops] = useState([])
   const [listNotifications, setListNotifications] = useState([])
+  const [selectedShop, setSelectedShop] = useState([])
   const [selectedNotifications, setSelectedNotifications] = useState([])
 
   useEffect(() => {
+    loadShops()
     loadNotifications()
   }, [])
 
+  useEffect(() => {
+    loadNotifications()
+  }, [selectedShop])
+
+  const loadShops = () => {
+    ShopService.getAll().then(data => {
+      setListShops(data)
+    })
+  }
+
   const loadNotifications = () => {
-    NotificationService.getAllByUserAndShop(params).then(data => {
+    const request = {...params,
+      shop: selectedShop?.nombre || ''
+    }
+
+    NotificationService.getAllByUserAndShop(request).then(data => {
       setListNotifications(data.content)
       setTotalElements(data.totalElements)
     })
@@ -78,7 +96,10 @@ export const NotificacionesPagina = () => {
     setFirst(event.first)
     setRows(event.rows)
 
-    const request = { ...params, page: event.page }
+    const request = { ...params, 
+      page: event.page, 
+      shop: selectedShop?.nombre || ''
+    }
 
     NotificationService.getAllByUserAndShop(request).then(data => {
       setListNotifications(data.content)
@@ -88,20 +109,41 @@ export const NotificacionesPagina = () => {
   const handleMarkAsRead = async (id) => {
     NotificationService.markAsRead(id).then((data) => {
       loadNotifications()
-      showMessage('Notificación marcada como leída', toast, 'success')
+      showMessage('Sistema', 'Notificación marcada como leída', toast, 'success')
     })
   }
 
   const handleDelete = async (id) => {
     NotificationService.delete(id).then((data) => {
       loadNotifications()
-      showMessage('Notificación eliminada con éxito', toast, 'success')
+      showMessage('Sistema', 'Notificación eliminada con éxito', toast, 'success')
     })
   }
 
-  const showMessage = (msg, ref, severity) => {
+  const handleMarkSelectedAsRead = () => {
+    NotificationService.markSelectedAsRead(selectedNotifications).then((data) => {
+      loadNotifications()
+      setSelectedNotifications([])
+      showMessage('Sistema', 'Notificaciónes marcadas como leída', toast, 'success')
+    })
+  }
+
+  const handleDeleteSelected = () => {
+    NotificationService.deleteSelected(selectedNotifications).then((data) => {
+      loadNotifications()
+      setSelectedNotifications([])
+      showMessage('Sistema', 'Notificaciónes eliminadas con éxito', toast, 'success')
+    })
+  }
+
+  const showNotification = () => {
+    
+  }
+
+  const showMessage = (title, msg, ref, severity) => {
+    const summary = title
     const message = msg
-    ref.current.show({ severity: severity, summary: message, life: 3000 })
+    ref.current.show({ severity: severity, summary: summary, detail: message, life: 3000 })
   }
 
   return (
@@ -109,16 +151,6 @@ export const NotificacionesPagina = () => {
       <h2 className='text-3xl font-medium mb-5'>Notificaciones</h2>
 
       <div className='flex gap-5 mb-5'>
-
-        <Dropdown placeholder='Selecciona un local' />
-
-        <Card className='!shadow-none border cursor-pointer'>
-          <div className='flex gap-3'>
-            <Send className='text-blue-500' />
-            <span className='font-medium'>Crear notificación</span>
-          </div>
-        </Card>
-
         <Card className='!shadow-none border cursor-pointer'>
           <div className='flex gap-3'>
             <MailOpen className='text-blue-500' />
@@ -129,6 +161,22 @@ export const NotificacionesPagina = () => {
 
       <Card className='!shadow-none border'>
         <div className='max-h-[650px] overflow-y-auto'>
+          <div className='flex'>
+            <Dropdown value={selectedShop} options={listShops} onChange={(e) => setSelectedShop(e.value)}
+              optionLabel='nombre' className='mb-5' placeholder='Selecciona un local' />
+            {selectedNotifications.length > 0 &&
+              <div className='flex items-center gap-4 ml-3 mb-3'>
+                <span className='text-lg font-medium'>{selectedNotifications.length} seleccionadas</span>
+                <button onClick={handleMarkSelectedAsRead}>
+                  <MailOpen className='text-blue-500' size={20} />
+                </button>
+                <button onClick={handleDeleteSelected}>
+                  <Trash2 className='text-blue-500' size={20} />
+                </button>
+              </div>
+            }
+          </div>
+
           <DataTable value={listNotifications} stripedRows emptyMessage='No hay notificaciones por el momento' size='small' dataKey='id'
             selectionMode={'checkbox'} selection={selectedNotifications} onSelectionChange={(e) => setSelectedNotifications(e.value)}>
             <Column selectionMode='multiple' className='rounded-tl-lg' style={{ width: '1%' }} />
@@ -139,7 +187,7 @@ export const NotificacionesPagina = () => {
             <Column className='rounded-tr-md' alignHeader={'center'} style={{ width: '5%' }}
               body={(rowData) => (
                 <div className='flex justify-center'>
-                  <button className='text-dark rounded px-2 py-1'>
+                  <button onClick={() => showNotification(rowData.id)} className='text-dark rounded px-2 py-1'>
                     <Eye size={16} />
                   </button>
                   <button onClick={() => handleMarkAsRead(rowData.id)} className='text-dark rounded px-2 py-1'>

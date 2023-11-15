@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import ShopService from '../services/local.servicio'
 
 export const AdminPagina = () => {
-  const [sucursales, setSucursales] = useState([]);
+  const [sucursales, setSucursales] = useState([])
 
   useEffect(() => {
     ShopService.getAll().then(data => {
@@ -19,10 +19,6 @@ export const AdminPagina = () => {
 
   return (
     <div className='p-5'>
-      <Card className='!shadow-none border mb-5'>
-        <h2>Bienvenido</h2>
-      </Card>
-
       <div className='mb-5'>
         <h2 className='text-4xl font-medium mb-5'>Mis Locales</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>

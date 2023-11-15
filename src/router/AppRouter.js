@@ -6,7 +6,6 @@ import RequireAuth from '../utils/RequireAuth'
 
 import { AdminPagina } from '../pages/admin.pagina'
 import { UsuarioPagina } from '../pages/usuario.pagina'
-
 import { LocalPagina } from '../pages/local/local.pagina'
 import { PanelPagina } from '../pages/panel/panel.pagina'
 import { AjustesPagina } from '../pages/ajustes.pagina'
@@ -30,10 +29,14 @@ import { RegistrarDevolucionPagina } from '../pages/venta/devolucion.registrar.p
 
 export const AppRouter = () => {
   const [user, setUser] = useContext(UserContext)
+  const rolname = user.roles.match(/ROLE_(\w+)/)[1]
 
   return (
     <Routes>
-      <Route exact path="/inicio" element={<AdminPagina />} />
+      {rolname === 'ADMINISTRADOR' 
+        ? < Route exact path="/inicio" element={<AdminPagina />} />
+        : < Route exact path="/inicio" element={<UsuarioPagina />} />
+      }
 
       <Route element={<RequireAuth allowedRoles={['ROLE_USUARIO', 'ROLE_ADMINISTRADOR']} />}>
         <Route exact path="/mensajeria" element={<MensajeriaPagina />} />
