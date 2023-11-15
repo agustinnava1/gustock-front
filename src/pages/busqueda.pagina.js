@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button } from 'primereact/button'
+
 import { Paginator } from 'primereact/paginator'
 import { Link, useParams } from 'react-router-dom'
 
@@ -20,7 +20,6 @@ export const ProductoBusqueda = () => {
 
   useEffect(() => {
     ProductoService.getAllByCriteria(paginacionRequest).then(data => {
-      console.log(data)
       setListProducts(data.content)
       setTotalElements(data.totalElements)
     })
@@ -36,30 +35,30 @@ export const ProductoBusqueda = () => {
   };
 
   return (
-    <div class="p-5">
-      <h2 class="text-4xl font-medium mb-5">Resultados de busqueda: "{criterio}"</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-5">
+    <div class='p-5'>
+      <h2 class='text-4xl font-medium mb-5'>Resultados de busqueda: "{criterio}"</h2>
+      <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-5'>
         {listProducts.map((product) => (
           <Link to={`/producto/detalle/${product.id}`}>
-            <div class="group bg-white shadow rounded border hover:shadow-2xl cursor-pointer">
-              <div class="border-b">
+            <div class='group bg-white shadow rounded border hover:shadow-2xl cursor-pointer'>
+              <div class='border-b'>
                 <img src={product.base64Image || '/producto-sin-foto.jpg'}
-                  class="h-[550px] w-full object-cover object-center rounded-t-lg"></img>
+                  class='h-[550px] w-full object-cover object-center rounded-t-lg'></img>
               </div>
-              <div class="h-[210px] p-5">
+              <div class='h-[210px] p-5'>
                 <span className='text-sm text-gray-400'>{product.code}</span>
                 <h3 className='text-xl text-gray-600 font-medium mb-3'>{product.description}</h3>
                 <div className='flex justify-between'>
                   <p className='font-medium text-gray-500'>Efectivo</p>
-                  <p class="mt-1">{formatCurrency(product.cashPrice)}</p>
+                  <p class='mt-1'>{formatCurrency(product.cashPrice)}</p>
                 </div>
                 <div className='flex justify-between'>
                   <p className='font-medium text-gray-500'>Débito</p>
-                  <p class="mt-1">{formatCurrency(product.debitPrice)}</p>
+                  <p class='mt-1'>{formatCurrency(product.debitPrice)}</p>
                 </div>
                 <div className='flex justify-between'>
                   <p className='font-medium text-gray-500'>Crédito</p>
-                  <p class="mt-1">{formatCurrency(product.creditPrice)}</p>
+                  <p class='mt-1'>{formatCurrency(product.creditPrice)}</p>
                 </div>
               </div>
             </div>

@@ -38,6 +38,7 @@ export const RegistrarDevolucionPagina = () => {
   const [additionalPct, setAdditionalPct] = useState(0)
 
   const [listProducts, setListProducts] = useState([])
+  const [listRefunds, setListRefunds] = useState([])
 
   const initialRequest = {
     shop: name,
@@ -52,9 +53,11 @@ export const RegistrarDevolucionPagina = () => {
   ]
 
   useEffect(() => {
-    const newSubtotal = listProducts.reduce((total, product) => total + product.subtotal, 0)
+    const subtotalRefund = listRefunds.reduce((total, product) => total + product.subtotal, 0)
+    const subtotalProducts = listProducts.reduce((total, product) => total + product.subtotal, 0)
+    const newSubtotal = subtotalProducts - subtotalRefund
     setSubtotal(newSubtotal)
-  }, [listProducts])
+  }, [listProducts, listRefunds])
 
   useEffect(() => {
     calculateDiscount()
@@ -75,6 +78,20 @@ export const RegistrarDevolucionPagina = () => {
       const request = { ...requestState, shop: name }
       ProductService.getByCodeOrBarcode(request).then(data => {
         setListProducts(prevList => [...prevList, data])
+      }).catch((error) => {
+        Swal.fire('Producto no encontrado', 'No se encontró ningún producto que coincida con el artículo o código de barras ingresado.', 'error',)
+      })
+    }
+  }
+
+  const handleSearchRefund = (e) => {
+    e.preventDefault()
+    if (listRefunds.some(product => product.code === code.trim())) {
+      Swal.fire('Producto ya agregado', 'Este producto ya ha sido agregado a la venta.', 'error',)
+    } else {
+      const request = { ...requestState, shop: name }
+      ProductService.getByCodeOrBarcode(request).then(data => {
+        setListRefunds(prevList => [...prevList, data])
       }).catch((error) => {
         Swal.fire('Producto no encontrado', 'No se encontró ningún producto que coincida con el artículo o código de barras ingresado.', 'error',)
       })
@@ -131,6 +148,23 @@ export const RegistrarDevolucionPagina = () => {
       item => (item.code === rowData.code ? { ...item, quantity: newQuantity, subtotal: newSubtotal } : item)));
   }
 
+  const onPriceChangeRefund = (rowData) => (e) => {
+    const newPrice = e.value
+    const newSubtotal = rowData.quantity * newPrice
+
+    setListRefunds(prevList => prevList.map(
+      item => (item.code === rowData.code ? { ...item, price: newPrice, subtotal: newSubtotal } : item)));
+  }
+
+  const onQuantityChangeRefund = (rowData) => (e) => {
+    const newQuantity = e.value
+    const newSubtotal = newQuantity * rowData.price
+
+    setListRefunds(prevList => prevList.map(
+      item => (item.code === rowData.code ? { ...item, quantity: newQuantity, subtotal: newSubtotal } : item)));
+  }
+
+
   const handleCreateSale = () => {
     if (listProducts.length === 0) {
       Swal.fire('Error', 'No hay productos agregados a la venta.', 'error');
@@ -151,6 +185,7 @@ export const RegistrarDevolucionPagina = () => {
       total: total,
       subtotal: subtotal,
       discount: discount,
+      refunds: listRefunds,
       details: listProducts,
       cashPayment: cashPayment,
       debitPayment: debitPayment,
@@ -159,6 +194,7 @@ export const RegistrarDevolucionPagina = () => {
     }
 
     SaleService.create(sale).then(data => {
+      console.log(sale)
       Swal.fire('Registrado', 'Se ha registrado la venta con éxito. <br> Número de venta: ' + data.id, 'success')
     }).catch((error) => {
       Swal.fire('Error', 'Hubo un problema al intentar registrar la venta. Por favor, inténtelo de nuevo más tarde.', 'error')
@@ -172,8 +208,9 @@ export const RegistrarDevolucionPagina = () => {
 
         <div className='lg:w-3/4'>
           <Card className="!shadow-none border mb-5">
-            <form onSubmit={handleSearchProduct}>
-              <div className='flex gap-5'>
+            <h3 className='text-xl text-blue-600 font-bold mb-3'>Productos que devuelve</h3>
+            <form onSubmit={handleSearchRefund} className='mb-3'>
+              <div className='flex gap-3'>
                 <InputText name="code" placeholder='Artículo o código de barras'
                   className='p-inputtext-sm w-full' onChange={onInputChange} required />
                 <div>
@@ -185,11 +222,7 @@ export const RegistrarDevolucionPagina = () => {
                 </div>
               </div>
             </form>
-          </Card>
-
-          <Card className="!shadow-none border mb-5">
-            <h2 className='text-xl font-bold mb-3'>Productos que devuelve</h2>
-            <DataTable value={listProducts} tableStyle={{ minWidth: '50rem' }} stripedRows
+            <DataTable value={listRefunds} tableStyle={{ minWidth: '50rem' }} stripedRows
               emptyMessage='No se agregaron productos' size='small'>
               <Column field='code' header='Código' className='rounded-tl-md' style={{ width: '10%' }} />
               <Column field='description' header='Descripción' style={{ width: '55%' }} />
@@ -198,14 +231,14 @@ export const RegistrarDevolucionPagina = () => {
               <Column field='price' header='Precio unitario' style={{ width: '15%' }}
                 body={(rowData) => (
                   <InputNumber minFractionDigits={0} maxFractionDigits={0}
-                    value={rowData.price} onChange={onPriceChange(rowData)}
+                    value={rowData.price} onChange={onPriceChangeRefund(rowData)}
                     mode='currency' currency='ARS' locale='es-AR' className='p-inputtext-sm' />
                 )}>
               </Column>
 
               <Column field='quantity' header='Cantidad' style={{ width: '5%' }}
                 body={(rowData) => (
-                  <InputNumber value={rowData.quantity} onChange={onQuantityChange(rowData)} step={1} min={1}
+                  <InputNumber value={rowData.quantity} onChange={onQuantityChangeRefund(rowData)} step={1} min={1}
                     showButtons buttonLayout='horizontal' inputClassName='p-inputtext-sm text-center w-12'
                     decrementButtonClassName='p-button-secondary' decrementButtonIcon='pi pi-minus'
                     incrementButtonClassName='p-button-info' incrementButtonIcon='pi pi-plus' />
@@ -226,7 +259,20 @@ export const RegistrarDevolucionPagina = () => {
           </Card>
 
           <Card className='!shadow-none border mb-5'>
-            <h2 className='text-xl font-bold mb-3'>Productos a vender</h2>
+            <h3 className='text-xl text-blue-600 font-bold mb-3'>Productos a vender</h3>
+            <form onSubmit={handleSearchProduct} className='mb-3'>
+              <div className='flex gap-3'>
+                <InputText name="code" placeholder='Artículo o código de barras'
+                  className='p-inputtext-sm w-full' onChange={onInputChange} required />
+                <div>
+                  <Dropdown name='typePrice' value={typePrice} options={prices} onChange={onDropdownChange}
+                    className='p-inputtext-sm w-full' placeholder='Seleccione tipo de precio' />
+                </div>
+                <div>
+                  <Button label='Agregar' type='submit' size='small'></Button>
+                </div>
+              </div>
+            </form>
             <DataTable value={listProducts} tableStyle={{ minWidth: '50rem' }} stripedRows
               emptyMessage='No se agregaron productos' size='small'>
               <Column field='code' header='Código' className='rounded-tl-md' style={{ width: '10%' }} />
@@ -263,8 +309,8 @@ export const RegistrarDevolucionPagina = () => {
             </DataTable>
           </Card>
 
-          <Card className='!shadow-none border border-l-4 border-l-blue-800'>
-            <h3 className='text-2xl text-blue-800 font-bold mb-5'>Resumen de cuenta</h3>
+          <Card className='!shadow-none border'>
+            <h3 className='text-xl text-blue-800 font-bold mb-3'>Resumen de cuenta</h3>
             <div className='flex gap-5'>
               <div className='flex-1'>
                 <InputTextarea value={note} onChange={(e) => setNote(e.value)} rows={7}
@@ -297,7 +343,7 @@ export const RegistrarDevolucionPagina = () => {
 
         <div className='lg:w-1/4 h-full'>
           <Card className='!shadow-none border'>
-            <h3 className='text-2xl text-blue-600 font-bold mb-5'>Detalle de pago</h3>
+            <h3 className='text-xl text-blue-600 font-bold mb-5'>Detalle de pago</h3>
             <div className='mb-5'>
               <div class='flex items-center justify-between mb-3'>
                 <span className='text-lg font-semibold'>Contado</span>

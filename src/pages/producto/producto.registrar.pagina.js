@@ -179,7 +179,7 @@ export const ProductoRegistrar = () => {
       provider: provider?.razonSocial,
       stocks: listStocks,
       base64Image: base64Image,
-      base64barcode: base64Barcode,
+      base64barcode: barcode ? base64Barcode : null,
       specifications: specifications
     }
 

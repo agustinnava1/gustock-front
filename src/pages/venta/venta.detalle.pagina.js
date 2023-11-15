@@ -11,6 +11,7 @@ export const VentaDetalle = () => {
 
   const [sale, setSale] = useState([])
   const [details, setDetails] = useState([])
+  const [refunds, setRefunds] = useState([])
 
   useEffect(() => {
     loadSale()
@@ -20,6 +21,7 @@ export const VentaDetalle = () => {
     VentaService.getById(id).then(data => {
       setSale(data)
       setDetails(data.details)
+      setRefunds(data?.refunds)
     })
   }
 
@@ -91,7 +93,7 @@ export const VentaDetalle = () => {
         </div>
 
         <div className="w-3/4">
-          <Card title='Productos vendidos' className='!shadow-none border'>
+          <Card title='Productos vendidos' className='!shadow-none border mb-5'>
             {details.map(product => (
               <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded mt-5 p-5">
                 <div className="flex-auto w-52">
@@ -104,6 +106,22 @@ export const VentaDetalle = () => {
               </div>
             ))}
           </Card>
+
+          {refunds.length > 0 &&
+            <Card title='Productos devueltos' className='!shadow-none border'>
+              {refunds.map(product => (
+                <div className="flex items-center text-lg border border-blue-200 bg-blue-50 rounded mt-5 p-5">
+                  <div className="flex-auto w-52">
+                    <p className="font-medium">{product.description}</p>
+                    <span className="!text-sm">Código: {product.code}</span>
+                  </div>
+                  <span className="flex-auto text-center text-gray-500 font-medium">Precio unitario: {formatCurrency(product.price)}</span>
+                  <span className="flex-auto text-center text-gray-500 font-medium">Cantidad: {product.quantity}</span>
+                  <span className="flex-auto text-center text-gray-500 font-medium">Subtotal: {formatCurrency(product.subtotal)}</span>
+                </div>
+              ))}
+            </Card>
+          }
         </div>
       </div>
     </div>

@@ -10,24 +10,47 @@ import { formatCurrency, formatDate, formatTime } from '../../../helper/format'
 
 import SaleService from '../../../services/venta.servicio'
 import { Plus, RotateCcw } from 'lucide-react'
+import Swal from 'sweetalert2'
 
 const SalesComponent = ({ shop }) => {
 
   useEffect(() => {
+    loadSales()
+  }, []);
+
+  const loadSales = () => {
     SaleService.getAllCurrentByShop(shop).then(data => {
       setListSales(data)
     })
-  }, []);
+  }
 
   const [listSales, setListSales] = useState([])
+
+  const handleDelete = async (id) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Se eliminará el registro de venta del sistema y los productos seran reintregrados al stock del local",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        SaleService.delete(id)
+          .then((data) => {
+            loadSales()
+            Swal.fire('Eliminado', 'La venta ha sido eliminada del sistema.', 'success');
+          })
+          .catch((error) => {
+            Swal.fire('Error', 'Hubo un problema al intentar eliminar la venta. Por favor, inténtalo de nuevo más tarde.', 'error');
+          });
+      }
+    })
+  }
 
   return (
     <div className='lg:flex lg:justify-between gap-5'>
       <div className='lg:w-1/6'>
-        <Card className='!shadow-none border mb-5'>
-          <span className='font-medium'>Ventas realizadas</span>
-        </Card>
-
         <Link to={`/local/${shop}/venta/registrar`}>
           <Card className='!shadow-none border mb-5'>
             <div className='flex gap-3'>
@@ -73,9 +96,8 @@ const SalesComponent = ({ shop }) => {
 
         <Card className='!shadow-none border'>
           <DataTable value={listSales} stripedRows emptyMessage='Sin registro de ventas' size='small'>
-            <Column field='id' header='Código' className='font-medium rounded-tl-md' style={{ width: '5%' }}></Column>
+            <Column field='id' header='Código' className='font-medium rounded-tl-md' style={{ width: '10%' }}></Column>
             <Column field='user' header='Usuario' style={{ width: '10%' }}></Column>
-            <Column field={(rowData) => formatDate(rowData.date)} header='Fecha' style={{ width: '10%' }}></Column>
             <Column field={(rowData) => formatTime(rowData.time)} header='Hora' style={{ width: '10%' }}></Column>
             <Column field={(rowData) => formatCurrency(rowData.cashPayment)} header='Efectivo' style={{ width: '10%' }}></Column>
             <Column field={(rowData) => formatCurrency(rowData.debitPayment)} header='Débito' style={{ width: '10%' }}></Column>
@@ -91,7 +113,7 @@ const SalesComponent = ({ shop }) => {
                     </button>
                   </Link>
                   <button className='bg-red-500 text-white rounded px-2 py-1'
-                  >
+                    onClick={() => handleDelete(rowData.id)}>
                     <i className='bi bi-trash-fill'></i>
                   </button>
                 </div>

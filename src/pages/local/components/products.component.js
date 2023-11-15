@@ -176,7 +176,7 @@ const ProductsComponent = ({ shop }) => {
             <Column field={(rowData) => formatCurrency(rowData.product.cashPrice)} header='Efectivo' style={{ width: '10%' }} />
             <Column field={(rowData) => formatCurrency(rowData.product.debitPrice)} header='Débito' style={{ width: '10%' }} />
             <Column field={(rowData) => formatCurrency(rowData.product.creditPrice)} header='Crédito' style={{ width: '10%' }} />
-            <Column field={(rowData) => formatDate(rowData.product.lastPrice)} header='Ult. Precio' style={{ width: '10%' }} />
+            <Column field={(rowData) => rowData.product.lastPrice ? formatDate(rowData.product.lastPrice) : '-'} header='Ult. Precio' style={{ width: '10%' }} />
             <Column field={(rowData) => formatDate(rowData.lastUpdate)} header='Ult. Stock' style={{ width: '10%' }} />
             <Column field='quantity' header='Unidades' style={{ width: '5%' }} />
             <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
