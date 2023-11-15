@@ -21,6 +21,7 @@ import ProductFilters from '../../helper/producto.filtros'
 import ProductoService from '../../services/producto.servicio'
 import SpecificationsForm from './components/specifications.form'
 
+
 const initialProduct = {
   code: '',
   description: '',
@@ -42,6 +43,7 @@ export const ProductoModificar = () => {
   const { id } = useParams()
   const canvasRef = useRef(null)
 
+  const [product, setProduct] = useState(null)
   const [code, setCode] = useState('')
   const [barcode, setBarcode] = useState(null)
   const [listStocks, setListStocks] = useState([])
@@ -60,11 +62,7 @@ export const ProductoModificar = () => {
   useEffect(() => {
     ProductoService.getById(id).then(data => {
       console.log(data)
-      const updatedInitialProduct = {
-        ...initialProduct,
-        description: data.description
-      };
-      const updatedInitialSpecifications = { ...initialSpecifications, ...data.specifications };
+      setProduct(product)
     })
 
     ShopService.getAll().then(data => {
@@ -203,7 +201,7 @@ export const ProductoModificar = () => {
 
   return (
     <div className='p-5'>
-      <h2 className='text-3xl font-medium mb-5'>Registrar nuevo producto</h2>
+      <h2 className='text-3xl font-medium mb-5'>Modificar producto</h2>
       <div className='md:flex gap-5'>
         <div className='w-1/5'>
           <Card title='Imagen' className='!shadow-none border mb-5'>
@@ -248,7 +246,7 @@ export const ProductoModificar = () => {
             <div className='mb-3'>
               <label htmlFor='description' className='block font-medium text-lg mb-2'>Descripción</label>
               <InputText placeholder='Valija mediana roja' className='p-inputtext-sm w-full'
-                name='description' value={description} onChange={onInputChange} />
+                name='description' value={product?.description} onChange={onInputChange} />
             </div>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
               <div className='mb-3'>
