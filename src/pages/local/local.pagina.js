@@ -29,7 +29,7 @@ export const LocalPagina = () => {
       <Card className='!shadow-none border mb-5'>
         <div className='flex justify-between'>
           <div className='flex items-center gap-3'>
-            <h2 className="text-2xl font-bold">LOCAL {shop.nombre}</h2>
+            <h3 className="text-2xl font-bold">LOCAL {shop.nombre}</h3>
             <p className="text-xl">| {shop.direccion}</p>
           </div>
           <div className='flex items-center gap-3'>

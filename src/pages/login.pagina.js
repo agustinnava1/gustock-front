@@ -53,7 +53,7 @@ export const Login = () => {
         <div className='flex-col flex self-center p-10 sm:max-w-5xl xl:max-w-2xl z-10'>
           <div className='self-start hidden lg:flex flex-col text-white'>
             <h1 className='!text-white mb-3 font-bold text-5xl'>Bienvenido a gustock </h1>
-            <p className='pr-3'>¡Bienvenido al equipo! Nuestra aplicación te ayudará en la gestión de el local.</p>
+            <p className='pr-3'>¡Bienvenido al equipo! Nuestra aplicación te ayudará en la gestión del local.</p>
           </div>
         </div>
         <div className='flex justify-center self-center z-10'>

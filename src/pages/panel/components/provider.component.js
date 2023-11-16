@@ -125,12 +125,12 @@ export const ProviderComponent = () => {
           <Column field="ciudad" header="Ciudad"></Column>
           <Column header="Acciones" className="rounded-tr-md" style={{ width: '5%' }}
             body={(rowData) => (
-              <div className='flex'>
-                <button className='bg-yellow-500 rounded text-white px-2 py-1 me-3'
+              <div className='flex gap-2'>
+                <button className='text-gray-500 px-2 py-1'
                   onClick={() => showFormUpdate(rowData.id)}>
                   <i className='bi bi-pencil-fill'></i>
                 </button>
-                <button className='bg-red-500 rounded text-white px-2 py-1'
+                <button className='text-gray-500 px-2 py-1'
                   onClick={() => handleDelete(rowData.id)}>
                   <i className='bi bi-trash-fill'></i>
                 </button>

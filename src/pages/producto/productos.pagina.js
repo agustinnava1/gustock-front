@@ -186,16 +186,16 @@ export const ProductosPagina = () => {
                 body={(rowData) => (
                   <div className='flex gap-2'>
                     <Link to={`/producto/detalle/${rowData.id}`}>
-                      <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                      <button className='text-gray-500 px-2 py-1'>
                         <i className='bi bi-eye-fill'></i>
                       </button>
                     </Link>
                     <Link to={`/producto/modificar/${rowData.id}`}>
-                      <button className='bg-yellow-500 text-white rounded px-2 py-1'>
+                      <button className='text-gray-500 px-2 py-1'>
                         <i className='bi bi-pencil-fill'></i>
                       </button>
                     </Link>
-                    <button className='bg-red-500 text-white rounded px-2 py-1'
+                    <button className='text-gray-500 px-2 py-1'
                       onClick={() => handleDelete(rowData.id)} >
                       <i className='bi bi-trash-fill'></i>
                     </button>

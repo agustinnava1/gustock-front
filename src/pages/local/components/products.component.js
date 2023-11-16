@@ -98,7 +98,7 @@ const ProductsComponent = ({ shop }) => {
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Se eliminará el registro del producto de este local.',
+      text: 'Se eliminará el registro del producto de este local',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si, eliminar',
@@ -183,16 +183,16 @@ const ProductsComponent = ({ shop }) => {
               body={(rowData) => (
                 <div className='flex gap-2'>
                   <Link to={`/producto/detalle/${rowData.product.id}`} target='_blank'>
-                    <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                    <button className='text-gray-500 px-2 py-1'>
                       <i className='bi bi-eye-fill'></i>
                     </button>
                   </Link>
                   <Link to={`/producto/modificar/${rowData.product.id}`} target='_blank'>
-                    <button className='bg-yellow-500 text-white rounded px-2 py-1'>
+                    <button className='text-gray-500 px-2 py-1'>
                       <i className='bi bi-pencil-fill'></i>
                     </button>
                   </Link>
-                  <button className='bg-red-500 text-white rounded px-2 py-1'
+                  <button className='text-gray-500 px-2 py-1'
                     onClick={() => handleDelete(rowData.idStock)} >
                     <i className='bi bi-trash-fill'></i>
                   </button>
@@ -200,7 +200,7 @@ const ProductsComponent = ({ shop }) => {
               )}>
             </Column>
           </DataTable>
-          <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
+          <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalElements}
             onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
         </Card>
       </div>

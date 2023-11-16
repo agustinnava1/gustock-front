@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 
-import { Save } from 'lucide-react'
+import { RotateCcw, Save, ShoppingCart } from 'lucide-react'
 import { Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
@@ -21,23 +21,23 @@ export const UsuarioPagina = () => {
     <div className="flex justify-center items-center h-screen">
       <div className="text-center">
         <div className="mb-5">
-          <h2 className="text-4xl font-medium mb-5">Bienvenido de vuelta {user.sub}</h2>
+          <h2 className="text-4xl font-medium mb-5">Bienvenido {user.sub}</h2>
           <span className="text-xl">Estas en el local {shop}</span>
         </div>
         <div className="flex gap-5">
           <Link to={`/local/${shop}/venta/registrar`}>
             <Card className="!shadow-xl rounded-xl bg-white text-center border">
               <div className='p-32'>
-                <Save className="text-blue-500 m-auto mb-10" size={100} />
-                <h2 className='text-2xl font-medium'>Registrar venta</h2>
+                <ShoppingCart className="text-blue-500 m-auto mb-10" size={100} />
+                <h3 className='text-2xl font-medium'>Registrar venta</h3>
               </div>
             </Card>
           </Link>
           <Link to={`/local/${shop}/devolucion/registrar`}>
             <Card className="!shadow-xl rounded-xl bg-white border">
               <div className='p-32'>
-                <Save className="text-blue-500 m-auto mb-10" size={100} />
-                <h2 className='text-2xl font-medium'>Registrar cambio</h2>
+                <RotateCcw className="text-blue-500 m-auto mb-10" size={100} />
+                <h3 className='text-2xl font-medium'>Registrar cambio</h3>
               </div>
             </Card>
           </Link>

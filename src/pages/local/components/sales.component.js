@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react'
 
 import { Card } from 'primereact/card'
 import { Link } from 'react-router-dom'
-import { Button } from 'primereact/button'
 import { Column } from 'primereact/column'
+import { Plus, RotateCcw } from 'lucide-react'
 import { DataTable } from 'primereact/datatable'
 
-import { formatCurrency, formatDate, formatTime } from '../../../helper/format'
+import { useCalculateTotal } from '../../../hooks/venta.calcular'
+import { formatCurrency, formatTime } from '../../../helper/format'
+
+import Swal from 'sweetalert2'
 
 import SaleService from '../../../services/venta.servicio'
-import { Plus, RotateCcw } from 'lucide-react'
-import Swal from 'sweetalert2'
 
 const SalesComponent = ({ shop }) => {
 
@@ -25,6 +26,7 @@ const SalesComponent = ({ shop }) => {
   }
 
   const [listSales, setListSales] = useState([])
+  const { totalCash, totalDebit, totalCredit, totalCodeQr, totalFinal } = useCalculateTotal(listSales)
 
   const handleDelete = async (id) => {
     Swal.fire({
@@ -51,11 +53,16 @@ const SalesComponent = ({ shop }) => {
   return (
     <div className='lg:flex lg:justify-between gap-5'>
       <div className='lg:w-1/6'>
+        <Card className='!shadow-none border mb-5'>
+          <p className='text-lg font-medium mb-2'>Ventas realizadas</p>
+          <span className='text-xl'>{listSales.length}</span>
+        </Card>
+
         <Link to={`/local/${shop}/venta/registrar`}>
           <Card className='!shadow-none border mb-5'>
             <div className='flex gap-3'>
               <Plus className='text-blue-500' />
-              <span className='font-medium'>Nueva venta</span>
+              <span className='font-medium'>Registrar venta</span>
             </div>
           </Card>
         </Link>
@@ -64,7 +71,7 @@ const SalesComponent = ({ shop }) => {
           <Card className='!shadow-none border mb-5'>
             <div className='flex gap-3'>
               <RotateCcw className='text-blue-500' />
-              <span className='font-medium'>Devolución</span>
+              <span className='font-medium'>Registrar devolución</span>
             </div>
           </Card>
         </Link>
@@ -74,23 +81,23 @@ const SalesComponent = ({ shop }) => {
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 mb-5'>
           <Card className='!shadow-none border'>
             <p className='text-lg text-blue-400 font-medium mb-2'>Total efectivo</p>
-            <span className='text-xl'>$ 0</span>
+            <span className='text-xl'>{totalCash()}</span>
           </Card>
           <Card className='!shadow-none border'>
             <p className='text-lg text-blue-500 font-medium mb-2'>Total débito</p>
-            <span className='text-xl'>$ 0</span>
+            <span className='text-xl'>{totalDebit()}</span>
           </Card>
           <Card className='!shadow-none border'>
             <p className='text-lg text-blue-600 font-medium mb-2'>Total código Qr</p>
-            <span className='text-xl'>$ 0</span>
+            <span className='text-xl'>{totalCodeQr()}</span>
           </Card>
           <Card className='!shadow-none border'>
             <p className='text-lg text-blue-700 font-medium mb-2'>Total crédito</p>
-            <span className='text-xl'>$ 0</span>
+            <span className='text-xl'>{totalCredit()}</span>
           </Card>
           <Card className='!shadow-none border'>
             <p className='text-lg text-blue-800 font-medium mb-2'>Total de ventas</p>
-            <span className='text-xl'>$ 0</span>
+            <span className='text-xl'>{totalFinal()}</span>
           </Card>
         </div>
 
@@ -108,11 +115,11 @@ const SalesComponent = ({ shop }) => {
               body={(rowData) => (
                 <div className='flex justify-center gap-2'>
                   <Link to={`/venta/detalle/${rowData.id}`} target='_blank'>
-                    <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                    <button className='text-gray-500 px-2 py-1'>
                       <i className='bi bi-eye-fill'></i>
                     </button>
                   </Link>
-                  <button className='bg-red-500 text-white rounded px-2 py-1'
+                  <button className='text-gray-500 px-2 py-1'
                     onClick={() => handleDelete(rowData.id)}>
                     <i className='bi bi-trash-fill'></i>
                   </button>

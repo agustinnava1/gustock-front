@@ -115,8 +115,8 @@ export const VentaHistorialProductoPagina = () => {
               <Column field='id' header='Código' className='font-bold' style={{ width: '5%' }}></Column>
               <Column field='shop' header='Local' style={{ width: '10%' }}></Column>
               <Column field='user' header='Usuario' style={{ width: '10%' }}></Column>
-              <Column field={(rowData) => formatDate(rowData.fecha)} header='Fecha' style={{ width: '10%' }}></Column>
-              <Column field={(rowData) => formatTime(rowData.hora)} header='Hora' style={{ width: '10%' }}></Column>
+              <Column field={(rowData) => formatDate(rowData.date)} header='Fecha' style={{ width: '10%' }}></Column>
+              <Column field={(rowData) => formatTime(rowData.time)} header='Hora' style={{ width: '10%' }}></Column>
               <Column header='Producto/s' style={{ width: '50%' }}
                 body={(rowData) => (
                   <div>
@@ -132,7 +132,7 @@ export const VentaHistorialProductoPagina = () => {
                 body={(rowData) => (
                   <div className='flex justify-center'>
                     <Link to={`/venta/detalle/${rowData.id}`} target='_blank'>
-                      <button className='bg-sky-500 rounded text-xl text-white px-2 py-1 hover:bg-sky-600'>
+                      <button className='text-gray-500 px-2 py-1'>
                         <i className='bi bi-eye-fill'></i>
                       </button>
                     </Link>

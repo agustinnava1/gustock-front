@@ -37,7 +37,7 @@ export const ProductoBusqueda = () => {
   return (
     <div class='p-5'>
       <h2 class='text-4xl font-medium mb-5'>Resultados de busqueda: "{criterio}"</h2>
-      <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-5 gap-5'>
+      <div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5'>
         {listProducts.map((product) => (
           <Link to={`/producto/detalle/${product.id}`}>
             <div class='group bg-white shadow rounded border hover:shadow-2xl cursor-pointer'>

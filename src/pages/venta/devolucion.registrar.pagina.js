@@ -100,8 +100,8 @@ export const RegistrarDevolucionPagina = () => {
 
   const handleDeleteProduct = (product) => {
     Swal.fire({
-      title: 'Eliminar producto',
-      text: 'Está seguro que desea eliminar el producto de la venta?',
+      title: '¿Estás seguro?',
+      text: 'Se eliminará el producto de la lista',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
@@ -109,7 +109,23 @@ export const RegistrarDevolucionPagina = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         setListProducts(prevList => prevList.filter((item) => item.code !== product.code))
-        Swal.fire('Eliminado', 'Se elimino el producto de la venta.', 'success')
+        Swal.fire('Eliminado', 'Se elimino el producto de la lista.', 'success')
+      }
+    })
+  }
+
+  const handleDeleteRefund = (refund) => {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Se eliminará el producto de la lista',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setListRefunds(prevList => prevList.filter((item) => item.code !== refund.code))
+        Swal.fire('Eliminado', 'Se elimino el producto de la lista.', 'success')
       }
     })
   }
@@ -203,12 +219,12 @@ export const RegistrarDevolucionPagina = () => {
 
   return (
     <div className='container mx-auto p-5'>
-      <h2 className='text-3xl font-medium mb-5'>{name} | Cambio de producto</h2>
+      <h2 className='text-4xl font-medium mb-5'>{name} | Cambio de producto</h2>
       <div className='lg:flex gap-5'>
 
         <div className='lg:w-3/4'>
           <Card className="!shadow-none border mb-5">
-            <h3 className='text-xl text-blue-600 font-bold mb-3'>Productos que devuelve</h3>
+            <h3 className='text-2xl text-blue-600 font-bold mb-3'>Productos que devuelve</h3>
             <form onSubmit={handleSearchRefund} className='mb-3'>
               <div className='flex gap-3'>
                 <InputText name="code" placeholder='Artículo o código de barras'
@@ -249,9 +265,9 @@ export const RegistrarDevolucionPagina = () => {
 
               <Column className='rounded-tr-md' style={{ width: '5%' }}
                 body={(rowData) => (
-                  <button className='text-red-500 rounded p-2 hover:text-white hover:bg-red-500'
-                    onClick={() => handleDeleteProduct(rowData)} >
-                    <Trash2 size={20} />
+                  <button className='text-gray-500 px-2 py-1'
+                    onClick={() => handleDeleteRefund(rowData)} >
+                    <i className='bi bi-trash-fill'></i>
                   </button>
                 )}>
               </Column>
@@ -259,7 +275,7 @@ export const RegistrarDevolucionPagina = () => {
           </Card>
 
           <Card className='!shadow-none border mb-5'>
-            <h3 className='text-xl text-blue-600 font-bold mb-3'>Productos a vender</h3>
+            <h3 className='text-2xl text-blue-600 font-bold mb-3'>Productos a vender</h3>
             <form onSubmit={handleSearchProduct} className='mb-3'>
               <div className='flex gap-3'>
                 <InputText name="code" placeholder='Artículo o código de barras'
@@ -300,9 +316,9 @@ export const RegistrarDevolucionPagina = () => {
 
               <Column className='rounded-tr-md' style={{ width: '5%' }}
                 body={(rowData) => (
-                  <button className='text-red-500 rounded p-2 hover:text-white hover:bg-red-500'
+                  <button className='text-gray-500 px-2 py-1'
                     onClick={() => handleDeleteProduct(rowData)} >
-                    <Trash2 size={20} />
+                    <i className='bi bi-trash-fill'></i>
                   </button>
                 )}>
               </Column>
@@ -310,7 +326,7 @@ export const RegistrarDevolucionPagina = () => {
           </Card>
 
           <Card className='!shadow-none border'>
-            <h3 className='text-xl text-blue-800 font-bold mb-3'>Resumen de cuenta</h3>
+            <h3 className='text-2xl text-blue-800 font-bold mb-3'>Resumen de cuenta</h3>
             <div className='flex gap-5'>
               <div className='flex-1'>
                 <InputTextarea value={note} onChange={(e) => setNote(e.value)} rows={7}
@@ -343,7 +359,7 @@ export const RegistrarDevolucionPagina = () => {
 
         <div className='lg:w-1/4 h-full'>
           <Card className='!shadow-none border'>
-            <h3 className='text-xl text-blue-600 font-bold mb-5'>Detalle de pago</h3>
+            <h3 className='text-2xl text-blue-600 font-bold mb-5'>Detalle de pago</h3>
             <div className='mb-5'>
               <div class='flex items-center justify-between mb-3'>
                 <span className='text-lg font-semibold'>Contado</span>
@@ -377,14 +393,9 @@ export const RegistrarDevolucionPagina = () => {
                   minFractionDigits={0} maxFractionDigits={0} size={10} />
               </div>
             </div>
-            <div className='flex gap-5'>
-              <div className='flex-1'>
-                <Button onClick={handleCreateSale} label='Confirmar' size='small'
-                  className='w-full' />
-              </div>
-              <div className='flex-1'>
-                <Button label='Cancelar' severity='secondary' size='small' className='w-full' />
-              </div>
+            <div >
+              <Button onClick={handleCreateSale} label='Confirmar' size='small'
+                className='w-full' />
             </div>
           </Card>
 

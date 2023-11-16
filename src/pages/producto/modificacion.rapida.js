@@ -218,7 +218,7 @@ export const ProductosModificacionRapida = () => {
                 body={(rowData) => (
                   <Link to={`/producto/detalle/${rowData.id}`}>
                     <div className='flex justify-center'>
-                      <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                      <button className='text-gray-500 px-2 py-1'>
                         <i className='bi bi-eye-fill'></i>
                       </button>
                     </div>

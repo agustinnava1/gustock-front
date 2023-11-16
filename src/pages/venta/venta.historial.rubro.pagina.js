@@ -140,7 +140,7 @@ export const VentaHistorialRubroPagina = () => {
                 body={(rowData) => (
                   <div className='flex justify-center'>
                     <Link to={`/venta/detalle/${rowData.id}`} target='_blank'>
-                      <button className='bg-sky-500 rounded text-xl text-white px-2 py-1 hover:bg-sky-600'>
+                      <button className='text-gray-500 px-2 py-1'>
                         <i className='bi bi-eye-fill'></i>
                       </button>
                     </Link>

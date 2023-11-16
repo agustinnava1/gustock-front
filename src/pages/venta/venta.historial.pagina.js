@@ -39,7 +39,7 @@ export const VentaHistorialPagina = () => {
   const [totalElements, setTotalElements] = useState(null)
 
   const { shops, payments, quantities } = VentaFilters()
-  const { paginationState, onDropdownChange, handleDate } = usePagination(initialPagination)
+  const { paginationState, onDropdownChange, handleDate, setPaginationState } = usePagination(initialPagination)
   const { totalCash, totalDebit, totalCredit, totalCodeQr, totalFinal } = useCalculateTotal(listItems)
 
   const { shop, payment, recordsQuantity } = paginationState
@@ -108,6 +108,10 @@ export const VentaHistorialPagina = () => {
 
   addLocale('es', calendarioEspañol)
 
+  const resetFilters = () => {
+    setPaginationState(initialPagination)
+  }
+
   return (
     <div className='p-5'>
       <h2 className='text-4xl font-medium mb-5'>Historial de ventas</h2>
@@ -141,7 +145,7 @@ export const VentaHistorialPagina = () => {
             </div>
             <div className='flex gap-3'>
               <Button label="Aplicar" onClick={filter} className='w-full' size='small' />
-              <Button label="Limpiar" onClick={filter} className='w-full' size='small' severity='secondary' />
+              <Button label="Limpiar" onClick={resetFilters} className='w-full' size='small' severity='secondary' />
             </div>
           </Card>
 
@@ -206,11 +210,11 @@ export const VentaHistorialPagina = () => {
                 body={(rowData) => (
                   <div className='flex justify-center gap-2'>
                     <Link to={`/venta/detalle/${rowData.id}`} target='_blank'>
-                      <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                      <button className='text-gray-500 px-2 py-1'>
                         <i className='bi bi-eye-fill'></i>
                       </button>
                     </Link>
-                    <button className='bg-red-500 text-white rounded px-2 py-1'
+                    <button className='text-gray-500 px-2 py-1'
                       onClick={() => handleDelete(rowData.id)} >
                       <i className='bi bi-trash-fill'></i>
                     </button>

@@ -28,8 +28,7 @@ label{
 }
 
 .p-datatable .p-datatable-thead > tr > th{
-  color: white!important;
-  background-color: #3b82f6!important;
+ 
 }
 
 .p-datatable .p-datatable-tbody > tr > td {
@@ -38,7 +37,7 @@ label{
 }
 
 .p-datatable.p-datatable-striped .p-datatable-tbody > tr.p-row-odd {
-  background-color: #eff5ff!important;
+  background-color: rgb(249, 249, 251)!important;
 }
 
 .p-panel.p-panel-toggleable .p-panel-header {

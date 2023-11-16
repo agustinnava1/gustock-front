@@ -177,15 +177,15 @@ export const UsuarioComponent = () => {
           <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
             body={(rowData) => (
               <div className='flex gap-2'>
-                <button className='bg-sky-500 rounded text-white px-2 py-1'
+                <button className='text-gray-500 px-2 py-1'
                   onClick={() => showUpdatePassword(rowData.id)}>
                   <i className='bi bi-key-fill'></i>
                 </button>
-                <button className='bg-yellow-500 rounded text-white px-2 py-1'
+                <button className='text-gray-500 px-2 py-1'
                   onClick={() => showFormUpdate(rowData.id)}>
                   <i className='bi bi-pencil-fill'></i>
                 </button>
-                <button className='bg-red-500 rounded text-white px-2 py-1'
+                <button className='text-gray-500 px-2 py-1'
                   onClick={() => handleDeleteUser(rowData.id)}>
                   <i className='bi bi-trash-fill'></i>
                 </button>

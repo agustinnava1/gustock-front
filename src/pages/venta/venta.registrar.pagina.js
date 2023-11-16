@@ -76,15 +76,15 @@ export const RegistrarVentaPagina = () => {
       ProductService.getByCodeOrBarcode(request).then(data => {
         setListProducts(prevList => [...prevList, data])
       }).catch((error) => {
-        Swal.fire('Producto no encontrado', 'No se encontró ningún producto que coincida con el artículo o código de barras ingresado.','error',)
+        Swal.fire('Producto no encontrado', 'No se encontró ningún producto que coincida con el artículo o código de barras ingresado.', 'error',)
       })
     }
   }
 
   const handleDeleteProduct = (product) => {
     Swal.fire({
-      title: 'Eliminar producto',
-      text: 'Está seguro que desea eliminar el producto de la venta?',
+      title: '¿Estás seguro?',
+      text: 'Se eliminará el producto de la venta',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
@@ -107,8 +107,8 @@ export const RegistrarVentaPagina = () => {
     const rest = cashPayment + debitPayment + qrCodePayment
     const newValue = total - rest
 
-    if(additionalPct > 0) {
-      const additional =  (newValue * additionalPct) / 100
+    if (additionalPct > 0) {
+      const additional = (newValue * additionalPct) / 100
       setCreditPayment(newValue + additional)
     } else {
       setCreditPayment(newValue)
@@ -172,9 +172,9 @@ export const RegistrarVentaPagina = () => {
 
         <div className='lg:w-3/4'>
           <Card className="!shadow-none border border-l-4 border-l-blue-600 mb-5">
-            <h3 className='text-2xl text-blue-600 font-bold mb-5'>Productos</h3>
-            <form onSubmit={handleSearchProduct} className="mb-5">
-              <div className='flex gap-5'>
+            <h3 className='text-2xl text-blue-600 font-bold mb-3'>Productos</h3>
+            <form onSubmit={handleSearchProduct} className="mb-3">
+              <div className='flex gap-3'>
                 <InputText name="code" placeholder='Artículo o código de barras'
                   className='p-inputtext-sm w-full' onChange={onInputChange} required />
                 <div>
@@ -213,9 +213,9 @@ export const RegistrarVentaPagina = () => {
 
               <Column className='rounded-tr-md' style={{ width: '5%' }}
                 body={(rowData) => (
-                  <button className='text-red-500 rounded p-2 hover:text-white hover:bg-red-500'
+                  <button className='text-gray-500 px-2 py-1'
                     onClick={() => handleDeleteProduct(rowData)} >
-                    <Trash2 size={20} />
+                    <i className='bi bi-trash-fill'></i>
                   </button>
                 )}>
               </Column>
@@ -223,7 +223,7 @@ export const RegistrarVentaPagina = () => {
           </Card>
 
           <Card className='!shadow-none border border-l-4 border-l-blue-800'>
-            <h3 className='text-2xl text-blue-800 font-bold mb-5'>Resumen de cuenta</h3>
+            <h3 className='text-2xl text-blue-800 font-bold mb-3'>Resumen de cuenta</h3>
             <div className='flex gap-5'>
               <div className='flex-1'>
                 <InputTextarea value={note} onChange={(e) => setNote(e.value)} rows={7}
@@ -256,7 +256,7 @@ export const RegistrarVentaPagina = () => {
 
         <div className='lg:w-1/4 h-full'>
           <Card className='!shadow-none border'>
-            <h3 className='text-2xl text-blue-600 font-bold mb-5'>Detalle de pago</h3>
+            <h3 className='text-2xl text-blue-600 font-bold mb-3'>Detalle de pago</h3>
             <div className='mb-5'>
               <div class='flex items-center justify-between mb-3'>
                 <span className='text-lg font-semibold'>Contado</span>
@@ -291,13 +291,8 @@ export const RegistrarVentaPagina = () => {
               </div>
             </div>
             <div className='flex gap-5'>
-              <div className='flex-1'>
-                <Button onClick={handleCreateSale} label='Confirmar' size='small'
-                  className='w-full' />
-              </div>
-              <div className='flex-1'>
-                <Button label='Cancelar' severity='secondary' size='small' className='w-full' />
-              </div>
+              <Button onClick={handleCreateSale} label='Confirmar' size='small'
+                className='w-full' />
             </div>
           </Card>
 

@@ -198,7 +198,7 @@ export const ProductosModificacionMasiva = () => {
               <Column className='rounded-tr-md' alignHeader={'center'} style={{ width: '5%' }}
                 body={(rowData) => (
                   <div className='flex justify-center'>
-                    <button className='bg-sky-500 text-white rounded px-2 py-1'>
+                    <button className='text-gray-500 px-2 py-1'>
                       <i className='bi bi-eye-fill'></i>
                     </button>
                   </div>
