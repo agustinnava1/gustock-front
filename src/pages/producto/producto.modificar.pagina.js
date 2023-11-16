@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import { Card } from 'primereact/card'
 import { Link, useParams } from 'react-router-dom'
-import { Panel } from 'primereact/panel'
 import { Column } from 'primereact/column'
 import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
@@ -17,10 +16,9 @@ import JsBarcode from 'jsbarcode'
 import { useForm } from '../../hooks/use.form'
 
 import ShopService from '../../services/local.servicio'
-import ProductFilters from '../../helper/producto.filtros'
+import ProductFilters from '../../helper/producto.modificar.filtros'
 import ProductoService from '../../services/producto.servicio'
 import SpecificationsForm from './components/specifications.form'
-
 
 const initialProduct = {
   code: '',
@@ -44,7 +42,6 @@ export const ProductoModificar = () => {
   const canvasRef = useRef(null)
 
   const [product, setProduct] = useState(null)
-  const [code, setCode] = useState('')
   const [barcode, setBarcode] = useState(null)
   const [listStocks, setListStocks] = useState([])
 
@@ -55,14 +52,16 @@ export const ProductoModificar = () => {
 
   const [specifications, setSpecifications] = useState(initialSpecifications)
 
-  const { formState, onInputChange, onDropdownChange } = useForm(initialProduct)
+  const { formState, onInputChange, onDropdownChange, setFormState } = useForm(initialProduct)
   const { listProviders, listCategories, listBrands } = ProductFilters()
-  const { description, brand, category, provider, priceDebit, priceCredit, priceEffective } = formState
+  const { code, description, brand, category, provider, cashPrice, debitPrice, creditPrice } = formState
 
   useEffect(() => {
     ProductoService.getById(id).then(data => {
       console.log(data)
       setProduct(product)
+      mapProperties(data, initialProduct);
+      mapProperties(data.specifications, initialSpecifications);
     })
 
     ShopService.getAll().then(data => {
@@ -74,13 +73,24 @@ export const ProductoModificar = () => {
     })
   }, []);
 
+  const mapProperties = (source, target) => {
+    for (const key in target) {
+      if (source[key] !== undefined && source[key] !== null) {
+        target[key] = source[key];
+      }
+    }
+  };
+
   useEffect(() => {
     generateBarcodeImg();
   }, [barcode]);
 
   const generateCode = () => {
     const randomNumber = Math.floor(Math.random() * 90000000) + 10000000
-    setCode(randomNumber.toString())
+    setFormState({
+      ...formState,
+      code: randomNumber.toString()
+    })
   }
 
   const generateBarcode = () => {
@@ -180,20 +190,20 @@ export const ProductoModificar = () => {
 
     const product = {
       ...formState,
+      id: id,
       code: code,
       barcode: barcode,
-      brand: brand?.descripcion,
-      category: category?.descripcion,
-      provider: provider?.razonSocial,
+      brand: brand,
+      category: category,
+      provider: provider,
       stocks: listStocks,
       base64Image: base64Image,
       base64barcode: barcode ? base64Barcode : null,
       specifications: specifications
     }
 
-    ProductoService.create(product).then(data => {
-      console.log(product)
-      Swal.fire('Registrado', 'Se ha registrado el producto: "' + data.description + '" con éxito.', 'success')
+    ProductoService.update(product).then(data => {
+      Swal.fire('Registrado', 'Se ha actualizado el producto con éxito.', 'success')
     }).catch((error) => {
       Swal.fire('Error', error.response.data, 'error')
     })
@@ -237,7 +247,7 @@ export const ProductoModificar = () => {
             <div className='mb-3'>
               <label htmlFor='description' className='block font-medium text-lg mb-2'>Código</label>
               <div className='flex'>
-                <InputText name='code' value={code} onChange={(e) => setCode(e.target.value)} className='p-inputtext-sm w-full !me-3' />
+                <InputText name='code' value={code} onChange={onInputChange} className='p-inputtext-sm w-full !me-3' />
                 <div>
                   <Button label='Generar' onClick={generateCode} size='small' className='w-full' />
                 </div>
@@ -246,53 +256,53 @@ export const ProductoModificar = () => {
             <div className='mb-3'>
               <label htmlFor='description' className='block font-medium text-lg mb-2'>Descripción</label>
               <InputText placeholder='Valija mediana roja' className='p-inputtext-sm w-full'
-                name='description' value={product?.description} onChange={onInputChange} />
+                name='description' value={description} onChange={onInputChange} />
             </div>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
               <div className='mb-3'>
                 <label htmlFor='provider' className='block font-medium text-lg mb-2'>Proveedor</label>
-                <Dropdown options={listProviders} optionLabel='razonSocial' className='p-inputtext-sm w-full' filter
+                <Dropdown options={listProviders} className='p-inputtext-sm w-full' filter
                   placeholder='Selecciona un proveedor' emptyMessage='Sin registros'
                   name='provider' value={provider} onChange={onDropdownChange} />
               </div>
               <div className='mb-3'>
                 <label htmlFor='category' className='block font-medium text-lg mb-2'>Rubro</label>
-                <Dropdown options={listCategories} optionLabel='descripcion' className='p-inputtext-sm w-full' filter
+                <Dropdown options={listCategories} className='p-inputtext-sm w-full' filter
                   placeholder='Selecciona un rubro' emptyMessage='Sin registros'
                   name='category' value={category} onChange={onDropdownChange} />
               </div>
               <div className='mb-3'>
                 <label htmlFor='brand' className='block font-medium text-lg mb-2'>Marca</label>
-                <Dropdown options={listBrands} optionLabel='descripcion' className='p-inputtext-sm w-full' filter
+                <Dropdown options={listBrands} className='p-inputtext-sm w-full' filter
                   placeholder='Selecciona una marca' emptyMessage='Sin registros'
                   name='brand' value={brand} onChange={onDropdownChange} />
               </div>
             </div>
             <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
               <div className='mb-3 lg:mb-0'>
-                <label htmlFor='priceEffective' className='block font-medium text-lg mb-2'>Precio efectivo</label>
-                <InputNumber inputId='priceEffective' mode='currency' currency='ARS' locale='es-AR' className='w-full'
+                <label htmlFor='cashPrice' className='block font-medium text-lg mb-2'>Precio efectivo</label>
+                <InputNumber inputId='cashPrice' mode='currency' currency='ARS' locale='es-AR' className='w-full'
                   minFractionDigits={0} maxFractionDigits={0} inputClassName='p-inputtext-sm w-full'
-                  name='priceEffective' value={priceEffective} onValueChange={onInputChange} />
+                  name='cashPrice' value={cashPrice} onValueChange={onInputChange} />
               </div>
               <div className='mb-3 lg:mb-0'>
-                <label htmlFor='priceDebit' className='block font-medium text-lg mb-2'>Precio débito</label>
-                <InputNumber inputId='priceDebit' mode='currency' currency='ARS' locale='es-AR' className='w-full'
+                <label htmlFor='debitPrice' className='block font-medium text-lg mb-2'>Precio débito</label>
+                <InputNumber inputId='debitPrice' mode='currency' currency='ARS' locale='es-AR' className='w-full'
                   minFractionDigits={0} maxFractionDigits={0} inputClassName='p-inputtext-sm w-full'
-                  name='priceDebit' value={priceDebit} onValueChange={onInputChange} />
+                  name='debitPrice' value={debitPrice} onValueChange={onInputChange} />
               </div>
               <div className='mb-3 lg:mb-0'>
-                <label htmlFor='priceCredit' className='block font-medium text-lg mb-2'>Precio crédito</label>
-                <InputNumber inputId='priceCredit' mode='currency' currency='ARS' locale='es-AR' className='w-full'
+                <label htmlFor='creditPrice' className='block font-medium text-lg mb-2'>Precio crédito</label>
+                <InputNumber inputId='creditPrice' mode='currency' currency='ARS' locale='es-AR' className='w-full'
                   minFractionDigits={0} maxFractionDigits={0} inputClassName='p-inputtext-sm w-full'
-                  name='priceCredit' value={priceCredit} onValueChange={onInputChange} />
+                  name='creditPrice' value={creditPrice} onValueChange={onInputChange} />
               </div>
             </div>
           </Card>
 
           <Card title="Distribución" className='!shadow-none border'>
             <DataTable value={listStocks} stripedRows size="small" emptyMessage="No se encontraron locales">
-              <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
+              <Column header='Sucursal' className='rounded-tl-md' style={{ width: '40%' }}
                 body={(rowData) => (
                   <div className='flex'>
                     <p className='font-medium'>{rowData.shop}</p>
@@ -301,6 +311,18 @@ export const ProductoModificar = () => {
                 )}>
               </Column>
               <Column header='Cantidad' className='rounded-tr-md' style={{ width: '20%' }}
+                body={(rowData) => (
+                  <InputNumber inputClassName="p-inputtext-sm w-full"
+                    value={rowData.quantity} onChange={(e) => handleQuantityChange(rowData, e.value)} min={0} disabled/>
+                )}>
+              </Column>
+              <Column header='Aumentar' className='rounded-tr-md' style={{ width: '20%' }}
+                body={(rowData) => (
+                  <InputNumber inputClassName="p-inputtext-sm w-full"
+                    value={rowData.quantity} onChange={(e) => handleQuantityChange(rowData, e.value)} min={0} />
+                )}>
+              </Column>
+              <Column header='Descontar' className='rounded-tr-md' style={{ width: '20%' }}
                 body={(rowData) => (
                   <InputNumber inputClassName="p-inputtext-sm w-full"
                     value={rowData.quantity} onChange={(e) => handleQuantityChange(rowData, e.value)} min={0} />

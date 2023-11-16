@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { Card } from 'primereact/card'
 import { Column } from 'primereact/column'
@@ -8,11 +8,14 @@ import { DataTable } from 'primereact/datatable'
 
 import { formatCurrency, formatDateTime } from '../../helper/format'
 
+import UserContext from '../../user.context'
 import StockService from '../../services/stock.servicio'
 import ProductService from '../../services/producto.servicio'
 
 export const ProductoDetalle = () => {
   const { id } = useParams()
+  const [user, setUser] = useContext(UserContext)
+  const rolname = user.roles.match(/ROLE_(\w+)/)[1]
 
   const items = [
     { label: 'Stock' },
@@ -88,12 +91,14 @@ export const ProductoDetalle = () => {
                 <tr><th colSpan={2} class='text-start p-2'>Datos del producto</th></tr>
               </thead>
               <tbody>
-                <tr className='text-start'>
-                  <th className='text-start p-2 border w-[250px]'>Proveedor</th>
-                  <td class='border-b p-2'>
-                    {product.provider || 'Sin proveedor'}
-                  </td>
-                </tr>
+                {rolname === 'ADMINISTRADOR' &&
+                  <tr className='text-start'>
+                    <th className='text-start p-2 border w-[250px]'>Proveedor</th>
+                    <td class='border-b p-2'>
+                      {product.provider || 'Sin proveedor'}
+                    </td>
+                  </tr>
+                }
                 <tr className='text-start'>
                   <th className='text-start p-2 border'>Rubro</th>
                   <td class='border-b p-2'>

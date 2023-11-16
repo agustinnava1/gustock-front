@@ -1,14 +1,14 @@
+import { useContext, useEffect, useRef, useState } from 'react'
+
 import { DateTime } from 'luxon'
 import { Tag } from 'primereact/tag'
 import { Card } from 'primereact/card'
-import { Link } from 'react-router-dom'
 import { Toast } from 'primereact/toast'
 import { Column } from 'primereact/column'
 import { Dropdown } from 'primereact/dropdown'
 import { DataTable } from 'primereact/datatable'
 import { Paginator } from 'primereact/paginator'
-import { Eye, MailOpen, Send, Trash2 } from 'lucide-react'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { Eye, Mail, MailOpen, Send, Trash2 } from 'lucide-react'
 
 import UserContext from '../user.context'
 import ShopService from '../services/local.servicio'
@@ -18,6 +18,8 @@ export const NotificacionesPagina = () => {
 
   const toast = useRef(null)
   const [user, setUser] = useContext(UserContext)
+  const rolname = user.roles.match(/ROLE_(\w+)/)[1]
+  const [showAllRead, setShowAllRead] = useState(false)
 
   const params = {
     page: 0,
@@ -44,6 +46,14 @@ export const NotificacionesPagina = () => {
     loadNotifications()
   }, [selectedShop])
 
+  useEffect(() => {
+    if (showAllRead === true) {
+      loadReadNotifications()
+    } else {
+      loadNotifications()
+    }
+  }, [showAllRead])
+
   const loadShops = () => {
     ShopService.getAll().then(data => {
       setListShops(data)
@@ -51,11 +61,24 @@ export const NotificacionesPagina = () => {
   }
 
   const loadNotifications = () => {
-    const request = {...params,
+    const request = {
+      ...params,
       shop: selectedShop?.nombre || ''
     }
 
     NotificationService.getAllByUserAndShop(request).then(data => {
+      setListNotifications(data.content)
+      setTotalElements(data.totalElements)
+    })
+  }
+
+  const loadReadNotifications = () => {
+    const request = {
+      ...params,
+      shop: selectedShop?.nombre || ''
+    }
+
+    NotificationService.getAllReadByUserAndShop(request).then(data => {
       setListNotifications(data.content)
       setTotalElements(data.totalElements)
     })
@@ -96,8 +119,9 @@ export const NotificacionesPagina = () => {
     setFirst(event.first)
     setRows(event.rows)
 
-    const request = { ...params, 
-      page: event.page, 
+    const request = {
+      ...params,
+      page: event.page,
       shop: selectedShop?.nombre || ''
     }
 
@@ -137,7 +161,7 @@ export const NotificacionesPagina = () => {
   }
 
   const showNotification = () => {
-    
+
   }
 
   const showMessage = (title, msg, ref, severity) => {
@@ -148,22 +172,35 @@ export const NotificacionesPagina = () => {
 
   return (
     <div className='p-5'>
-      <h2 className='text-3xl font-medium mb-5'>Notificaciones</h2>
+      <h2 className='text-3xl font-medium mb-5'>Notificaciones {showAllRead && 'leídas'}</h2>
 
       <div className='flex gap-5 mb-5'>
-        <Card className='!shadow-none border cursor-pointer'>
-          <div className='flex gap-3'>
-            <MailOpen className='text-blue-500' />
-            <span className='font-medium'>Notificaciones leídas</span>
-          </div>
-        </Card>
+        {showAllRead ?
+          <Card className='!shadow-none border cursor-pointer'
+            onClick={(e) => setShowAllRead(false)}>
+            <div className='flex gap-3'>
+              <Mail className='text-blue-500' />
+              <span className='font-medium'>Notificaciones</span>
+            </div>
+          </Card>
+          :
+          <Card className='!shadow-none border cursor-pointer'
+            onClick={(e) => setShowAllRead(true)}>
+            <div className='flex gap-3'>
+              <MailOpen className='text-blue-500' />
+              <span className='font-medium'>Notificaciones leídas</span>
+            </div>
+          </Card>
+        }
       </div>
 
       <Card className='!shadow-none border'>
         <div className='max-h-[650px] overflow-y-auto'>
           <div className='flex'>
-            <Dropdown value={selectedShop} options={listShops} onChange={(e) => setSelectedShop(e.value)}
-              optionLabel='nombre' className='mb-5' placeholder='Selecciona un local' />
+            {rolname === 'ADMINISTRADOR' &&
+              <Dropdown value={selectedShop} options={listShops} onChange={(e) => setSelectedShop(e.value)}
+                optionLabel='nombre' className='mb-5' placeholder='Selecciona un local' />
+            }
             {selectedNotifications.length > 0 &&
               <div className='flex items-center gap-4 ml-3 mb-3'>
                 <span className='text-lg font-medium'>{selectedNotifications.length} seleccionadas</span>
@@ -190,9 +227,11 @@ export const NotificacionesPagina = () => {
                   <button onClick={() => showNotification(rowData.id)} className='text-dark rounded px-2 py-1'>
                     <Eye size={16} />
                   </button>
-                  <button onClick={() => handleMarkAsRead(rowData.id)} className='text-dark rounded px-2 py-1'>
-                    <MailOpen size={16} />
-                  </button>
+                  {!showAllRead &&
+                    <button onClick={() => handleMarkAsRead(rowData.id)} className='text-dark rounded px-2 py-1'>
+                      <MailOpen size={16} />
+                    </button>
+                  }
                   <button onClick={() => handleDelete(rowData.id)} className='text-dark rounded px-2 py-1'>
                     <Trash2 size={16} />
                   </button>
