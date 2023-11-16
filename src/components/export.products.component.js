@@ -15,9 +15,9 @@ const ListProductsExport = ({ products }) => {
     // Format the prices in a new array
     const formattedProducts = products.map(product => ({
       ...product,
-      priceEffective: formatCurrency(product.priceEffective),
-      priceDebit: formatCurrency(product.priceDebit),
-      priceCredit: formatCurrency(product.priceCredit),
+      priceEffective: formatCurrency(product.cashPrice),
+      priceDebit: formatCurrency(product.debitPrice),
+      priceCredit: formatCurrency(product.creditPrice),
     }))
 
     // Define the columns

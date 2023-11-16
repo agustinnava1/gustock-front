@@ -81,10 +81,6 @@ export const ProductoModificar = () => {
     }
   };
 
-  useEffect(() => {
-    generateBarcodeImg();
-  }, [barcode]);
-
   const generateCode = () => {
     const randomNumber = Math.floor(Math.random() * 90000000) + 10000000
     setFormState({
@@ -96,28 +92,17 @@ export const ProductoModificar = () => {
   const generateBarcode = () => {
     // svg barcode
     if (barcode === null) {
-      const randomBarcode = Math.floor(Math.random() * 1000000000000)
+      const randomBarcode = generateRandomEAN13()
+      setBarcode(randomBarcode)
       JsBarcode("#barcode-svg", randomBarcode, { format: "ean13" })
     } else {
       JsBarcode("#barcode-svg", barcode, { format: "ean13" })
     }
-
-    // number value
-    const svgTextElements = document.querySelectorAll('svg text')
-    let concatenatedText = ""
-
-    svgTextElements.forEach((element) => {
-      const textContent = element.textContent
-      if (textContent.length > 0) {
-        concatenatedText += textContent
-      }
-    })
-
-    setBarcode(parseInt(concatenatedText, 10))
   }
 
   const deleteBarcode = () => {
     setBarcode(null)
+    setBase64Barcode(null)
     document.getElementById("barcode-svg").innerHTML = ""
   }
 
@@ -192,13 +177,13 @@ export const ProductoModificar = () => {
       ...formState,
       id: id,
       code: code,
-      barcode: barcode,
       brand: brand,
       category: category,
       provider: provider,
       stocks: listStocks,
+      barcodeNumber: barcode,
       base64Image: base64Image,
-      base64barcode: barcode ? base64Barcode : null,
+      base64barcode: base64Barcode,
       specifications: specifications
     }
 
@@ -207,6 +192,20 @@ export const ProductoModificar = () => {
     }).catch((error) => {
       Swal.fire('Error', error.response.data, 'error')
     })
+  }
+
+  const generateRandomEAN13 = () => {
+    const randomNumber = Math.floor(Math.random() * 1000000000000).toString().padStart(12, '0');
+  
+    // Calculate the checksum digit
+    let sum = 0;
+    for (let i = 0; i < 12; i++) {
+      const digit = parseInt(randomNumber[i]);
+      sum += i % 2 === 0 ? digit : digit * 3;
+    }
+    
+    const checksum = (10 - (sum % 10)) % 10;
+    return randomNumber + checksum;
   }
 
   return (
@@ -230,14 +229,14 @@ export const ProductoModificar = () => {
 
           <Card title='Código de barras' className='!shadow-none border mb-5'>
             <InputNumber className='w-full p-inputtext-sm mb-5' useGrouping={false}
-              value={barcode} onChange={(e) => setBarcode(e.target.value)} />
+              value={barcode} onChange={(e) => setBarcode(e.value)} />
             <div className='border border-1 mb-5'>
               <svg id='barcode-svg' className='m-auto' width='234px' height='142px'></svg>
               <canvas ref={canvasRef} style={{ display: 'none' }} />
             </div>
             <div className='flex'>
-              <Button label='Generar' onClick={generateBarcode} className='w-full !me-3 hover:!bg-blue-600' size='small' disabled={barcode} />
-              <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='secondary' size='small' disabled={!barcode} />
+              <Button label='Generar' onClick={generateBarcode} className='w-full !me-3 hover:!bg-blue-600' size='small' disabled={base64Barcode} />
+              <Button label='Eliminar' onClick={deleteBarcode} className='w-full' severity='secondary' size='small' disabled={!base64Barcode} />
             </div>
           </Card>
         </div>

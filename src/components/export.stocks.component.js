@@ -17,9 +17,9 @@ const ListStocksExport = ({ stocks }) => {
       ...stock,
       code: stock.product.code,
       description: stock.product.description,
-      priceEffective: formatCurrency(stock.product.priceEffective),
-      priceDebit: formatCurrency(stock.product.priceDebit),
-      priceCredit: formatCurrency(stock.product.priceCredit),
+      priceEffective: formatCurrency(stock.product.cashPrice),
+      priceDebit: formatCurrency(stock.product.debitPrice),
+      priceCredit: formatCurrency(stock.product.creditPrice),
     }))
 
     // Define the columns
