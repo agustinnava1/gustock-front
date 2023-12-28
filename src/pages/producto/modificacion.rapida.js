@@ -115,71 +115,71 @@ export const ProductosModificacionRapida = () => {
 
     ProductService.updatePrices(request).then(data => {
       filter()
+      setSelectedProducts([])
       Swal.fire('Actualizado', 'Se han actualizado ' + data + ' productos con éxito.', 'success')
     }).catch((error) => {
       Swal.fire('Error', 'Hubo un problema al intentar actualizar los productos. Por favor, inténtelo de nuevo más tarde.', 'error')
     })
   }
 
-  const resetFilters = () => {
-    setPaginationState(initialPagination)
-  }
-
   return (
     <div className='m-5'>
-      <h2 className='text-3xl font-medium mb-5'>Actualización rápida de precios</h2>
+      <h2 className='text-2xl font-medium mb-2'>Actualización rápida de precios</h2>
+      <span>Presiona la casilla para seleccionar el producto. Los artículos seleccionados se actualizarán al presionar "Grabar"</span>
+
+      <Card className='!shadow-none border my-5'>
+        <div className='md:flex gap-5'>
+          <div className='flex-auto flex items-center gap-3 w-full mb-3 md:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Proveedor</label>
+            <Dropdown options={listProviders} optionLabel='razonSocial' filter
+              name='provider' value={provider} onChange={onDropdownChange} emptyFilterMessage='Sin resultados'
+              placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto flex items-center gap-3 w-full mb-3 md:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Rubro</label>
+            <Dropdown options={listCategories} optionLabel='descripcion' filter
+              name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
+              placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto flex items-center gap-3 w-full mb-3 md:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Marca</label>
+            <Dropdown options={listBrands} optionLabel='descripcion' filter
+              name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
+              placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto flex items-center gap-3 w-full mb-3 md:mb-0'>
+            <label className='block font-medium text-lg mb-2'>Cantidad</label>
+            <Dropdown options={listQuantities}
+              name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
+              placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto'>
+            <Button label='Filtrar' onClick={filter} className='w-full' size='small' />
+          </div>
+        </div>
+      </Card>
 
       <div className='flex gap-5'>
         <div className='lg:w-1/6'>
           <Card className='!shadow-none border mb-5'>
-            <div className='mb-3'>
-              <label className='block font-medium text-lg mb-2'>Proveedor</label>
-              <Dropdown options={listProviders} optionLabel='razonSocial' filter
-                name='provider' value={provider} onChange={onDropdownChange} emptyFilterMessage='Sin resultados'
-                placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
-            </div>
-            <div className='mb-3'>
-              <label className='block font-medium text-lg mb-2'>Rubro</label>
-              <Dropdown options={listCategories} optionLabel='descripcion' filter
-                name='category' value={category} onChange={onDropdownChange} emptyMessage='Sin registros'
-                placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
-            </div>
-            <div className='mb-3'>
-              <label className='block font-medium text-lg mb-2'>Marca</label>
-              <Dropdown options={listBrands} optionLabel='descripcion' filter
-                name='brand' value={brand} onChange={onDropdownChange} emptyMessage='Sin registros'
-                placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
-            </div>
-            <div className='mb-5'>
-              <label className='block font-medium text-lg mb-2'>Cantidad</label>
-              <Dropdown options={listQuantities}
-                name='recordsQuantity' value={recordsQuantity} onChange={onDropdownChange} emptyMessage="Sin registros"
-                placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
-            </div>
-            <div className='flex gap-3'>
-              <Button label='Filtrar' onClick={filter} className='w-full' size='small' />
-              <Button label='Limpiar' onClick={resetFilters} className='w-full' size='small' severity='secondary' />
-            </div>
-          </Card>
-
-          <Card className='!shadow-none border mb-5'>
             <div className='flex justify-between mb-3'>
               <label className='my-auto font-medium'>Efectivo</label>
               <InputNumber name='pctEffective' className='p-inputtext-sm' suffix="%"
-                value={pctCash} onChange={(e) => setPctCash(e.value)} size={10} />
+                value={pctCash} onChange={(e) => setPctCash(e.value)} size={6} />
             </div>
             <div className='flex justify-between mb-3'>
               <label className='my-auto font-medium'>Débito</label>
               <InputNumber name='pctDebit' className='p-inputtext-sm' suffix="%"
-                value={pctDebit} onChange={(e) => setPctDebit(e.value)} size={10} />
+                value={pctDebit} onChange={(e) => setPctDebit(e.value)} size={6} />
             </div>
             <div className='flex justify-between mb-3'>
               <label className='my-auto font-medium'>Crédito</label>
               <InputNumber name='pctCredit' className='p-inputtext-sm' suffix="%"
-                value={pctCredit} onChange={(e) => setPctCredit(e.value)} size={10} />
+                value={pctCredit} onChange={(e) => setPctCredit(e.value)} size={6} />
             </div>
-            <div className='flex gap-3 mb-3'>
-              <div className='flex align-items-center'>
+            <hr className='my-3'></hr>
+            <div className='mb-3'>
+              <div className='flex align-items-center mb-3'>
                 <RadioButton inputId='increase' value='increase' onChange={(e) => setOption(e.value)} checked={option === 'increase'} />
                 <label htmlFor='increase' className="ml-2">Aumentar</label>
               </div>
@@ -206,7 +206,6 @@ export const ProductosModificacionRapida = () => {
             <DataTable value={listProducts} selectionMode={'checkbox'} emptyMessage="No se encontraron productos" size='small'
               selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)} dataKey="id" stripedRows>
               <Column selectionMode='multiple' className='rounded-tl-lg' style={{ width: '5%' }} />
-              <Column field="id" header="ID" style={{ width: '10%' }} />
               <Column field='code' header='Código' style={{ width: '10%' }} />
               <Column field='description' header='Descripción' style={{ width: '35%' }} />
               <Column field={(rowData) => formatCurrency(rowData.cashPrice)} header='Efectivo' style={{ width: '10%' }} />
@@ -226,7 +225,7 @@ export const ProductosModificacionRapida = () => {
                 )}>
               </Column>
             </DataTable>
-            <Paginator first={first} rows={rows} pageLinkSize={3} totalRecords={totalElements}
+            <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalElements}
               onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
           </Card>
         </div>

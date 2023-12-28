@@ -58,7 +58,7 @@ const ListProductsExport = ({ products }) => {
 
   return (
     <div onClick={handleExport} className='hover:cursor-pointer'>
-      <Card className='!shadow-none border mb-5'>
+      <Card className='!shadow-none border'>
         <div className='flex gap-3'>
           <FileDown className='text-blue-500' />
           <span className='font-medium'>Exportar a excel</span>

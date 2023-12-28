@@ -6,7 +6,7 @@ import { InputNumber } from "primereact/inputnumber"
 export const AjustesPagina = () => {
   return (
     <div className='m-5'>
-      <h2 className='text-4xl font-medium mb-3'>Ajustes del sistema</h2>
+      <h2 className='text-2xl font-medium mb-3'>Ajustes del sistema</h2>
       <div className="flex flex-wrap mt-5">
         <Card title='Recargo por tarjeta'
           subTitle='Se aplicará automáticamente sobre el precio de contado al momento de registrar o modificar un producto'

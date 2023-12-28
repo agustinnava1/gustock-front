@@ -24,7 +24,7 @@ export const PanelPagina = () => {
 
   return (
     <div className='m-5'>
-      <h2 className="text-4xl font-medium mb-5">Registros del sistema</h2>
+      <h2 className="text-2xl font-medium mb-5">Registros del sistema</h2>
 
       <div className='flex gap-5'>
         <div className='lg:w-1/6'>

@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 
 import jwtDecode from 'jwt-decode'
 
 import { Home } from './pages/home.pagina'
 import { Login } from './pages/login.pagina'
+
 import UserContext from '../src/user.context'
 import getCookie from '../src/hooks/get.cookie'
-
 
 function App() {
   const [user, setUser] = useContext(UserContext);
@@ -26,10 +26,8 @@ function App() {
   }
 
   return (
-    <div>
-      <ConditionalRender user={user} />
-    </div>
-  );
+    <ConditionalRender user={user} />
+  )
 }
 
 export default App;

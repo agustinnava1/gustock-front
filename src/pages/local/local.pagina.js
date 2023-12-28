@@ -26,28 +26,26 @@ export const LocalPagina = () => {
 
   return (
     <div className='p-5'>
-      <Card className='!shadow-none border mb-5'>
-        <div className='flex justify-between'>
-          <div className='flex items-center gap-3'>
-            <h3 className="text-2xl font-bold">LOCAL {shop.nombre}</h3>
-            <p className="text-xl">| {shop.direccion}</p>
-          </div>
-          <div className='flex items-center gap-3'>
-            <div>
-              <Button label='Productos' icon={<Package size={20} className='mr-3' />} iconPos='left' size='small'
-                className={`w-full ${selectedButton === 'Products' ? 'bg-blue-500' : '!bg-white !text-blue-500'}`}
-                onClick={() => handleButtonClick('Products')} />
-            </div>
-            {shop.tipo === 'LOCAL' &&
-              <div>
-                <Button label='Ventas' icon={<ShoppingCart size={20} className='mr-3' />} iconPos='left' size='small'
-                  className={`w-full ${selectedButton === 'Sales' ? '!bg-blue-500' : '!bg-white !text-blue-500'}`}
-                  onClick={() => handleButtonClick('Sales')} />
-              </div>
-            }
-          </div>
+      <div className='lg:flex justify-between mb-5'>
+        <div className='lg:flex items-center gap-3'>
+          <h2 className='text-2xl font-medium'>Local {shop.nombre}</h2>
+          <p className="text-xl">| Ubicación: {shop.direccion}</p>
         </div>
-      </Card>
+        <div className='flex items-center gap-3'>
+          <div>
+            <Button label='Productos' icon={<Package size={20} className='mr-3' />} iconPos='left' size='small'
+              className={`w-full ${selectedButton === 'Products' ? 'bg-blue-500' : '!bg-white !text-blue-500'}`}
+              onClick={() => handleButtonClick('Products')} />
+          </div>
+          {shop.tipo === 'LOCAL' &&
+            <div>
+              <Button label='Ventas' icon={<ShoppingCart size={20} className='mr-3' />} iconPos='left' size='small'
+                className={`w-full ${selectedButton === 'Sales' ? '!bg-blue-500' : '!bg-white !text-blue-500'}`}
+                onClick={() => handleButtonClick('Sales')} />
+            </div>
+          }
+        </div>
+      </div>
 
       {selectedButton === 'Sales' && <SalesComponent shop={name} />}
       {selectedButton === 'Products' && <ProductsComponent shop={name} />}

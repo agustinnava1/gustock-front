@@ -15,7 +15,6 @@ import ProductService from '../../services/producto.servicio'
 export const ProductoDetalle = () => {
   const { id } = useParams()
   const [user, setUser] = useContext(UserContext)
-  const rolname = user.roles.match(/ROLE_(\w+)/)[1]
 
   const items = [
     { label: 'Stock' },
@@ -91,7 +90,7 @@ export const ProductoDetalle = () => {
                 <tr><th colSpan={2} class='text-start p-2'>Datos del producto</th></tr>
               </thead>
               <tbody>
-                {rolname === 'ADMINISTRADOR' &&
+                {user.rol === 'ROLE_ADMINISTRADOR' &&
                   <tr className='text-start'>
                     <th className='text-start p-2 border w-[250px]'>Proveedor</th>
                     <td class='border-b p-2'>
@@ -129,10 +128,25 @@ export const ProductoDetalle = () => {
           <div className='p-5'>
             <DataTable value={stocks} stripedRows emptyMessage='No se encontraron unidades' size='small'>
               <Column field={(rowData) => (rowData.shop) + " - " + (rowData.direction)}
-                header='Sucursal' className='rounded-tl-md' style={{ width: '40%' }}></Column>
-              <Column field={(rowData) => (rowData.quantity) + ' unidades'} header='Cantidad' style={{ width: '40%' }}></Column>
+                header='Sucursal' className='rounded-tl-md' style={{ width: '40%' }} />
+
+              <Column header='Cantidad' style={{ width: '40%' }}
+                body={(rowData) => {
+                  if (user.rol === 'ROLE_ADMINISTRADOR') {
+                    return (<p>{rowData.quantity + ' unidades'}</p>)
+                  } else {
+                    if (rowData.quantity > 0) {
+                      return (<p className='font-medium text-green-500'>En stock</p>)
+                    }
+                    if (rowData.quantity <= 0) {
+                      return (<p className='font-medium text-red-500'>Sin stock</p>)
+                    }
+                  }
+                }}>
+              </Column>
+
               <Column field={(rowData) => formatDateTime(rowData.lastUpdate)}
-                header='Ult. Act' className='rounded-tr-md' style={{ width: '20%' }}></Column>
+                header='Ult. Act' className='rounded-tr-md' style={{ width: '20%' }} />
             </DataTable>
           </div>
         }

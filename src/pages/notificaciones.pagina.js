@@ -18,7 +18,6 @@ export const NotificacionesPagina = () => {
 
   const toast = useRef(null)
   const [user, setUser] = useContext(UserContext)
-  const rolname = user.roles.match(/ROLE_(\w+)/)[1]
   const [showAllRead, setShowAllRead] = useState(false)
 
   const params = {
@@ -172,7 +171,7 @@ export const NotificacionesPagina = () => {
 
   return (
     <div className='p-5'>
-      <h2 className='text-3xl font-medium mb-5'>Notificaciones {showAllRead && 'leídas'}</h2>
+      <h2 className='text-2xl font-medium mb-5'>Notificaciones {showAllRead && 'leídas'}</h2>
 
       <div className='flex gap-5 mb-5'>
         {showAllRead ?
@@ -195,25 +194,26 @@ export const NotificacionesPagina = () => {
       </div>
 
       <Card className='!shadow-none border'>
-        <div className='max-h-[650px] overflow-y-auto'>
-          <div className='flex'>
-            {rolname === 'ADMINISTRADOR' &&
-              <Dropdown value={selectedShop} options={listShops} onChange={(e) => setSelectedShop(e.value)}
-                optionLabel='nombre' className='mb-5' placeholder='Selecciona un local' />
-            }
-            {selectedNotifications.length > 0 &&
-              <div className='flex items-center gap-4 ml-3 mb-3'>
-                <span className='text-lg font-medium'>{selectedNotifications.length} seleccionadas</span>
-                <button onClick={handleMarkSelectedAsRead}>
-                  <MailOpen className='text-blue-500' size={20} />
-                </button>
-                <button onClick={handleDeleteSelected}>
-                  <Trash2 className='text-blue-500' size={20} />
-                </button>
-              </div>
-            }
-          </div>
 
+        <div className='flex justify-between'>
+          {user.rol === 'ROLE_ADMINISTRADOR' &&
+            <Dropdown value={selectedShop} options={listShops} onChange={(e) => setSelectedShop(e.value)}
+              optionLabel='nombre' className='mb-5' placeholder='Selecciona un local' />
+          }
+          {selectedNotifications.length > 0 &&
+            <div className='flex items-center gap-4 ml-3 mb-3'>
+              <span className='text-lg font-medium'>{selectedNotifications.length} seleccionadas</span>
+              <button onClick={handleMarkSelectedAsRead}>
+                <MailOpen className='text-blue-500' size={20} />
+              </button>
+              <button onClick={handleDeleteSelected}>
+                <Trash2 className='text-blue-500' size={20} />
+              </button>
+            </div>
+          }
+        </div>
+
+        <div className='max-h-[520px] overflow-y-auto'>
           <DataTable value={listNotifications} stripedRows emptyMessage='No hay notificaciones por el momento' size='small' dataKey='id'
             selectionMode={'checkbox'} selection={selectedNotifications} onSelectionChange={(e) => setSelectedNotifications(e.value)}>
             <Column selectionMode='multiple' className='rounded-tl-lg' style={{ width: '1%' }} />
@@ -240,6 +240,7 @@ export const NotificacionesPagina = () => {
             </Column>
           </DataTable>
         </div>
+
         <Paginator first={first} rows={rows} totalRecords={totalElements}
           pageLinkSize={5} onPageChange={onPageChange} className='mt-5 !p-0' />
       </Card>

@@ -11,7 +11,11 @@ import UserContext from '../user.context'
 import setCookie from '../hooks/set.cookie'
 import AuthService from '../services/auth.service'
 
+import { useNavigate } from 'react-router-dom';
+
 export const Login = () => {
+
+  const navigate = useNavigate();
   const [user, setUser] = useContext(UserContext);
   const [errorMessage, setErrorMessage] = useState();
 
@@ -38,6 +42,7 @@ export const Login = () => {
       const decoded = jwtDecode(resp.token)
       setCookie('jwt_authorization', resp.token)
       setUser(decoded)
+      navigate('/inicio');
     }).catch((error) => {
       setErrorMessage('Usuario o contraseña incorrecto')
       setTimeout(() => {

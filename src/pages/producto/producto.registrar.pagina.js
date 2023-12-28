@@ -180,23 +180,23 @@ export const ProductoRegistrar = () => {
 
   const generateRandomEAN13 = () => {
     const randomNumber = Math.floor(Math.random() * 1000000000000).toString().padStart(12, '0');
-  
+
     // Calculate the checksum digit
     let sum = 0;
     for (let i = 0; i < 12; i++) {
       const digit = parseInt(randomNumber[i]);
       sum += i % 2 === 0 ? digit : digit * 3;
     }
-    
+
     const checksum = (10 - (sum % 10)) % 10;
     return randomNumber + checksum;
   }
 
   return (
-    <div className='p-5'>
-      <h2 className='text-3xl font-medium mb-5'>Registrar nuevo producto</h2>
+    <div className='w-[1140px] m-auto p-5'>
+      <h2 className='text-2xl font-medium mb-5'>Registrar nuevo producto</h2>
       <div className='md:flex gap-5'>
-        <div className='w-1/5'>
+        <div className='w-1/3'>
           <Card title='Imagen' className='!shadow-none border mb-5'>
             <input className='block w-full text-slate-500 file:rounded file:mr-4 file:py-2 file:px-4 file:border-0
                 file:text-lg file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100'
@@ -226,16 +226,16 @@ export const ProductoRegistrar = () => {
         </div>
 
         <div className='flex-1'>
-          <Card title='Características' className='!shadow-none border mb-5'>
-            <div className='mb-3'>
-              <label htmlFor='description' className='block font-medium text-lg mb-2'>Código</label>
-              <div className='flex'>
-                <InputText name='code' value={code} onChange={(e) => setCode(e.target.value)} className='p-inputtext-sm w-full !me-3' />
-                <div>
-                  <Button label='Generar' onClick={generateCode} size='small' className='w-full' />
-                </div>
+          <Card title='Código' className='!shadow-none border mb-5'>
+            <div className='flex'>
+              <InputText name='code' value={code} onChange={(e) => setCode(e.target.value)} className='p-inputtext-sm w-full !me-3' />
+              <div>
+                <Button label='Generar' onClick={generateCode} size='small' className='w-full' />
               </div>
             </div>
+          </Card>
+          
+          <Card title='Características' className='!shadow-none border mb-5'>
             <div className='mb-3'>
               <label htmlFor='description' className='block font-medium text-lg mb-2'>Descripción</label>
               <InputText placeholder='Valija mediana roja' className='p-inputtext-sm w-full'
@@ -283,7 +283,9 @@ export const ProductoRegistrar = () => {
             </div>
           </Card>
 
-          <Card title="Distribución" className='!shadow-none border'>
+          <SpecificationsForm initialSpecifications={initialSpecifications} onSpecificationsChange={handleSpecificationsChange} />
+
+          <Panel header="Distribución" className='mb-5' collapsed='false' toggleable>
             <DataTable value={listStocks} stripedRows size="small" emptyMessage="No se encontraron locales">
               <Column header='Sucursal' className='rounded-tl-md' style={{ width: '80%' }}
                 body={(rowData) => (
@@ -300,21 +302,9 @@ export const ProductoRegistrar = () => {
                 )}>
               </Column>
             </DataTable>
-          </Card>
-        </div>
+          </Panel>
 
-        <div className='flex-1'>
-          <SpecificationsForm initialSpecifications={initialSpecifications} onSpecificationsChange={handleSpecificationsChange} />
-
-          <div className='flex gap-5'>
-            <Card className='!shadow-none border mb-5 cursor-pointer'
-              onClick={handleCreateProduct}>
-              <div className='flex gap-3'>
-                <Save className='text-blue-500' />
-                <span className='font-medium'>Registrar producto</span>
-              </div>
-            </Card>
-
+          <div className='flex justify-between'>
             <Link to={`/productos`}>
               <Card className='!shadow-none border'>
                 <div className='flex gap-3'>
@@ -323,6 +313,13 @@ export const ProductoRegistrar = () => {
                 </div>
               </Card>
             </Link>
+            <Card className='!shadow-none border mb-5 cursor-pointer'
+              onClick={handleCreateProduct}>
+              <div className='flex gap-3'>
+                <Save className='text-blue-500' />
+                <span className='font-medium'>Registrar producto</span>
+              </div>
+            </Card>
           </div>
         </div>
       </div>

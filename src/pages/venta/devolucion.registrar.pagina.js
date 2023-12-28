@@ -219,7 +219,7 @@ export const RegistrarDevolucionPagina = () => {
 
   return (
     <div className='container mx-auto p-5'>
-      <h2 className='text-4xl font-medium mb-5'>{name} | Cambio de producto</h2>
+      <h2 className='text-2xl font-medium mb-5'>{name} | Cambio de producto</h2>
       <div className='lg:flex gap-5'>
 
         <div className='lg:w-3/4'>

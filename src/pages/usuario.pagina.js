@@ -33,14 +33,6 @@ export const UsuarioPagina = () => {
               </div>
             </Card>
           </Link>
-          <Link to={`/local/${shop}/devolucion/registrar`}>
-            <Card className="!shadow-xl rounded-xl bg-white border">
-              <div className='p-32'>
-                <RotateCcw className="text-blue-500 m-auto mb-10" size={100} />
-                <h3 className='text-2xl font-medium'>Registrar cambio</h3>
-              </div>
-            </Card>
-          </Link>
         </div>
       </div >
     </div >

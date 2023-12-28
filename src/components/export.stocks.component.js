@@ -64,7 +64,7 @@ const ListStocksExport = ({ stocks }) => {
       <Card className='!shadow-none border mb-5'>
         <div className='flex gap-3'>
           <FileDown className='text-blue-500' />
-          <span className='font-medium'>Exportar a excel</span>
+          <span className='font-medium'>Exportar stock a excel</span>
         </div>
       </Card>
     </div>

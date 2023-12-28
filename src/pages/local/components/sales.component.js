@@ -57,24 +57,6 @@ const SalesComponent = ({ shop }) => {
           <p className='text-lg font-medium mb-2'>Ventas realizadas</p>
           <span className='text-xl'>{listSales.length}</span>
         </Card>
-
-        <Link to={`/local/${shop}/venta/registrar`}>
-          <Card className='!shadow-none border mb-5'>
-            <div className='flex gap-3'>
-              <Plus className='text-blue-500' />
-              <span className='font-medium'>Registrar venta</span>
-            </div>
-          </Card>
-        </Link>
-
-        <Link to={`/local/${shop}/devolucion/registrar`}>
-          <Card className='!shadow-none border mb-5'>
-            <div className='flex gap-3'>
-              <RotateCcw className='text-blue-500' />
-              <span className='font-medium'>Registrar devolución</span>
-            </div>
-          </Card>
-        </Link>
       </div>
 
       <div className='lg:w-5/6'>

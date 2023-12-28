@@ -20,6 +20,7 @@ import Swal from 'sweetalert2'
 import StockService from '../../../services/stock.servicio'
 import ProductFilters from '../../../helper/producto.filtros'
 import ListStocksExport from '../../../components/export.stocks.component'
+import { Plus, RotateCcw } from 'lucide-react'
 
 const ProductsComponent = ({ shop }) => {
 
@@ -27,7 +28,6 @@ const ProductsComponent = ({ shop }) => {
     StockService.getAllByShop(shop, paginationState).then(data => {
       setListProducts(data.content)
       setTotalElements(data.totalElements)
-      console.log(data.content)
     })
   }, []);
 
@@ -80,7 +80,6 @@ const ProductsComponent = ({ shop }) => {
     StockService.getAllByShop(shop, request).then(data => {
       setListProducts(data.content)
       setTotalElements(data.totalElements)
-      console.log(request)
     })
   }
 
@@ -117,58 +116,76 @@ const ProductsComponent = ({ shop }) => {
     })
   }
 
-  const resetFilters = () => {
-    setPaginationState(initialPagination)
-  }
-
   return (
-    <div className='lg:flex lg:justify-between gap-5'>
-      <div className='lg:w-1/6'>
+    <div>
+      <div>
+        <div className='md:flex gap-5'>
+          <ListStocksExport stocks={listProducts} />
+
+          <Link to={`/local/${shop}/venta/registrar`}>
+            <Card className='!shadow-none border mb-5'>
+              <div className='flex gap-3'>
+                <Plus className='text-blue-500' />
+                <span className='font-medium'>Registrar venta</span>
+              </div>
+            </Card>
+          </Link>
+
+          <Link to={`/local/${shop}/devolucion/registrar`}>
+            <Card className='!shadow-none border mb-5'>
+              <div className='flex gap-3'>
+                <RotateCcw className='text-blue-500' />
+                <span className='font-medium'>Registrar devolución</span>
+              </div>
+            </Card>
+          </Link>
+        </div>
+
         <Card className='!shadow-none border mb-5'>
-          <div className='mb-3'>
-            <label className='block font-medium text-lg mb-2'>Proveedor</label>
-            <Dropdown value={provider} options={listProviders} onChange={onDropdownChange}
-              name='provider' optionLabel='razonSocial' filter emptyFilterMessage="Sin resultados"
-              placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='mb-3'>
-            <label className='block font-medium text-lg mb-2'>Rubro</label>
-            <Dropdown value={category} options={listCategories} onChange={onDropdownChange}
-              name='category' optionLabel='descripcion' filter emptyFilterMessage="Sin resultados"
-              placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='mb-3'>
-            <label className='block font-medium text-lg mb-2'>Marca</label>
-            <Dropdown value={brand} options={listBrands} onChange={onDropdownChange}
-              name='brand' optionLabel='descripcion' filter emptyFilterMessage="Sin resultados"
-              placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='mb-3'>
-            <label htmlFor='stock' className='block font-medium text-lg mb-2'>Stock</label>
-            <Dropdown value={orderByStock} options={orderOptions} onChange={onDropdownChange}
-              name='orderByStock' optionLabel='description'
-              placeholder='Selecciona un orden' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='mb-3'>
-            <label htmlFor='ultPrecio' className='block font-medium text-lg w-full mb-2'>Ult. Precio</label>
-            <Calendar onChange={handleDate} locale='es' dateFormat='dd/mm/yy' name='lastUpdate'
-              placeholder='Selecciona una fecha' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='mb-5'>
-            <label className='block font-medium text-lg mb-2'>Cantidad</label>
-            <Dropdown value={recordsQuantity} options={listQuantities} onChange={onDropdownChange}
-              name='recordsQuantity' placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
-          </div>
-          <div className='flex gap-3'>
-            <Button label='Aplicar' onClick={filter} className='w-full' size='small' />
-            <Button label='Limpiar' onClick={resetFilters} className='w-full' size='small' severity='secondary' />
+          <div className='md:flex flex-wrap gap-5'>
+            <div className='flex-auto'>
+              <label className='block font-medium text-lg mb-2'>Proveedor</label>
+              <Dropdown value={provider} options={listProviders} onChange={onDropdownChange}
+                name='provider' optionLabel='razonSocial' filter emptyFilterMessage="Sin resultados"
+                placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto'>
+              <label className='block font-medium text-lg mb-2'>Rubro</label>
+              <Dropdown value={category} options={listCategories} onChange={onDropdownChange}
+                name='category' optionLabel='descripcion' filter emptyFilterMessage="Sin resultados"
+                placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto'>
+              <label className='block font-medium text-lg mb-2'>Marca</label>
+              <Dropdown value={brand} options={listBrands} onChange={onDropdownChange}
+                name='brand' optionLabel='descripcion' filter emptyFilterMessage="Sin resultados"
+                placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto'>
+              <label htmlFor='stock' className='block font-medium text-lg mb-2'>Stock</label>
+              <Dropdown value={orderByStock} options={orderOptions} onChange={onDropdownChange}
+                name='orderByStock' optionLabel='description'
+                placeholder='Selecciona un orden' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto'>
+              <label htmlFor='ultPrecio' className='block font-medium text-lg w-full mb-2'>Ult. Precio</label>
+              <Calendar onChange={handleDate} locale='es' dateFormat='dd/mm/yy' name='lastUpdate'
+                placeholder='Selecciona una fecha' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto'>
+              <label className='block font-medium text-lg mb-2'>Cantidad</label>
+              <Dropdown value={recordsQuantity} options={listQuantities} onChange={onDropdownChange}
+                name='recordsQuantity' placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
+            </div>
+            <div className='flex-auto'>
+              <label className='block font-medium text-lg mb-2'>Boton</label>
+              <Button label='Aplicar' onClick={filter} className='w-full' size='small' />
+            </div>
           </div>
         </Card>
-
-        <ListStocksExport stocks={listProducts} />
       </div>
 
-      <div className='lg:w-5/6'>
+      <div>
         <Card className='!shadow-none border'>
           <DataTable value={listProducts} stripedRows size='small' emptyMessage='No se encontraron resultados'>
             <Column field='product.code' header='Código' className='rounded-tl-md' style={{ width: '10%' }} />
@@ -178,7 +195,7 @@ const ProductsComponent = ({ shop }) => {
             <Column field={(rowData) => formatCurrency(rowData.product.creditPrice)} header='Crédito' style={{ width: '10%' }} />
             <Column field={(rowData) => rowData.product.lastPrice ? formatDate(rowData.product.lastPrice) : '-'} header='Ult. Precio' style={{ width: '10%' }} />
             <Column field={(rowData) => formatDate(rowData.lastUpdate)} header='Ult. Stock' style={{ width: '10%' }} />
-            <Column field='quantity' header='Unidades' style={{ width: '5%' }} />
+            <Column field='quantity' header='Stock' style={{ width: '5%' }} />
             <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
               body={(rowData) => (
                 <div className='flex gap-2'>

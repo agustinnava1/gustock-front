@@ -5,6 +5,7 @@ import { InputText } from 'primereact/inputtext'
 import { InputNumber } from 'primereact/inputnumber'
 import { RadioButton } from 'primereact/radiobutton'
 import { InputTextarea } from 'primereact/inputtextarea'
+import { Panel } from 'primereact/panel'
 
 const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) => {
   const [specificationsFormState, setSpecificationsFormState] = useState(initialSpecifications)
@@ -78,7 +79,7 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
   }, [specificationsFormState, onSpecificationsChange])
 
   return (
-    <Card title="Especificaciones" className='!shadow-none border mb-5'>
+    <Panel header="Especificaciones" className='mb-5' collapsed='false' toggleable>
       <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
         <div className='mb-3'>
           <label className='block text-lg font-medium mb-2'>Altura</label>
@@ -212,7 +213,7 @@ const SpecificationsForm = ({ initialSpecifications, onSpecificationsChange }) =
         <InputTextarea rows={2} placeholder='Detalles adicionales del producto (opcional)' className="w-full !mt-3"
           name='observations' value={specificationsFormState.observations} onChange={onSpecificationsInputChange} />
       </div>
-    </Card>
+    </Panel>
   )
 }
 

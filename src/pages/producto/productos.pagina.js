@@ -23,7 +23,7 @@ export const ProductosPagina = () => {
     brand: null,
     category: null,
     provider: null,
-    recordsQuantity: 20
+    recordsQuantity: 10
   }
 
   const [rows, setRows] = useState(20)
@@ -102,112 +102,106 @@ export const ProductosPagina = () => {
     })
   }
 
-  const resetFilters = () => {
-    setPaginationState(initialPagination)
-  }
-
   return (
     <div className='p-5'>
-      <h2 className='text-4xl font-medium mb-5'>Mis productos</h2>
+      <h2 className='text-2xl font-medium mb-2'>Mis productos</h2>
+      <span>Vista general y control de todos los productos registrados en el sistema</span>
 
-      <div className='flex gap-5'>
-        <div className='lg:w-1/6'>
-          <Card className='!shadow-none border mb-5'>
-            <div className='mb-3'>
-              <label className='block font-medium text-lg mb-2'>Proveedor</label>
-              <Dropdown value={provider} options={listProviders} onChange={onDropdownChange}
-                name='provider' optionLabel='razonSocial' filter emptyFilterMessage='Sin resultados'
-                placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
-            </div>
-            <div className='mb-3'>
-              <label className='block font-medium text-lg mb-2'>Rubro</label>
-              <Dropdown value={category} options={listCategories} onChange={onDropdownChange}
-                name='category' optionLabel='descripcion' filter emptyFilterMessage='Sin registros'
-                placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
-            </div>
-            <div className='mb-3'>
-              <label className='block font-medium text-lg mb-2'>Marca</label>
-              <Dropdown value={brand} options={listBrands} onChange={onDropdownChange}
-                name='brand' optionLabel='descripcion' filter emptyFilterMessage='Sin registros'
-                placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
-            </div>
-            <div className='mb-5'>
-              <label className='block font-medium text-lg mb-2'>Cantidad</label>
-              <Dropdown value={recordsQuantity} options={listQuantities} onChange={onDropdownChange}
-                name='recordsQuantity' placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
-            </div>
-            <div className='flex gap-3'>
-              <Button label='Filtrar' onClick={filter} className='w-full' size='small' />
-              <Button label='Limpiar' onClick={resetFilters} severity='secondary' className='w-full' size='small' />
-            </div>
-          </Card>
+      <div className='flex gap-5 my-5'>
+        <ListProductsExport products={listProducts} />
 
-          <ListProductsExport products={listProducts} />
-
-          <Link to={`/producto/registrar`}>
-            <Card className='!shadow-none border mb-5'>
-              <div className='flex gap-3'>
-                <PackagePlus className='text-blue-500' />
-                <span className='font-medium'>Agregar producto</span>
-              </div>
-            </Card>
-          </Link>
-
-          <Link to={`/productos/modificacion/rapida`}>
-            <Card className='!shadow-none border mb-5'>
-              <div className='flex gap-3'>
-                <ClipboardEdit className='text-blue-500' />
-                <span className='font-medium'>Modificación rápida</span>
-              </div>
-            </Card>
-          </Link>
-
-          <Link to={`/productos/modificacion/masiva`}>
-            <Card className='!shadow-none border'>
-              <div className='flex gap-3'>
-                <ClipboardEdit className='text-blue-500' />
-                <span className='font-medium'>Modificación masiva</span>
-              </div>
-            </Card>
-          </Link>
-        </div>
-
-        <div className='lg:w-5/6'>
+        <Link to={`/producto/registrar`}>
           <Card className='!shadow-none border'>
-            <DataTable value={listProducts} stripedRows emptyMessage='No se encontraron resultados' size='small'>
-              <Column field='code' header='Código' className='rounded-tl-md' style={{ width: '10%' }}></Column>
-              <Column field='description' header='Descripción' style={{ width: '45%' }}></Column>
-              <Column field={(rowData) => formatCurrency(rowData.cashPrice)} header='Efectivo' style={{ width: '10%' }} />
-              <Column field={(rowData) => formatCurrency(rowData.debitPrice)} header='Débito' style={{ width: '10%' }} />
-              <Column field={(rowData) => formatCurrency(rowData.creditPrice)} header='Crédito' style={{ width: '10%' }} />
-              <Column field='lastPrice' header='Ult. Precio' style={{ width: '10%' }}
-                body={(rowData) => rowData.lastPrice ? formatDate(rowData.lastPrice) : '-'}></Column>
-              <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
-                body={(rowData) => (
-                  <div className='flex gap-2'>
-                    <Link to={`/producto/detalle/${rowData.id}`}>
-                      <button className='text-gray-500 px-2 py-1'>
-                        <i className='bi bi-eye-fill'></i>
-                      </button>
-                    </Link>
-                    <Link to={`/producto/modificar/${rowData.id}`}>
-                      <button className='text-gray-500 px-2 py-1'>
-                        <i className='bi bi-pencil-fill'></i>
-                      </button>
-                    </Link>
-                    <button className='text-gray-500 px-2 py-1'
-                      onClick={() => handleDelete(rowData.id)} >
-                      <i className='bi bi-trash-fill'></i>
-                    </button>
-                  </div>
-                )}>
-              </Column>
-            </DataTable>
-            <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalElements}
-              onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
+            <div className='flex gap-3'>
+              <PackagePlus className='text-blue-500' />
+              <span className='font-medium'>Agregar producto</span>
+            </div>
           </Card>
+        </Link>
+
+        <Link to={`/productos/modificacion/rapida`}>
+          <Card className='!shadow-none border'>
+            <div className='flex gap-3'>
+              <ClipboardEdit className='text-blue-500' />
+              <span className='font-medium'>Modificación rápida</span>
+            </div>
+          </Card>
+        </Link>
+
+        <Link to={`/productos/modificacion/masiva`}>
+          <Card className='!shadow-none border'>
+            <div className='flex gap-3'>
+              <ClipboardEdit className='text-blue-500' />
+              <span className='font-medium'>Modificación masiva</span>
+            </div>
+          </Card>
+        </Link>
+      </div>
+
+      <Card className='!shadow-none border mb-5'>
+        <div className='flex gap-5'>
+          <div className='flex-auto flex items-center gap-3 w-full'>
+            <label className='block font-medium text-lg'>Proveedor</label>
+            <Dropdown value={provider} options={listProviders} onChange={onDropdownChange}
+              name='provider' optionLabel='razonSocial' filter emptyFilterMessage='Sin resultados'
+              placeholder='Selecciona un proveedor' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto flex items-center gap-3 w-full'>
+            <label className='block font-medium text-lg'>Rubro</label>
+            <Dropdown value={category} options={listCategories} onChange={onDropdownChange}
+              name='category' optionLabel='descripcion' filter emptyFilterMessage='Sin registros'
+              placeholder='Selecciona un rubro' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto flex items-center gap-3 w-full'>
+            <label className='block font-medium text-lg'>Marca</label>
+            <Dropdown value={brand} options={listBrands} onChange={onDropdownChange}
+              name='brand' optionLabel='descripcion' filter emptyFilterMessage='Sin registros'
+              placeholder='Selecciona una marca' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto flex items-center gap-3 w-full'>
+            <label className='block font-medium text-lg'>Cantidad</label>
+            <Dropdown value={recordsQuantity} options={listQuantities} onChange={onDropdownChange}
+              name='recordsQuantity' placeholder='Selecciona la cantidad' className='p-inputtext-sm w-full' />
+          </div>
+          <div className='flex-auto'>
+            <Button label='Filtrar' onClick={filter} className='w-full' size='small' />
+          </div>
         </div>
-      </div >
-    </div>
+      </Card>
+
+      <Card className='!shadow-none border'>
+        <DataTable value={listProducts} stripedRows emptyMessage='No se encontraron resultados' size='small'>
+          <Column field='code' header='Código' className='rounded-tl-md' style={{ width: '10%' }}></Column>
+          <Column field='description' header='Descripción' style={{ width: '45%' }}></Column>
+          <Column field={(rowData) => formatCurrency(rowData.cashPrice)} header='Efectivo' style={{ width: '10%' }} />
+          <Column field={(rowData) => formatCurrency(rowData.debitPrice)} header='Débito' style={{ width: '10%' }} />
+          <Column field={(rowData) => formatCurrency(rowData.creditPrice)} header='Crédito' style={{ width: '10%' }} />
+          <Column field='lastPrice' header='Ult. Precio' style={{ width: '10%' }}
+            body={(rowData) => rowData.lastPrice ? formatDate(rowData.lastPrice) : '-'}></Column>
+          <Column header='Acciones' className='rounded-tr-md' style={{ width: '5%' }}
+            body={(rowData) => (
+              <div className='flex gap-2'>
+                <Link to={`/producto/detalle/${rowData.id}`}>
+                  <button className='text-gray-500 px-2 py-1'>
+                    <i className='bi bi-eye-fill'></i>
+                  </button>
+                </Link>
+                <Link to={`/producto/modificar/${rowData.id}`}>
+                  <button className='text-gray-500 px-2 py-1'>
+                    <i className='bi bi-pencil-fill'></i>
+                  </button>
+                </Link>
+                <button className='text-gray-500 px-2 py-1'
+                  onClick={() => handleDelete(rowData.id)} >
+                  <i className='bi bi-trash-fill'></i>
+                </button>
+              </div>
+            )}>
+          </Column>
+        </DataTable>
+        <Paginator first={first} rows={rows} pageLinkSize={5} totalRecords={totalElements}
+          onPageChange={onPageChange} className='mt-5 !p-0'></Paginator>
+      </Card>
+    </div >
   )
 }

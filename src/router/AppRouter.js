@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
 
 import UserContext from '../user.context'
@@ -28,49 +28,60 @@ import { VentaHistorialRubroPagina } from '../pages/venta/venta.historial.rubro.
 import { RegistrarDevolucionPagina } from '../pages/venta/devolucion.registrar.pagina'
 import { ProductoModificar } from '../pages/producto/producto.modificar.pagina'
 
+const RedirectToHTTPS = ({ children }) => {
+  useEffect(() => {
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (window.location.protocol === 'http:' && !isLocalhost) {
+      window.location.href = window.location.href.replace('http:', 'https:');
+    }
+  }, []);
+
+  return children;
+};
+
 export const AppRouter = () => {
   const [user, setUser] = useContext(UserContext)
-  const rolname = user.roles.match(/ROLE_(\w+)/)[1]
 
   return (
-    <Routes>
-      {rolname === 'ADMINISTRADOR' 
-        ? < Route exact path="/inicio" element={<AdminPagina />} />
-        : < Route exact path="/inicio" element={<UsuarioPagina />} />
-      }
+    <RedirectToHTTPS>
+      <Routes>
+        {user.rol === 'ROLE_ADMINISTRADOR'
+          ? < Route exact path="/inicio" element={<AdminPagina />} />
+          : < Route exact path="/inicio" element={<UsuarioPagina />} />
+        }
 
-      <Route element={<RequireAuth allowedRoles={['ROLE_USUARIO', 'ROLE_ADMINISTRADOR']} />}>
-        <Route exact path="/mensajeria" element={<MensajeriaPagina />} />
-        <Route exact path="/notificaciones" element={<NotificacionesPagina />} />
+        <Route element={<RequireAuth allowedRoles={['ROLE_USUARIO', 'ROLE_ADMINISTRADOR']} />}>
+          <Route exact path="/mensajeria" element={<MensajeriaPagina />} />
+          <Route exact path="/notificaciones" element={<NotificacionesPagina />} />
 
-        <Route exact path="/producto/detalle/:id" element={<ProductoDetalle />} />
-        <Route exact path="/producto/buscar/:criterio" element={<ProductoBusqueda />} />
+          <Route exact path="/producto/detalle/:id" element={<ProductoDetalle />} />
+          <Route exact path="/producto/buscar/:criterio" element={<ProductoBusqueda />} />
 
-        <Route exact path="/local/:name/venta/registrar" element={<RegistrarVentaPagina />} />
-        <Route exact path="/local/:name/devolucion/registrar" element={<RegistrarDevolucionPagina />} />
-      </Route>
+          <Route exact path="/local/:name/venta/registrar" element={<RegistrarVentaPagina />} />
+        </Route>
 
-      <Route element={<RequireAuth allowedRoles={['ROLE_ADMINISTRADOR']} />}>
-        <Route exact path="/panel" element={<PanelPagina />} />
-        <Route exact path="/reposicion" element={<ReposicionPagina />} />
-        <Route exact path="/ajustes" element={<AjustesPagina />} />
+        <Route element={<RequireAuth allowedRoles={['ROLE_ADMINISTRADOR']} />}>
+          <Route exact path="/panel" element={<PanelPagina />} />
+          <Route exact path="/reposicion" element={<ReposicionPagina />} />
+          <Route exact path="/ajustes" element={<AjustesPagina />} />
 
-        <Route exact path="/local/:name" element={<LocalPagina />} />
-        <Route exact path="/deposito/:name" element={<LocalPagina />} />
+          <Route exact path="/local/:name" element={<LocalPagina />} />
+          <Route exact path="/deposito/:name" element={<LocalPagina />} />
 
-        <Route exact path="/venta/detalle/:id" element={<VentaDetalle />} />
-        <Route exact path="/devolucion/detalle/:id" element={<VentaDetalle />} />
-        <Route exact path="/venta/historial" element={<VentaHistorialPagina />} />
-        <Route exact path="/venta/historial/rubro" element={<VentaHistorialRubroPagina />} />
-        <Route exact path="/venta/historial/producto" element={<VentaHistorialProductoPagina />} />
+          <Route exact path="/venta/detalle/:id" element={<VentaDetalle />} />
+          <Route exact path="/devolucion/detalle/:id" element={<VentaDetalle />} />
+          <Route exact path="/venta/historial" element={<VentaHistorialPagina />} />
+          <Route exact path="/venta/historial/rubro" element={<VentaHistorialRubroPagina />} />
+          <Route exact path="/venta/historial/producto" element={<VentaHistorialProductoPagina />} />
+          <Route exact path="/local/:name/devolucion/registrar" element={<RegistrarDevolucionPagina />} />
 
-        <Route exact path="/productos" element={<ProductosPagina />} />
-        <Route exact path="/producto/registrar" element={<ProductoRegistrar />} />
-        <Route exact path="/producto/modificar/:id" element={<ProductoModificar />} />
-        <Route exact path="/productos/modificacion/rapida" element={<ProductosModificacionRapida />} />
-        <Route exact path="/productos/modificacion/masiva" element={<ProductosModificacionMasiva />} />
-      </Route>
-
-    </Routes>
+          <Route exact path="/productos" element={<ProductosPagina />} />
+          <Route exact path="/producto/registrar" element={<ProductoRegistrar />} />
+          <Route exact path="/producto/modificar/:id" element={<ProductoModificar />} />
+          <Route exact path="/productos/modificacion/rapida" element={<ProductosModificacionRapida />} />
+          <Route exact path="/productos/modificacion/masiva" element={<ProductosModificacionMasiva />} />
+        </Route>
+      </Routes>
+    </RedirectToHTTPS>
   )
 } 
